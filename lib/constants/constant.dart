@@ -55,3 +55,27 @@ showFutureCustomDialog(
             });
       });
 }
+
+class CustomListtile extends StatelessWidget {
+  const CustomListtile(
+      {Key? key, this.subtitle, this.title, required this.data})
+      : super(key: key);
+  final Widget? subtitle;
+  final Widget? title;
+  final String data;
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        data,
+        style: const TextStyle(color: Colors.red),
+      ),
+      subtitle: subtitle,
+    );
+  }
+}
+
+const Color primarycolor = Color(0xFFc2185B);
+const Color bgcolor = Colors.white;
+const defaultpadding = 20.0;
+const textboxgap = 10.0;

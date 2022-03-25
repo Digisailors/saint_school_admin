@@ -1,12 +1,10 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/form_controller.dart';
-import '../models/student.dart';
+import 'package:school_app/widgets/custom_text_field';
 
 enum FormMode { add, update, view }
 
@@ -74,68 +72,99 @@ class _StudentFormState extends State<StudentForm> {
                             flex: 8,
                             child: Form(
                               key: _formKey,
-                              child: Wrap(
+                              child: Column(
                                 children: [
-                                  CustomTextFormField(
-                                      validator: requiredValidator,
-                                      controller: controller.name,
-                                      label: 'Name   '),
-                                  CustomTextFormField(
-                                      validator: requiredValidator,
-                                      controller: controller.id,
-                                      label: 'ID     '),
-                                  CustomTextFormField(
-                                      validator: requiredValidator,
-                                      controller: controller.studentClass,
-                                      label: "Class  "),
-                                  CustomTextFormField(
-                                      validator: requiredValidator,
-                                      controller: controller.section,
-                                      label: "Section"),
-                                  CustomTextFormField(
-                                      validator: anyOneValidator,
-                                      controller: controller.father,
-                                      label: "Father "),
-                                  CustomTextFormField(
-                                      validator: anyOneValidator,
-                                      controller: controller.mother,
-                                      label: "Mother "),
-                                  CustomTextFormField(
-                                    validator: anyOneValidator,
-                                    controller: controller.guardian,
-                                    label: "Guardian",
+                                  Table(
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          CustomTextField(
+                                              validator: requiredValidator,
+                                              controller: controller.id,
+                                              labelText: 'ID     '),
+                                          CustomTextField(
+                                              validator: requiredValidator,
+                                              controller: controller.name,
+                                              labelText: 'Name   '),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  CustomTextFormField(
+                                  Table(
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          CustomTextField(
+                                              validator: requiredValidator,
+                                              controller:
+                                                  controller.studentClass,
+                                              labelText: "Class  "),
+                                          CustomTextField(
+                                              validator: requiredValidator,
+                                              controller: controller.section,
+                                              labelText: "Section"),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Table(
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          CustomTextField(
+                                              validator: anyOneValidator,
+                                              controller: controller.father,
+                                              labelText: "Father "),
+                                          CustomTextField(
+                                              validator: anyOneValidator,
+                                              controller: controller.mother,
+                                              labelText: "Mother "),
+                                          CustomTextField(
+                                            validator: anyOneValidator,
+                                            controller: controller.guardian,
+                                            labelText: "Guardian",
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  CustomTextField(
                                     validator: requiredValidator,
                                     controller: controller.contact,
-                                    label: "Contact",
+                                    labelText: "Contact",
                                   ),
-                                  CustomTextFormField(
+                                  CustomTextField(
                                     validator: requiredValidator,
                                     controller: controller.address,
-                                    label: "Address",
-                                    size: 2,
+                                    labelText: "Address",
                                   ),
-                                  CustomTextFormField(
-                                    controller: controller.carNumbers[0],
-                                    label: "Car 1  ",
-                                    size: 6,
-                                  ),
-                                  CustomTextFormField(
-                                    controller: controller.carNumbers[1],
-                                    label: "Car 2  ",
-                                    size: 6,
-                                  ),
-                                  CustomTextFormField(
-                                    controller: controller.carNumbers[2],
-                                    label: "Car 3  ",
-                                    size: 6,
+                                  Table(
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          CustomTextField(
+                                            controller:
+                                                controller.carNumbers[0],
+                                            labelText: "Car 1  ",
+                                          ),
+                                          CustomTextField(
+                                            controller:
+                                                controller.carNumbers[1],
+                                            labelText: "Car 2  ",
+                                          ),
+                                          CustomTextField(
+                                            controller:
+                                                controller.carNumbers[2],
+                                            labelText: "Car 3  ",
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          const Divider(),
                           Expanded(
                             flex: 2,
                             child: Column(
@@ -205,7 +234,7 @@ class CustomTextFormField extends StatelessWidget {
 
   final TextEditingController controller;
   final String label;
-  final int? size;
+  final double? size;
   final String? Function(String?)? validator;
 
   @override

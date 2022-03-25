@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/controllers/session_controller.dart';
+import 'package:school_app/screens/dashboard.dart';
 import 'package:school_app/screens/student_form.dart';
 import 'package:school_app/widgets/sidebar.dart';
 
@@ -9,7 +10,7 @@ class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
 
   final pages = [
-    Container(color: Colors.green),
+    Dashboard(),
     StudentList(),
     const StudentForm(formMode: FormMode.add),
   ];

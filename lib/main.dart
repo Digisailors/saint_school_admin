@@ -12,7 +12,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Get.put(AuthController());
-  Get.put(MySession());
+
   runApp(const MyApp());
 }
 
