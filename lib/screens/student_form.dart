@@ -161,6 +161,41 @@ class _StudentFormState extends State<StudentForm> {
                                       ),
                                     ],
                                   ),
+                                  const Divider(),
+                                  Table(
+                                    children: [
+                                      TableRow(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 16, right: 16, left: 16),
+                                          child: SizedBox(
+                                              width: double.maxFinite,
+                                              height: 40,
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      var future = (formMode ==
+                                                              FormMode.add)
+                                                          ? controller
+                                                              .createUser()
+                                                          : controller
+                                                              .updateUser();
+                                                      showFutureCustomDialog(
+                                                          context: context,
+                                                          future: future,
+                                                          onTapOk: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          });
+                                                    }
+                                                  },
+                                                  child: const Text("Submit"))),
+                                        )
+                                      ])
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -194,27 +229,6 @@ class _StudentFormState extends State<StudentForm> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                            width: double.maxFinite,
-                            height: 40,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    var future = (formMode == FormMode.add)
-                                        ? controller.createUser()
-                                        : controller.updateUser();
-                                    showFutureCustomDialog(
-                                        context: context,
-                                        future: future,
-                                        onTapOk: () {
-                                          Navigator.of(context).pop();
-                                        });
-                                  }
-                                },
-                                child: const Text("Submit"))),
-                      )
                     ],
                   ),
                 ),
