@@ -66,6 +66,18 @@ class _SideMenuState extends State<SideMenu> {
             },
           ),
           DrawerListTile(
+            title: "Dashboard",
+            svgSrc: "assets/icons/menu_tran.svg",
+            selected: session.pageIndex == 2,
+            press: () {
+              setState(() {
+                session.pageIndex = 2;
+
+                session.controller.jumpToPage(2);
+              });
+            },
+          ),
+          DrawerListTile(
             title: "Carousel",
             svgSrc: "assets/icons/menu_tran.svg",
             // selected: session.pageIndex == 2,

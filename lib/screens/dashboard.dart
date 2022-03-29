@@ -9,7 +9,7 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          const Expanded(child: ClassList()),
+          Expanded(child: ClassList()),
           Expanded(child: Container(color: Colors.white)),
           Expanded(child: Container(color: Colors.red)),
         ],

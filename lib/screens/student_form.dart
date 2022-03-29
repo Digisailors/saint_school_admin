@@ -4,6 +4,7 @@ import 'package:school_app/constants/constant.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/form_controller.dart';
+import 'package:school_app/widgets/custom_drop_down.dart';
 import 'package:school_app/widgets/custom_text_field';
 
 enum FormMode { add, update, view }
@@ -84,8 +85,31 @@ class _StudentFormState extends State<StudentForm> {
                                     children: [
                                       TableRow(
                                         children: [
-                                          CustomTextField(validator: requiredValidator, controller: controller.studentClass, labelText: "Class  "),
-                                          CustomTextField(validator: requiredValidator, controller: controller.section, labelText: "Section"),
+                                          // CustomTextField(validator: requiredValidator, controller: controller.studentClass, labelText: "Class  "),
+                                          // CustomTextField(validator: requiredValidator, controller: controller.section, labelText: "Section"),
+                                          CustomDropDown<String?>(
+                                            labelText: 'Class',
+                                            items: controller.classItems,
+                                            selectedValue: controller.classField,
+                                            onChanged: (text) {
+                                              setState(() {
+                                                if (controller.classField != text) {
+                                                  controller.classField = text ?? controller.classField;
+                                                  controller.sectionField = null;
+                                                }
+                                              });
+                                            },
+                                          ),
+                                          CustomDropDown<String?>(
+                                            labelText: 'Section',
+                                            items: controller.sectionItems,
+                                            selectedValue: controller.sectionField,
+                                            onChanged: (text) {
+                                              setState(() {
+                                                controller.sectionField = text ?? controller.sectionField;
+                                              });
+                                            },
+                                          ),
                                         ],
                                       ),
                                     ],

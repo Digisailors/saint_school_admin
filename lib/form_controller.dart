@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
+import 'package:school_app/controllers/class_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/models/student.dart';
 import 'package:image_picker_web/image_picker_web.dart';
@@ -22,6 +24,9 @@ class StudentFormController {
   final contact = TextEditingController();
   final studentClass = TextEditingController();
   final section = TextEditingController();
+  String? classField;
+  String? sectionField;
+
   final address = TextEditingController();
   final guardian = TextEditingController();
   String? image;
@@ -50,6 +55,20 @@ class StudentFormController {
     return;
   }
 
+  get classItems => classController.classes.keys
+      .map((e) => DropdownMenuItem(
+            child: Text(e.toString()),
+            value: e.toString(),
+          ))
+      .toList();
+
+  List<DropdownMenuItem<String>> get sectionItems {
+    if (classField == null) {
+      return <DropdownMenuItem<String>>[];
+    }
+    return classController.classes[classField]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
+  }
+
   Future<Response> createUser() async {
     var snapshot = await students.doc(id.text).get();
     if (snapshot.exists) {
@@ -74,8 +93,8 @@ class StudentFormController {
       id: id.text,
       carNumbers: carNumbers.map((e) => e.text).toList(),
       contact: contact.text,
-      studentClass: studentClass.text,
-      section: section.text,
+      studentClass: classField!,
+      section: sectionField,
       address: address.text,
       guardian: guardian.text,
       father: father.text,
@@ -90,8 +109,12 @@ class StudentFormController {
     controller.father.text = student.father ?? '';
     controller.mother.text = student.mother ?? '';
     controller.contact.text = student.contact;
+
     controller.studentClass.text = student.studentClass;
     controller.section.text = student.section ?? '';
+    controller.classField = student.studentClass;
+    controller.sectionField = student.section;
+
     controller.address.text = student.address;
     controller.guardian.text = student.guardian ?? '';
     controller.carNumbers[0].text = student.carNumbers[0];
