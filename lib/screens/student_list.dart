@@ -3,10 +3,9 @@ import 'package:get/get.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/student_form.dart';
 
-import 'ID.dart';
-
 class StudentList extends StatelessWidget {
-  const StudentList({Key? key}) : super(key: key);
+  StudentList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,19 +23,30 @@ class StudentList extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Card(
                           child: ListTile(
+                            leading: IconButton(
+                                onPressed: () {
+                                  session.loadStudents();
+                                },
+                                icon: const Icon(Icons.search)),
                             title: TextFormField(
                               controller: session.searchController,
+                              onChanged: (text) {
+                                if (text.isEmpty) {
+                                  session.loadStudents();
+                                }
+                              },
                               decoration: const InputDecoration(
                                   border: InputBorder.none),
                             ),
-                            trailing: Container(
-                              color: Colors.white,
-                              child: IconButton(
-                                  onPressed: () {
-                                    session.loadStudents();
-                                  },
-                                  icon: const Icon(Icons.search)),
-                            ),
+                            trailing: DropdownButton<String?>(
+                                icon: Icon(Icons.sort_sharp),
+                                items: session.getOrderByItems(),
+                                hint: const Icon(Icons.sort),
+                                value: session.sortBy,
+                                onChanged: (text) {
+                                  session.sortBy = text ?? session.sortBy;
+                                  session.update();
+                                }),
                           ),
                         ),
                       ),

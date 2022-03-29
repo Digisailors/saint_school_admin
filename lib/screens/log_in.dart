@@ -5,17 +5,17 @@ import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool showPassword = false;
+  bool forgotPassword = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,20 +55,28 @@ class _LoginPageState extends State<LoginPage> {
                                   title: const Text("Email"),
                                   subtitle: TextFormField(
                                       controller: emailController)),
-                              ListTile(
-                                title: const Text("Password"),
-                                subtitle: TextFormField(
-                                  controller: passwordController,
-                                  obscureText: !showPassword,
-                                  decoration: InputDecoration(
-                                      suffixIcon: IconButton(
-                                          onPressed: () {},
-                                          icon: showPassword
-                                              ? const Icon(Icons.visibility)
-                                              : const Icon(
-                                                  Icons.visibility_off))),
-                                ),
-                              ),
+                              forgotPassword
+                                  ? Container()
+                                  : ListTile(
+                                      title: const Text("Password"),
+                                      subtitle: TextFormField(
+                                        controller: passwordController,
+                                        obscureText: !showPassword,
+                                        decoration: InputDecoration(
+                                            suffixIcon: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    showPassword =
+                                                        !showPassword;
+                                                  });
+                                                },
+                                                icon: showPassword
+                                                    ? const Icon(
+                                                        Icons.visibility)
+                                                    : const Icon(
+                                                        Icons.visibility_off))),
+                                      ),
+                                    ),
                               Padding(
                                 padding: const EdgeInsets.all(14.0),
                                 child: SizedBox(
@@ -76,18 +84,53 @@ class _LoginPageState extends State<LoginPage> {
                                   width: double.maxFinite,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      auth.signInWithEmailAndPassword(
-                                          emailController
-                                              .text.removeAllWhitespace,
-                                          passwordController.text);
+                                      if (forgotPassword) {
+                                        auth
+                                            .resetPassword(
+                                                email: emailController
+                                                    .text.removeAllWhitespace)
+                                            .then((_) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: const Text("Success"),
+                                                  content: const Text(
+                                                      "An email will be sent, if the address is valid"),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child:
+                                                            const Text("Okay"))
+                                                  ],
+                                                );
+                                              });
+                                        });
+                                      } else {
+                                        auth.signInWithEmailAndPassword(
+                                            emailController
+                                                .text.removeAllWhitespace,
+                                            passwordController.text);
+                                      }
                                     },
-                                    child: const Text("LOG IN"),
+                                    child: Text(forgotPassword
+                                        ? "RESET PASSWORD"
+                                        : "LOG IN"),
                                   ),
                                 ),
                               ),
                               TextButton(
-                                  onPressed: () {},
-                                  child: const Text("Forgot password ?"))
+                                  onPressed: () {
+                                    setState(() {
+                                      forgotPassword = !forgotPassword;
+                                    });
+                                  },
+                                  child: Text(forgotPassword
+                                      ? "Back to sign in"
+                                      : "Forgot password ?"))
                             ]),
                       ),
                     ),

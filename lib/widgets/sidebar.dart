@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
+import 'package:school_app/screens/carousel.dart';
 
 class SideMenu extends StatefulWidget {
-  SideMenu({
+  const SideMenu({
     Key? key,
   }) : super(key: key);
 
@@ -27,39 +29,53 @@ class _SideMenuState extends State<SideMenu> {
               ),
             ),
           ),
+          // DrawerListTile(
+          //   title: "Dashboard",
+          //   svgSrc: "assets/icons/menu_dashbord.svg",
+          //   selected: session.pageIndex == 0,
+          //   press: () {
+          //     setState(() {
+          //       session.pageIndex = 0;
+          //       session.controller.jumpToPage(0);
+          //     });
+          //   },
+          //   // selected: index==0,
+          // ),
           DrawerListTile(
-            title: "Dashboard",
-            svgSrc: "assets/icons/menu_dashbord.svg",
+            title: "Student List",
+            svgSrc: "assets/icons/menu_tran.svg",
             selected: session.pageIndex == 0,
             press: () {
               setState(() {
                 session.pageIndex = 0;
+                session.selectedStudent = session.kids[0];
                 session.controller.jumpToPage(0);
-              });
-            },
-            // selected: index==0,
-          ),
-          DrawerListTile(
-            title: "Student List",
-            svgSrc: "assets/icons/menu_tran.svg",
-            selected: session.pageIndex == 1,
-            press: () {
-              setState(() {
-                session.pageIndex = 1;
-                session.controller.jumpToPage(1);
               });
             },
           ),
           DrawerListTile(
             title: "Add Student",
             svgSrc: "assets/icons/menu_tran.svg",
-            selected: session.pageIndex == 2,
+            selected: session.pageIndex == 1,
             press: () {
               setState(() {
-                session.pageIndex = 2;
+                session.pageIndex = 1;
                 session.selectedStudent = null;
-                session.controller.jumpToPage(2);
+                session.controller.jumpToPage(1);
               });
+            },
+          ),
+          DrawerListTile(
+            title: "Carousel",
+            svgSrc: "assets/icons/menu_tran.svg",
+            // selected: session.pageIndex == 2,
+            press: () {
+              Get.to(() => const Carousel());
+              // setState(() {
+              //   session.pageIndex = 2;
+              //   session.selectedStudent = null;
+              //   session.controller.jumpToPage(2);
+              // });
             },
           ),
           DrawerListTile(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/screens/dashboard.dart';
+import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/student_form.dart';
 import 'package:school_app/widgets/sidebar.dart';
 
@@ -10,9 +10,10 @@ class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
 
   final pages = [
-    Dashboard(),
+    // const Dashboard(),
     StudentList(),
     const StudentForm(formMode: FormMode.add),
+    const Carousel(),
   ];
 
   @override
@@ -20,7 +21,7 @@ class Home extends StatelessWidget {
     return Scaffold(
         body: Row(
       children: [
-        Expanded(
+        const Expanded(
           child: SideMenu(),
           flex: 1,
         ),

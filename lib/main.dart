@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/landing_page.dart';
+import 'package:school_app/screens/carousel.dart';
 
 import 'controllers/auth_controller.dart';
-import 'controllers/session_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -12,6 +13,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Get.put(AuthController());
+  Get.put(MySession());
 
   runApp(const MyApp());
 }
@@ -23,9 +25,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: const LandingPage());
+      title: 'Flutter Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const LandingPage(),
+      routes: {
+        '/Carousel': (context) => const Carousel(),
+      },
+    );
   }
 }
 

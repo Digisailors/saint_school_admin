@@ -1,11 +1,9 @@
 import 'dart:typed_data';
-import 'package:mime_type/mime_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:school_app/constants/constant.dart';
+import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/models/student.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'dart:html' as file;
-import 'package:path/path.dart';
 
 import 'models/response.dart';
 
@@ -41,18 +39,12 @@ class StudentFormController {
     }
   }
 
-  file.File? _mediafile;
   Uint8List? fileData;
-  String? _fileName;
 
   Future<void> imagePicker() async {
     var mediaInfo = await ImagePickerWeb.getImageInfo;
     if (mediaInfo!.data != null && mediaInfo.fileName != null) {
       fileData = mediaInfo.data;
-      _fileName = mediaInfo.fileName;
-      String? mimeType = mime(basename(mediaInfo.fileName.toString()));
-      _mediafile =
-          file.File(mediaInfo.data!, mediaInfo.fileName!, {'type': mimeType});
       show = Provide.memory;
     }
     return;
@@ -67,14 +59,14 @@ class StudentFormController {
     if (fileData != null) {
       image = await uploadImage(fileData!, id.text);
     }
-    return student.createUser();
+    return student.createUser().then((value) => session.loadStudents());
   }
 
   Future<Response> updateUser() async {
     if (fileData != null) {
       image = await uploadImage(fileData!, id.text);
     }
-    return student.updateUser();
+    return student.updateUser().then((value) => session.loadStudents());
   }
 
   Student get student => Student(
@@ -99,7 +91,7 @@ class StudentFormController {
     controller.mother.text = student.mother ?? '';
     controller.contact.text = student.contact;
     controller.studentClass.text = student.studentClass;
-    controller.section.text = student.section;
+    controller.section.text = student.section ?? '';
     controller.address.text = student.address;
     controller.guardian.text = student.guardian ?? '';
     controller.carNumbers[0].text = student.carNumbers[0];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/widgets/class_list.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -8,7 +9,7 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          Expanded(child: Container(color: Colors.black)),
+          const Expanded(child: ClassList()),
           Expanded(child: Container(color: Colors.white)),
           Expanded(child: Container(color: Colors.red)),
         ],

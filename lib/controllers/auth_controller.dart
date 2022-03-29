@@ -7,11 +7,6 @@ class AuthController extends GetxController {
 
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Stream<bool> checkUserVerified() async* {
     bool verified = false;
     while (!verified) {

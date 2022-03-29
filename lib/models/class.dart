@@ -1,19 +1,18 @@
-class Class {
-  Class({
-    required this.section,
-    required this.name,
-  });
+class Standard {
+  Standard({required this.className, required this.section, required this.id});
 
-  String section;
-  String name;
+  String className;
+  List<String> section;
+  String id;
 
-  factory Class.fromJson(Map<String, dynamic> json) => Class(
-        section: json["section"],
-        name: json["name"],
+  factory Standard.fromJson(Map<String, dynamic> json) => Standard(
+        className: json["className"],
+        section: List<String>.from(json["section"].map((x) => x)),
+        id: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "section": section,
-        "name": name,
+        "className": className,
+        "section": List<dynamic>.from(section.map((x) => x)),
       };
 }

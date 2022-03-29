@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/form_controller.dart';
@@ -18,6 +16,7 @@ class Student extends GetxController {
     required this.address,
     this.image,
     this.guardian,
+    this.inQueue = false,
   });
 
   String name;
@@ -28,13 +27,14 @@ class Student extends GetxController {
   String? guardian;
   String contact;
   String studentClass;
-  String section;
+  String? section;
   String address;
   String? image;
+  bool inQueue;
 
   List<String> get searchString {
     List<String> list = [];
-    List<String> splits = name.split(' ').toList();
+    List<String> splits = [];
     splits.addAll(name.split(' ').toList());
     splits.add(id);
     for (var element in carNumbers) {
@@ -48,25 +48,32 @@ class Student extends GetxController {
 
   List<String> makeSearchstring(String string) {
     List<String> list = [];
-    for (int i = 1; i < string.length; i++) {
-      list.add(string.substring(0, i).toLowerCase());
+    for (int i = 0; i <= string.length; i++) {
+      for (int j = i; j <= string.length; j++) {
+        var temp = string.substring(i, j);
+        if (temp.length > 2) {
+          list.add(temp.toLowerCase());
+        }
+      }
     }
     list.add(string.toLowerCase());
     return list;
   }
 
   factory Student.fromJson(Map<String, dynamic> json) => Student(
-      name: json["name"],
-      id: json["id"],
-      carNumbers: List<String>.from(json["carNumbers"].map((x) => x)),
-      father: json["father"],
-      mother: json["mother"],
-      contact: json["contact"],
-      studentClass: json["class"],
-      section: json["section"],
-      address: json["address"],
-      guardian: json["guardian"],
-      image: json["image"]);
+        name: json["name"],
+        id: json["id"],
+        carNumbers: List<String>.from(json["carNumbers"].map((x) => x)),
+        father: json["father"],
+        mother: json["mother"],
+        contact: json["contact"],
+        studentClass: json["class"],
+        section: json["section"],
+        address: json["address"],
+        guardian: json["guardian"],
+        image: json["image"],
+        inQueue: json["inQueue"] ?? false,
+      );
 
   Map<String, dynamic> toJson() => {
         "name": name,
@@ -81,6 +88,7 @@ class Student extends GetxController {
         "guardian": guardian,
         "image": image,
         "address": address,
+        "inQueue": inQueue,
       };
 
   StudentFormController get formController =>

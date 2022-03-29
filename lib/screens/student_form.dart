@@ -145,17 +145,17 @@ class _StudentFormState extends State<StudentForm> {
                                           CustomTextField(
                                             controller:
                                                 controller.carNumbers[0],
-                                            labelText: "Car 1  ",
+                                            labelText: "Vehicle 1  ",
                                           ),
                                           CustomTextField(
                                             controller:
                                                 controller.carNumbers[1],
-                                            labelText: "Car 2  ",
+                                            labelText: "Vehicle 2  ",
                                           ),
                                           CustomTextField(
                                             controller:
                                                 controller.carNumbers[2],
-                                            labelText: "Car 3  ",
+                                            labelText: "Vehicle 3  ",
                                           ),
                                         ],
                                       ),
