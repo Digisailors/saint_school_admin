@@ -1,7 +1,4 @@
 // ignore_for_file: file_names
-
-import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/get_constants.dart';
@@ -29,25 +26,19 @@ class Idcard extends StatelessWidget {
     List<TableRow> tiles = [];
     if ((student.father ?? '').isNotEmpty) {
       tiles.add(TableRow(children: [
-        const TableCell(
-            verticalAlignment: TableCellVerticalAlignment.middle,
-            child: Text("Father", style: TextStyle(fontSize: 25))),
+        const TableCell(verticalAlignment: TableCellVerticalAlignment.middle, child: Text("Father", style: TextStyle(fontSize: 25))),
         Text(student.mother!, style: const TextStyle(fontSize: 40)),
       ]));
     }
     if ((student.mother ?? '').isNotEmpty) {
       tiles.add(TableRow(children: [
-        const TableCell(
-            verticalAlignment: TableCellVerticalAlignment.middle,
-            child: Text("Mother", style: TextStyle(fontSize: 25))),
+        const TableCell(verticalAlignment: TableCellVerticalAlignment.middle, child: Text("Mother", style: TextStyle(fontSize: 25))),
         Text(student.mother!, style: const TextStyle(fontSize: 40)),
       ]));
     }
     if ((student.guardian ?? '').isNotEmpty) {
       tiles.add(TableRow(children: [
-        const TableCell(
-            verticalAlignment: TableCellVerticalAlignment.middle,
-            child: Text("Guardian", style: TextStyle(fontSize: 25))),
+        const TableCell(verticalAlignment: TableCellVerticalAlignment.middle, child: Text("Guardian", style: TextStyle(fontSize: 25))),
         Text(student.guardian!, style: const TextStyle(fontSize: 40)),
       ]));
     }
@@ -78,26 +69,22 @@ class Idcard extends StatelessWidget {
                 Text(
                   student.name,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 50),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       "Class : ",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text(
                       student.studentClass,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 20),
+                      style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
                     ),
                     Text(
                       student.section ?? '',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 20),
+                      style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
                     ),
                   ],
                 ),
@@ -106,10 +93,7 @@ class Idcard extends StatelessWidget {
                 const Divider(),
                 Table(
                   textBaseline: TextBaseline.alphabetic,
-                  columnWidths: const {
-                    0: FlexColumnWidth(2),
-                    1: FlexColumnWidth(5)
-                  },
+                  columnWidths: const {0: FlexColumnWidth(2), 1: FlexColumnWidth(5)},
                   children: getParentTiles(),
                 )
               ],

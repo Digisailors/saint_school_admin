@@ -32,11 +32,10 @@ class CustomDropDown<T> extends StatelessWidget {
       onChanged: onChanged,
       onTap: onTap,
       decoration: InputDecoration(
-        constraints: const BoxConstraints.expand(height: 65),
+        border: const OutlineInputBorder(),
         labelText: labelText,
         labelStyle: const TextStyle(
           fontFamily: 'Lexend Deca',
-          color: Color(0xFFEF4C43),
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
@@ -47,13 +46,7 @@ class CustomDropDown<T> extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFFDBE2E7),
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: const BorderSide(color: Colors.blue, width: 1)),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Color(0xFFDBE2E7),

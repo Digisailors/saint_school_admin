@@ -23,8 +23,7 @@ class _StudentFormState extends State<StudentForm> {
   @override
   void initState() {
     if (formMode == FormMode.update) {
-      controller.show =
-          controller.image != null ? Provide.network : Provide.logo;
+      controller.show = controller.image != null ? Provide.network : Provide.logo;
     }
     super.initState();
   }
@@ -40,9 +39,7 @@ class _StudentFormState extends State<StudentForm> {
   }
 
   String? anyOneValidator(String? val) {
-    if (controller.father.text.isNotEmpty ||
-        controller.mother.text.isNotEmpty ||
-        controller.guardian.text.isNotEmpty) {
+    if (controller.father.text.isNotEmpty || controller.mother.text.isNotEmpty || controller.guardian.text.isNotEmpty) {
       return null;
     }
     return "Either a parent or guardian is required";
@@ -61,8 +58,7 @@ class _StudentFormState extends State<StudentForm> {
                     ),
               body: Card(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
                   child: Column(
                     children: [
                       Row(
@@ -78,14 +74,8 @@ class _StudentFormState extends State<StudentForm> {
                                     children: [
                                       TableRow(
                                         children: [
-                                          CustomTextField(
-                                              validator: requiredValidator,
-                                              controller: controller.id,
-                                              labelText: 'ID     '),
-                                          CustomTextField(
-                                              validator: requiredValidator,
-                                              controller: controller.name,
-                                              labelText: 'Name   '),
+                                          CustomTextField(validator: requiredValidator, controller: controller.id, labelText: 'ID     '),
+                                          CustomTextField(validator: requiredValidator, controller: controller.name, labelText: 'Name   '),
                                         ],
                                       ),
                                     ],
@@ -94,15 +84,8 @@ class _StudentFormState extends State<StudentForm> {
                                     children: [
                                       TableRow(
                                         children: [
-                                          CustomTextField(
-                                              validator: requiredValidator,
-                                              controller:
-                                                  controller.studentClass,
-                                              labelText: "Class  "),
-                                          CustomTextField(
-                                              validator: requiredValidator,
-                                              controller: controller.section,
-                                              labelText: "Section"),
+                                          CustomTextField(validator: requiredValidator, controller: controller.studentClass, labelText: "Class  "),
+                                          CustomTextField(validator: requiredValidator, controller: controller.section, labelText: "Section"),
                                         ],
                                       ),
                                     ],
@@ -111,14 +94,8 @@ class _StudentFormState extends State<StudentForm> {
                                     children: [
                                       TableRow(
                                         children: [
-                                          CustomTextField(
-                                              validator: anyOneValidator,
-                                              controller: controller.father,
-                                              labelText: "Father "),
-                                          CustomTextField(
-                                              validator: anyOneValidator,
-                                              controller: controller.mother,
-                                              labelText: "Mother "),
+                                          CustomTextField(validator: anyOneValidator, controller: controller.father, labelText: "Father "),
+                                          CustomTextField(validator: anyOneValidator, controller: controller.mother, labelText: "Mother "),
                                           CustomTextField(
                                             validator: anyOneValidator,
                                             controller: controller.guardian,
@@ -143,18 +120,15 @@ class _StudentFormState extends State<StudentForm> {
                                       TableRow(
                                         children: [
                                           CustomTextField(
-                                            controller:
-                                                controller.carNumbers[0],
+                                            controller: controller.carNumbers[0],
                                             labelText: "Vehicle 1  ",
                                           ),
                                           CustomTextField(
-                                            controller:
-                                                controller.carNumbers[1],
+                                            controller: controller.carNumbers[1],
                                             labelText: "Vehicle 2  ",
                                           ),
                                           CustomTextField(
-                                            controller:
-                                                controller.carNumbers[2],
+                                            controller: controller.carNumbers[2],
                                             labelText: "Vehicle 3  ",
                                           ),
                                         ],
@@ -166,28 +140,19 @@ class _StudentFormState extends State<StudentForm> {
                                     children: [
                                       TableRow(children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 16, right: 16, left: 16),
+                                          padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
                                           child: SizedBox(
                                               width: double.maxFinite,
                                               height: 40,
                                               child: ElevatedButton(
                                                   onPressed: () {
-                                                    if (_formKey.currentState!
-                                                        .validate()) {
-                                                      var future = (formMode ==
-                                                              FormMode.add)
-                                                          ? controller
-                                                              .createUser()
-                                                          : controller
-                                                              .updateUser();
+                                                    if (_formKey.currentState!.validate()) {
+                                                      var future = (formMode == FormMode.add) ? controller.createUser() : controller.updateUser();
                                                       showFutureCustomDialog(
                                                           context: context,
                                                           future: future,
                                                           onTapOk: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
+                                                            Navigator.of(context).pop();
                                                           });
                                                     }
                                                   },
@@ -203,9 +168,7 @@ class _StudentFormState extends State<StudentForm> {
                           Expanded(
                             flex: 2,
                             child: Column(
-                              mainAxisAlignment: formMode == FormMode.update
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.center,
+                              mainAxisAlignment: formMode == FormMode.update ? MainAxisAlignment.start : MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Padding(

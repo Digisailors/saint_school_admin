@@ -35,7 +35,7 @@ class ClassList extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                             onPressed: () {
-                              classController.add();
+                              classController.addClass();
                             },
                             child: const Text("Add")),
                       )
@@ -43,23 +43,6 @@ class ClassList extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                child: Card(
-                  child: ListView.builder(
-                    itemCount: classController.sections.length,
-                    itemBuilder: (context, index) {
-                      var section = classController.sections[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: ListTile(
-                          leading: Text(section["name"]),
-                          title: Text(section["section"]),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              )
             ],
           );
         });

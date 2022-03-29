@@ -35,11 +35,15 @@ class Student extends GetxController {
   List<String> get searchString {
     List<String> list = [];
     List<String> splits = [];
-    splits.addAll(name.split(' ').toList());
+
+    list.add(name);
+    list.addAll(carNumbers);
+    list.add(id);
+
+    splits.add(name);
+    splits.addAll(carNumbers);
     splits.add(id);
-    for (var element in carNumbers) {
-      splits.addAll(element.split(' ').toList());
-    }
+
     for (var element in splits) {
       list.addAll(makeSearchstring(element));
     }
@@ -91,8 +95,7 @@ class Student extends GetxController {
         "inQueue": inQueue,
       };
 
-  StudentFormController get formController =>
-      StudentFormController.fromStudent(this);
+  StudentFormController get formController => StudentFormController.fromStudent(this);
 
   Future<res.Response> createUser() async {
     return students
@@ -103,9 +106,6 @@ class Student extends GetxController {
   }
 
   Future<res.Response> updateUser() {
-    return students
-        .doc(id)
-        .update(toJson())
-        .then((value) => res.Response.success("Student Updated Succesfully"));
+    return students.doc(id).update(toJson()).then((value) => res.Response.success("Student Updated Succesfully"));
   }
 }
