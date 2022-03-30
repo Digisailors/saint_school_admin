@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const LandingPage(),
-      routes: {
-        '/Carousel': (context) => const Carousel(),
-      },
+      // routes: {
+      // //   '/Carousel': (context) => const Carousel(),
+      // },
     );
   }
 }

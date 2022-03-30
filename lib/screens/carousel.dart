@@ -25,6 +25,19 @@ class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("Back"),
+          ),
+        ),
+      ),
       body: GetBuilder(
           init: session,
           builder: (context) {
@@ -33,10 +46,7 @@ class _CarouselState extends State<Carousel> {
                 child: Text("Empty Queue"),
               );
             } else {
-              return Row(
-                  children: session.queuedStudents
-                      .map((e) => Expanded(child: Idcard(student: e)))
-                      .toList());
+              return Row(children: session.queuedStudents.map((e) => Expanded(child: Idcard(student: e))).toList());
             }
           }),
     );

@@ -99,13 +99,17 @@ class Student extends GetxController {
 
   Future<res.Response> createUser() async {
     return students
-        .doc(id)
+        .doc(id.toUpperCase().removeAllWhitespace)
         .set(toJson())
         .then((value) => res.Response.success("Student Addeed Succesfully"))
         .onError((error, stackTrace) => res.Response.error(error.toString()));
   }
 
   Future<res.Response> updateUser() {
-    return students.doc(id).update(toJson()).then((value) => res.Response.success("Student Updated Succesfully"));
+    return students.doc(id.toUpperCase().removeAllWhitespace).update(toJson()).then((value) => res.Response.success("Student Updated Succesfully"));
+  }
+
+  Future<res.Response> delete() {
+    return students.doc(id).delete().then((value) => res.Response.success("Student Deleted successfully"));
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/widgets/class_list.dart';
+import 'package:school_app/widgets/dashboard/class_list.dart';
+import 'package:school_app/widgets/dashboard/preview.dart';
+import 'package:school_app/widgets/dashboard/queued_student.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -10,8 +12,8 @@ class Dashboard extends StatelessWidget {
       body: Row(
         children: [
           Expanded(child: ClassList()),
-          Expanded(child: Container(color: Colors.white)),
-          Expanded(child: Container(color: Colors.red)),
+          const Expanded(child: QueueList()),
+          const Expanded(child: Preview()),
         ],
       ),
     );

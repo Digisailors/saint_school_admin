@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/controllers/class_controller.dart';
@@ -7,7 +8,7 @@ import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/models/student.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 
-import 'models/response.dart';
+import 'models/response.dart' as r;
 
 enum Provide { network, memory, logo }
 
@@ -69,28 +70,54 @@ class StudentFormController {
     return classController.classes[classField]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
   }
 
-  Future<Response> createUser() async {
-    var snapshot = await students.doc(id.text).get();
-    if (snapshot.exists) {
-      var data = snapshot.data();
-      return Response.error("ID is taken by another student ${data!['name']}");
-    }
-    if (fileData != null) {
-      image = await uploadImage(fileData!, id.text);
-    }
-    return student.createUser().then((value) => session.loadStudents());
+  clear() {
+    name.clear();
+    id.clear();
+    carNumbers[0].clear();
+    carNumbers[1].clear();
+    carNumbers[2].clear();
+    father.clear();
+    mother.clear();
+    contact.clear();
+    address.clear();
+    classField = null;
+    sectionField = null;
+    image = null;
+    fileData = null;
   }
 
-  Future<Response> updateUser() async {
+  Future<r.Response> createUser() async {
+    var snapshot = await students.doc(id.text.toUpperCase().removeAllWhitespace).get();
+    if (snapshot.exists) {
+      var data = snapshot.data();
+      return r.Response.error("ID is taken by another student ${data!['name']}");
+    }
+    if (fileData != null) {
+      image = await uploadImage(fileData!, id.text.toUpperCase().removeAllWhitespace);
+    }
+
+    return student.createUser().then((value) {
+      clear();
+      return value;
+    });
+  }
+
+  Future<r.Response> updateUser() async {
+    if (session.student == null) {
+      return r.Response.error("Please select a student");
+    }
     if (fileData != null) {
       image = await uploadImage(fileData!, id.text);
     }
-    return student.updateUser().then((value) => session.loadStudents());
+    return student.updateUser().then((value) {
+      session.loadStudents();
+      return value;
+    });
   }
 
   Student get student => Student(
       name: name.text,
-      id: id.text,
+      id: id.text.toUpperCase().removeAllWhitespace,
       carNumbers: carNumbers.map((e) => e.text).toList(),
       contact: contact.text,
       studentClass: classField!,

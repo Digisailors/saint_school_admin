@@ -7,8 +7,7 @@ import 'package:school_app/constants/constant.dart';
 import 'package:school_app/form_controller.dart';
 import 'package:school_app/models/student.dart';
 
-final CollectionReference<Map<String, dynamic>> queue =
-    firestore.collection('Queue');
+final CollectionReference<Map<String, dynamic>> queue = firestore.collection('Queue');
 
 class MySession extends GetxController {
   static MySession instance = Get.find();
@@ -48,45 +47,63 @@ class MySession extends GetxController {
     super.onInit();
   }
 
+  sortLocal() {
+    if (sortBy == 'name') {
+      kids.sort((a, b) => a.name.compareTo(b.name));
+      selectedIndex = 0;
+      selectedStudent = kids.first;
+      update();
+    }
+    if (sortBy == 'id') {
+      kids.sort((a, b) => a.id.compareTo(b.id));
+      selectedIndex = 0;
+      selectedStudent = kids.first;
+      update();
+    }
+    if (sortBy == 'class') {
+      kids.sort((a, b) => a.studentClass.compareTo(b.studentClass));
+      selectedIndex = 0;
+      selectedStudent = kids.first;
+      update();
+    }
+  }
+
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listenQueue() {
-    return students
-        .where("inQueue", isEqualTo: true)
-        .limit(3)
-        .snapshots()
-        .listen((event) {
+    return students.where("inQueue", isEqualTo: true).limit(3).orderBy('queuedTime', descending: false).snapshots().listen((event) {
       if (event.docs.isEmpty) {
         queuedStudents = [];
         update();
-      } else {
-        queuedStudents =
-            event.docs.map((e) => Student.fromJson(e.data())).toList();
+      } else if (event.docs.length < 2) {
+        queuedStudents = event.docs.map((e) => Student.fromJson(e.data())).toList();
         update();
-      }
-
-      for (var e in event.docs) {
-        // Timer(const Duration(seconds: 30), () {
-        //   e.reference.update({"inQueue": false});
-        // });
       }
     });
   }
 
+  loadQueue() {
+    students.where("inQueue", isEqualTo: true).limit(3).orderBy('queuedTime', descending: false).get().then((value) {
+      if (value.docs.isEmpty) {
+        queuedStudents = [];
+      } else {
+        queuedStudents = value.docs.map((e) => Student.fromJson(e.data())).toList();
+      }
+    });
+    update();
+  }
+
   loadStudents() {
     if (searchController.text.isEmpty) {
-      students.orderBy('id').get().then((event) {
+      students.orderBy(sortBy).get().then((event) {
         kids = event.docs.map((e) => Student.fromJson(e.data())).toList();
         selectedIndex = 0;
-        selectedStudent = kids[selectedIndex];
+        selectedStudent = kids.isNotEmpty ? kids[selectedIndex] : null;
         update();
       });
     } else {
-      students
-          .where('search', arrayContains: searchController.text.toLowerCase())
-          .get()
-          .then((event) {
+      students.orderBy(sortBy).where('search', arrayContains: searchController.text.toLowerCase()).get().then((event) {
         kids = event.docs.map((e) => Student.fromJson(e.data())).toList();
         selectedIndex = 0;
-        selectedStudent = kids[selectedIndex];
+        selectedStudent = kids.isNotEmpty ? kids[selectedIndex] : null;
         update();
       });
     }

@@ -40,13 +40,14 @@ class ClassController extends GetxController {
   }
 
   addClass() {
-    classes[name.text.removeAllWhitespace] = <String>[];
-    return classRef.update(classes).then((value) => r.Response.success("Class added"));
+    classes[name.text.removeAllWhitespace.toUpperCase()] = <String>[];
+    return classRef.update(classes).then((value) => r.Response.success("Class Submitted"));
   }
 
   addSection(String className, String section) {
     classes[className] = classes[className] ?? [];
-    classes[className]!.add(section);
+
+    classes[className]!.add(section.toUpperCase());
     return classRef.update(classes).then((value) => r.Response.success("Section added"));
   }
 }

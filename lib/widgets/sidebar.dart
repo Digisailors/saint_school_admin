@@ -48,7 +48,7 @@ class _SideMenuState extends State<SideMenu> {
             press: () {
               setState(() {
                 session.pageIndex = 0;
-                session.selectedStudent = session.kids[0];
+                session.selectedStudent = session.kids.isEmpty ? null : session.kids[0];
                 session.controller.jumpToPage(0);
               });
             },
