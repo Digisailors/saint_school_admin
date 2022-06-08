@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:school_app/controllers/session_controller.dart';
+import 'package:school_app/controllers/queue_controller.dart';
 import 'package:school_app/screens/id.dart';
 
 class Carousel extends StatefulWidget {
@@ -12,14 +12,15 @@ class Carousel extends StatefulWidget {
 
 class _CarouselState extends State<Carousel> {
   @override
-  void initState() {
-    session.listenQueue();
-    super.initState();
+  void dispose() {
+    queueController.queuedStudents.clear();
+    super.dispose();
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    Get.put((QueueController()));
+    super.initState();
   }
 
   @override
@@ -39,16 +40,33 @@ class _CarouselState extends State<Carousel> {
         ),
       ),
       body: GetBuilder(
-          init: session,
-          builder: (context) {
-            if (session.queuedStudents.isEmpty) {
-              return const Center(
-                child: Text("Empty Queue"),
-              );
-            } else {
-              return Row(children: session.queuedStudents.map((e) => Expanded(child: Idcard(student: e))).toList());
-            }
-          }),
+        init: queueController,
+        builder: (_) {
+          return Row(
+              children: queueController.queuedStudents
+                  .map((e) => Expanded(
+                          child: Idcard(
+                        student: e,
+                        string: queueController.countDown[e.id] ?? '',
+                      )))
+                  .toList());
+        },
+      ),
+      // body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      //   stream: queue.orderBy("queuedTime").limit(3).snapshots(),
+      //   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.active || snapshot.hasData) {
+      //       List<Student> studentList = snapshot.data?.docs.map((e) => Student.fromJson(e.data())).toList() ?? [];
+      //       return Row(children: studentList.map((e) => Expanded(child: Idcard(student: e))).toList());
+      //     }
+      //     if (snapshot.hasError) {
+      //       return Center(child: Text(snapshot.error.toString()));
+      //     }
+      //     return const Center(
+      //       child: CircularProgressIndicator(),
+      //     );
+      //   },
+      // ),
     );
   }
 }

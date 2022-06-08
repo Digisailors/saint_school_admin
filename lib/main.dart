@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/landing_page.dart';
 import 'package:school_app/screens/carousel.dart';
 
 import 'controllers/auth_controller.dart';
+import 'controllers/queue_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -26,11 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.blue, textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme)),
       home: const LandingPage(),
-      // routes: {
-      // //   '/Carousel': (context) => const Carousel(),
-      // },
     );
   }
 }
