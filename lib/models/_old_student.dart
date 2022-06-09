@@ -17,6 +17,7 @@ class Student extends GetxController {
     this.image,
     this.guardian,
     this.inQueue = false,
+    this.queuedTime,
   });
 
   String name;
@@ -31,6 +32,7 @@ class Student extends GetxController {
   String address;
   String? image;
   bool inQueue;
+  DateTime? queuedTime;
 
   List<String> get searchString {
     List<String> list = [];
@@ -65,19 +67,20 @@ class Student extends GetxController {
   }
 
   factory Student.fromJson(Map<String, dynamic> json) => Student(
-        name: json["name"],
-        id: json["id"],
-        carNumbers: List<String>.from(json["carNumbers"].map((x) => x)),
-        father: json["father"],
-        mother: json["mother"],
-        contact: json["contact"],
-        studentClass: json["class"],
-        section: json["section"],
-        address: json["address"],
-        guardian: json["guardian"],
-        image: json["image"],
-        inQueue: json["inQueue"] ?? false,
-      );
+      name: json["name"],
+      id: json["id"],
+      carNumbers: List<String>.from(json["carNumbers"].map((x) => x)),
+      father: json["father"],
+      mother: json["mother"],
+      contact: json["contact"],
+      studentClass: json["class"],
+      section: json["section"],
+      address: json["address"],
+      guardian: json["guardian"],
+      image: json["image"],
+      inQueue: json["inQueue"] ?? false,
+      // ignore: prefer_null_aware_operators
+      queuedTime: json["queuedTime"] is int ? DateTime.fromMicrosecondsSinceEpoch(json["queuedTime"]) : json["queuedTime"]?.toDate());
 
   Map<String, dynamic> toJson() => {
         "name": name,

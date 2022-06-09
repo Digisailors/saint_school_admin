@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/controllers/class_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/models/student.dart';
+import 'package:school_app/models/_old_student.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 
 import 'models/response.dart' as r;

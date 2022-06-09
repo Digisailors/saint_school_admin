@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/form_controller.dart';
-import 'package:school_app/models/student.dart';
+import 'package:school_app/models/_old_student.dart';
 
-final CollectionReference<Map<String, dynamic>> queue = firestore.collection('Queue');
+final CollectionReference<Map<String, dynamic>> queue = firestore.collection('NewQueue');
 
 class MySession extends GetxController {
   static MySession instance = Get.find();
@@ -37,13 +35,12 @@ class MySession extends GetxController {
     return items;
   }
 
-  List<Student> queuedStudents = [];
-
   final searchController = TextEditingController();
 
   @override
   onInit() {
     loadStudents();
+
     super.onInit();
   }
 
@@ -68,29 +65,6 @@ class MySession extends GetxController {
     }
   }
 
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listenQueue() {
-    return students.where("inQueue", isEqualTo: true).limit(3).orderBy('queuedTime', descending: false).snapshots().listen((event) {
-      if (event.docs.isEmpty) {
-        queuedStudents = [];
-        update();
-      } else if (event.docs.length < 2) {
-        queuedStudents = event.docs.map((e) => Student.fromJson(e.data())).toList();
-        update();
-      }
-    });
-  }
-
-  loadQueue() {
-    students.where("inQueue", isEqualTo: true).limit(3).orderBy('queuedTime', descending: false).get().then((value) {
-      if (value.docs.isEmpty) {
-        queuedStudents = [];
-      } else {
-        queuedStudents = value.docs.map((e) => Student.fromJson(e.data())).toList();
-      }
-    });
-    update();
-  }
-
   loadStudents() {
     if (searchController.text.isEmpty) {
       students.orderBy(sortBy).get().then((event) {
@@ -111,6 +85,7 @@ class MySession extends GetxController {
 
   set selectedStudent(Student? tempStudent) {
     student = tempStudent;
+
     loadForm();
   }
 
