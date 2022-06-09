@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/form_controller.dart';
-import 'package:school_app/models/student.dart';
+import 'package:school_app/models/_old_student.dart';
 
-final CollectionReference<Map<String, dynamic>> queue = firestore.collection('Queue');
+final CollectionReference<Map<String, dynamic>> queue = firestore.collection('NewQueue');
 
 class MySession extends GetxController {
   static MySession instance = Get.find();

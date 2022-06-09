@@ -4,13 +4,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/landing_page.dart';
-import 'package:school_app/screens/carousel.dart';
 
 import 'controllers/auth_controller.dart';
-import 'controllers/queue_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

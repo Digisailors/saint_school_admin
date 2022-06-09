@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/queue_controller.dart';
 import 'package:school_app/screens/id.dart';
+import 'package:school_app/widgets/student_tile.dart';
 
 class Carousel extends StatefulWidget {
   const Carousel({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class Carousel extends StatefulWidget {
 class _CarouselState extends State<Carousel> {
   @override
   void dispose() {
-    queueController.queuedStudents.clear();
+    queueController.queuedStudentsList.clear();
     super.dispose();
   }
 
@@ -27,29 +28,21 @@ class _CarouselState extends State<Carousel> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("Back"),
-          ),
-        ),
-      ),
+
       body: GetBuilder(
         init: queueController,
         builder: (_) {
-          return Row(
-              children: queueController.queuedStudents
-                  .map((e) => Expanded(
-                          child: Idcard(
-                        student: e,
-                        string: queueController.countDown[e.id] ?? '',
-                      )))
-                  .toList());
+          return GridView.count(
+            crossAxisCount: 4,
+            childAspectRatio: 3,
+            children: queueController.queuedStudentsList
+                .map((e) => StudentTile(student: e.student, string: queueController.countDown[e.icNumber] ?? ''))
+                .toList(),
+          );
+          // return Wrap(
+          //     children: queueController.queuedStudentsList
+          //         .map((e) => Expanded(child: StudentTile(student: e, string: queueController.countDown[e.ic] ?? '')))
+          //         .toList());
         },
       ),
       // body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

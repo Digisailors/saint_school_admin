@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/models/student.dart';
+import 'package:school_app/models/_old_student.dart';
 
 class QueueList extends StatelessWidget {
   const QueueList({Key? key}) : super(key: key);
