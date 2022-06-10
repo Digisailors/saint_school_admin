@@ -32,23 +32,24 @@ class _StudentFormState extends State<StudentForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Wrap(
-          children: [
-            CustomTextFormField(controller: state.name, label: 'Name'),
-            CustomTextFormField(controller: state.name, label: 'Email'),
-            CustomTextFormField(controller: state.name, label: 'IC Nmber'),
-            CustomTextFormField(controller: state.name, label: 'Image Url'),
-            CustomTextFormField(controller: state.name, label: 'Address'),
-            CustomDropDown(
-                labelText: 'Gender',
-                items: const [
-                  DropdownMenuItem(child: Text('Male'), value: Gender.male),
-                  DropdownMenuItem(child: Text('Female'), value: Gender.female),
-                  DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
-                ],
-                selectedValue: state.gender),
-          ],
-        ));
+      appBar: AppBar(),
+      body: Wrap(
+        children: [
+          CustomTextFormField(controller: state.name, label: 'Name'),
+          CustomTextFormField(controller: state.name, label: 'Email'),
+          CustomTextFormField(controller: state.name, label: 'IC Nmber'),
+          CustomTextFormField(controller: state.name, label: 'Image Url'),
+          CustomTextFormField(controller: state.name, label: 'Address'),
+          CustomDropDown(
+              labelText: 'Gender',
+              items: const [
+                DropdownMenuItem(child: Text('Male'), value: Gender.male),
+                DropdownMenuItem(child: Text('Female'), value: Gender.female),
+                DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
+              ],
+              selectedValue: state.gender),
+        ],
+      ),
+    );
   }
 }

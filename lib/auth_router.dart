@@ -12,7 +12,7 @@ import 'package:school_app/models/student.dart';
 import 'package:school_app/screens/Form/student_form.dart';
 import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
-import 'package:school_app/screens/ladning_page.dart';
+import 'package:school_app/screens/landing_page.dart.dart';
 import 'package:school_app/screens/list/list.dart';
 import 'package:school_app/screens/log_in.dart';
 
@@ -39,6 +39,10 @@ class AuthRouter extends StatelessWidget {
               if (settings.name == EntityList.routeName) {
                 final args = settings.arguments as EntityType;
                 return MaterialPageRoute(builder: (context) => LandingPage(child: EntityList(entityType: args)));
+              }
+              if (settings.name == StudentForm.routeName) {
+                final args = settings.arguments as Student?;
+                return MaterialPageRoute(builder: (context) => LandingPage(child: StudentForm(student: args)));
               }
               if (settings.name == StudentForm.routeName) {
                 final args = settings.arguments as Student?;

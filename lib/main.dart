@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/auth_router.dart';
 import 'package:school_app/models/session.dart';
-import 'package:school_app/screens/ladning_page.dart';
+import 'package:school_app/screens/landing_page.dart.dart';
 import 'package:school_app/screens/log_in.dart';
 import 'package:school_app/screens/student_list.dart';
 
