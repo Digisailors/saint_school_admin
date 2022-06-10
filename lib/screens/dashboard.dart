@@ -6,6 +6,8 @@ import 'package:school_app/widgets/dashboard/queued_student.dart';
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
 
+  static String routeName = '/Dashboard';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

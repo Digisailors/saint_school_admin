@@ -1,5 +1,5 @@
-class Response {
-  Response({
+class Result {
+  Result({
     required this.code,
     required this.message,
   });
@@ -7,7 +7,7 @@ class Response {
   String code;
   String message;
 
-  factory Response.fromJson(Map<String, dynamic> json) => Response(
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
         code: json["code"],
         message: json["message"],
       );
@@ -17,6 +17,6 @@ class Response {
         "message": message,
       };
 
-  factory Response.error(error) => Response(code: "Error", message: error);
-  factory Response.success(message) => Response(code: "Success", message: message);
+  factory Result.error(error) => Result(code: "Error", message: error);
+  factory Result.success(message) => Result(code: "Success", message: message);
 }

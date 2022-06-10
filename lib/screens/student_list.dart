@@ -14,7 +14,7 @@ class StudentList extends StatefulWidget {
 class _StudentListState extends State<StudentList> {
   @override
   void initState() {
-    session.loadStudents();
+    // session.loadStudents();
 
     // session.selectedStudent = session.kids[]
     super.initState();
@@ -39,85 +39,35 @@ class _StudentListState extends State<StudentList> {
                           child: ListTile(
                             trailing: IconButton(
                                 onPressed: () {
-                                  session.loadStudents();
+                                  // session.loadStudents();
                                 },
                                 icon: const Icon(Icons.search)),
                             title: TextFormField(
-                              controller: session.searchController,
+                              // controller: session.searchController,
                               onChanged: (text) {
                                 if (text.isEmpty) {
-                                  session.loadStudents();
+                                  // session.loadStudents();
                                 }
                               },
                               decoration: const InputDecoration(border: InputBorder.none),
                             ),
                             leading: DropdownButtonHideUnderline(
-                              child: DropdownButton<String?>(
-                                  icon: const Icon(Icons.sort_sharp),
-                                  items: session.getOrderByItems(),
-                                  hint: const Icon(Icons.sort),
-                                  value: session.sortBy,
-                                  onChanged: (text) {
-                                    session.sortBy = text ?? session.sortBy;
-                                    session.sortLocal();
-                                  }),
+                              child: DropdownButton<dynamic>(
+                                icon: const Icon(Icons.sort_sharp),
+                                // items: session.getOrderByItems(),
+                                items: [],
+                                hint: const Icon(Icons.sort),
+                                // value: session.sortBy,
+                                onChanged: (text) {
+                                  // session.sortBy = text ?? session.sortBy;
+                                  // session.sortLocal();
+                                },
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: session.kids.isEmpty
-                            ? const Center(
-                                child: Text("There are no students in the list"),
-                              )
-                            : ListView.builder(
-                                itemCount: session.kids.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    horizontalTitleGap: 32,
-                                    leading: CircleAvatar(backgroundImage: NetworkImage(session.kids[index].image ?? '')),
-                                    title: Text(session.kids[index].id),
-                                    subtitle: Text(session.kids[index].name),
-                                    selected: session.selectedIndex == index,
-                                    selectedColor: Colors.white,
-                                    trailing: IconButton(
-                                        onPressed: () {
-                                          try {
-                                            var future = session.kids[index].delete();
-                                            showFutureCustomDialog(
-                                                context: context,
-                                                future: future,
-                                                onTapOk: () {
-                                                  session.kids.removeAt(index);
-                                                  session.selectedIndex = 0;
-                                                  session.selectedStudent = session.kids.isNotEmpty ? session.kids.first : null;
-                                                  session.update();
-                                                  Navigator.of(context).pop();
-                                                });
-                                          } catch (err) {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: const Text("Error Occured", style: TextStyle(color: Colors.black)),
-                                                    content: Text(err.toString()),
-                                                  );
-                                                });
-                                          }
-                                        },
-                                        icon: const Icon(Icons.delete)),
-                                    onTap: () {
-                                      session.selectedIndex = index;
-
-                                      session.selectedStudent = session.kids[session.selectedIndex];
-
-                                      session.update();
-                                    },
-                                    hoverColor: Colors.blue.shade100,
-                                    selectedTileColor: Colors.blueAccent,
-                                  );
-                                }),
-                      ),
+                      Container()
                     ],
                   ),
                 ),

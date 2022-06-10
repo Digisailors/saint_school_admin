@@ -30,25 +30,20 @@ class ClassController extends GetxController {
         for (var element in value) {
           sections.add(element.toString());
         }
-        // print("\x1B[2J\x1B[0;0H");
-        // print(value);
-        // print(sections);
         classes[key] = sections;
       });
     });
-    print(classes);
   }
 
   addClass() {
     classes[name.text.removeAllWhitespace.toUpperCase()] = <String>[];
-    return classRef.update(classes).then((value) => r.Response.success("Class Submitted"));
+    return classRef.update(classes).then((value) => r.Result.success("Class Submitted"));
   }
 
   addSection(String className, String section) {
     classes[className] = classes[className] ?? [];
-
     classes[className]!.add(section.toUpperCase());
-    return classRef.update(classes).then((value) => r.Response.success("Section added"));
+    return classRef.update(classes).then((value) => r.Result.success("Section added"));
   }
 }
 

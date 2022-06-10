@@ -8,30 +8,23 @@ import '../models/response.dart';
 
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
-final CollectionReference<Map<String, dynamic>> students =
-    firestore.collection('Students');
+final CollectionReference<Map<String, dynamic>> students = firestore.collection('Students');
 
 Future<String> uploadImage(Uint8List file, String name) async {
-  var ref = storage
-      .ref(name)
-      .child(name + DateTime.now().microsecondsSinceEpoch.toString());
+  var ref = storage.ref(name).child(name + DateTime.now().microsecondsSinceEpoch.toString());
   var url = ref.putData(file).then((p0) => p0.ref.getDownloadURL());
   return url;
 }
 
-showFutureCustomDialog(
-    {required BuildContext context,
-    required Future<dynamic> future,
-    required void Function()? onTapOk}) {
+showFutureCustomDialog({required BuildContext context, required Future<dynamic> future, required void Function()? onTapOk}) {
   showDialog(
       context: context,
       builder: (context) {
         return FutureBuilder(
             future: future,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.active ||
-                  snapshot.connectionState == ConnectionState.done) {
-                var response = snapshot.data as Response;
+              if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
+                var response = snapshot.data as Result;
                 if (response.code == "success") {
                   Navigator.of(context).pop();
                 }
@@ -57,9 +50,7 @@ showFutureCustomDialog(
 }
 
 class CustomListtile extends StatelessWidget {
-  const CustomListtile(
-      {Key? key, this.subtitle, this.title, required this.data})
-      : super(key: key);
+  const CustomListtile({Key? key, this.subtitle, this.title, required this.data}) : super(key: key);
   final Widget? subtitle;
   final Widget? title;
   final String data;

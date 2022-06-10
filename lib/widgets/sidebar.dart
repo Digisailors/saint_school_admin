@@ -2,104 +2,93 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
+import 'package:school_app/models/biodata.dart';
 import 'package:school_app/screens/carousel.dart';
+import 'package:school_app/screens/dashboard.dart';
+import 'package:school_app/screens/list/list.dart';
 
-class SideMenu extends StatefulWidget {
+class SideMenu extends StatelessWidget {
   const SideMenu({
     Key? key,
   }) : super(key: key);
 
-  @override
-  State<SideMenu> createState() => _SideMenuState();
-}
-
-class _SideMenuState extends State<SideMenu> {
   set index(int number) => session.pageIndex = number;
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: Colors.blue.shade50,
-      child: ListView(
-        children: [
-          DrawerHeader(
-            child: CircleAvatar(
-              child: Image.asset(
-                'assets/logo.png',
-                fit: BoxFit.cover,
-              ),
+    return GetBuilder(
+        init: session,
+        builder: (_) {
+          final currentPage = session.pageIndex;
+          return Drawer(
+            backgroundColor: Colors.blue.shade50,
+            child: ListView(
+              children: [
+                DrawerHeader(
+                  child: CircleAvatar(
+                    child: Image.asset(
+                      'assets/logo.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                DrawerListTile(
+                  title: "Dashboard",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  selected: currentPage == 0,
+                  press: () {
+                    session.pageIndex = 0;
+                    Get.offAllNamed(Dashboard.routeName);
+                  },
+                ),
+                DrawerListTile(
+                  title: "Student List",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  selected: currentPage == 1,
+                  press: () {
+                    session.pageIndex = 1;
+                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.student);
+                  },
+                ),
+                DrawerListTile(
+                  title: "Parent List",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  selected: currentPage == 2,
+                  press: () {
+                    session.pageIndex = 2;
+                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.parent);
+                  },
+                ),
+                DrawerListTile(
+                  title: "Teacher List",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  // selected: currentPage == 2,
+                  press: () {
+                    session.pageIndex = 3;
+                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
+                    // Get.offAll(() => const Carousel());
+                  },
+                ),
+                DrawerListTile(
+                  title: "Carousel",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  // selected: currentPage == 2,
+                  press: () {
+                    session.pageIndex = 9;
+                    Get.to(() => const Carousel());
+                  },
+                ),
+                DrawerListTile(
+                  title: "Log out",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  press: () {
+                    auth.signOut();
+                  },
+                ),
+              ],
             ),
-          ),
-          // DrawerListTile(
-          //   title: "Dashboard",
-          //   svgSrc: "assets/icons/menu_dashbord.svg",
-          //   selected: session.pageIndex == 0,
-          //   press: () {
-          //     setState(() {
-          //       session.pageIndex = 0;
-          //       session.controller.jumpToPage(0);
-          //     });
-          //   },
-          //   // selected: index==0,
-          // ),
-          DrawerListTile(
-            title: "Student List",
-            svgSrc: "assets/icons/menu_tran.svg",
-            selected: session.pageIndex == 0,
-            press: () {
-              setState(() {
-                session.pageIndex = 0;
-                session.selectedStudent = session.kids.isEmpty ? null : session.kids[0];
-                session.controller.jumpToPage(0);
-              });
-            },
-          ),
-          DrawerListTile(
-            title: "Add Student",
-            svgSrc: "assets/icons/menu_tran.svg",
-            selected: session.pageIndex == 1,
-            press: () {
-              setState(() {
-                session.pageIndex = 1;
-                session.selectedStudent = null;
-                session.controller.jumpToPage(1);
-              });
-            },
-          ),
-          DrawerListTile(
-            title: "Dashboard",
-            svgSrc: "assets/icons/menu_tran.svg",
-            selected: session.pageIndex == 2,
-            press: () {
-              setState(() {
-                session.pageIndex = 2;
-
-                session.controller.jumpToPage(2);
-              });
-            },
-          ),
-          DrawerListTile(
-            title: "Carousel",
-            svgSrc: "assets/icons/menu_tran.svg",
-            // selected: session.pageIndex == 2,
-            press: () {
-              Get.to(() => const Carousel());
-              // setState(() {
-              //   session.pageIndex = 2;
-              //   session.selectedStudent = null;
-              //   session.controller.jumpToPage(2);
-              // });
-            },
-          ),
-          DrawerListTile(
-            title: "Log out",
-            svgSrc: "assets/icons/menu_tran.svg",
-            press: () {
-              auth.signOut();
-            },
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }
 

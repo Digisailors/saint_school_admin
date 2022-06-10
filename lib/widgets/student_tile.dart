@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/models/_newStudent.dart';
+import 'package:school_app/models/student.dart';
 
 class StudentTile extends StatelessWidget {
   const StudentTile({
@@ -34,7 +34,7 @@ class StudentTile extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
                         radius: MediaQuery.of(context).size.width * 0.15,
-                        backgroundImage: NetworkImage('https://i.pravatar.cc/3${student.ic}'),
+                        backgroundImage: NetworkImage('https://i.pravatar.cc/3${student.icNumber}'),
                       ),
                     ),
                   )),
@@ -55,7 +55,7 @@ class StudentTile extends StatelessWidget {
                           children: [
                             const Text("IC"),
                             Text(
-                              student.ic,
+                              student.icNumber,
                               style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey),
                             ),
                           ],

@@ -18,7 +18,7 @@ class StudentForm extends StatefulWidget {
 }
 
 class _StudentFormState extends State<StudentForm> {
-  StudentFormController get controller => session.formcontroller;
+  StudentFormController get controller => StudentFormController();
   FormMode get formMode => widget.formMode;
 
   @override
@@ -61,7 +61,7 @@ class _StudentFormState extends State<StudentForm> {
               body: Card(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
-                  child: (session.student == null && formMode == FormMode.update)
+                  child: (formMode == FormMode.update)
                       ? const Center(child: Text("No Student Selected"))
                       : Column(
                           children: [
@@ -151,26 +151,6 @@ class _StudentFormState extends State<StudentForm> {
                                             validator: requiredValidator,
                                             controller: controller.address,
                                             labelText: "Address",
-                                          ),
-                                          Table(
-                                            children: [
-                                              TableRow(
-                                                children: [
-                                                  CustomTextField(
-                                                    controller: controller.carNumbers[0],
-                                                    labelText: "Vehicle 1  ",
-                                                  ),
-                                                  CustomTextField(
-                                                    controller: controller.carNumbers[1],
-                                                    labelText: "Vehicle 2  ",
-                                                  ),
-                                                  CustomTextField(
-                                                    controller: controller.carNumbers[2],
-                                                    labelText: "Vehicle 3  ",
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
                                           ),
                                           const Divider(),
                                           Table(

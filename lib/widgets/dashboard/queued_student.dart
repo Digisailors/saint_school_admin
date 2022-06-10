@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/models/_old_student.dart';
+import 'package:school_app/models/queue.dart';
 
 class QueueList extends StatelessWidget {
   const QueueList({Key? key}) : super(key: key);
@@ -44,12 +44,12 @@ class QueueList extends StatelessWidget {
           // initialData: initialData,
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
-              var students = snapshot.data!.docs.map((e) => Student.fromJson(e.data())).toList();
+              var students = snapshot.data!.docs.map((e) => StudentQueue.fromJson(e.data())).toList();
               return ListView.builder(
                   itemCount: students.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(students[index].id),
+                      title: Text(students[index].icNumber),
                       subtitle: Text("Last Queue Time : ${students[index].queuedTime}"),
                     );
                   });

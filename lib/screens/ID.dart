@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:school_app/models/_newStudent.dart';
+import 'package:school_app/models/student.dart';
 
 class Idcard extends StatelessWidget {
   final Student student;
@@ -78,7 +78,7 @@ class Idcard extends StatelessWidget {
                       style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 50),
                     ),
                     Text(
-                      student.ic.toUpperCase(),
+                      student.icNumber.toUpperCase(),
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.blueAccent),
                     ),

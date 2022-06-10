@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/landing_page.dart';
+import 'package:school_app/auth_router.dart';
+import 'package:school_app/models/session.dart';
+import 'package:school_app/screens/ladning_page.dart';
+import 'package:school_app/screens/log_in.dart';
+import 'package:school_app/screens/student_list.dart';
 
 import 'controllers/auth_controller.dart';
 import 'firebase_options.dart';
@@ -14,9 +18,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Get.put(AuthController());
-  Get.put(MySession());
-
-  runApp(const MyApp());
+  Get.put(SessionController(MySession()));
+  runApp(const AuthRouter());
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +31,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue, textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme)),
-      home: const LandingPage(),
+      routes: {
+        '/': (context) => const AuthRouter(),
+        '/login': (context) => const LoginPage(),
+        '/studentList': (context) => StudentList(),
+      },
+      home: const AuthRouter(),
     );
   }
 }
