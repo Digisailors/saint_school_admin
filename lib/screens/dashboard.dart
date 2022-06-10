@@ -9,13 +9,6 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          Expanded(child: ClassList()),
-          const Expanded(child: QueueList()),
-          const Expanded(child: Preview()),
-        ],
-      ),
     );
   }
 }

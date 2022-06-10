@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/carousel.dart';
+import 'package:school_app/widgets/theme.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({
@@ -18,11 +20,14 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.blue.shade50,
+      elevation: 10,
+      backgroundColor: getColor(context).onInverseSurface,
+
       child: ListView(
         children: [
           DrawerHeader(
             child: CircleAvatar(
+              backgroundColor: Colors.transparent,
               child: Image.asset(
                 'assets/logo.png',
                 fit: BoxFit.cover,
@@ -42,6 +47,7 @@ class _SideMenuState extends State<SideMenu> {
           //   // selected: index==0,
           // ),
           DrawerListTile(
+            src: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
             title: "Student List",
             svgSrc: "assets/icons/menu_tran.svg",
             selected: session.pageIndex == 0,
@@ -50,10 +56,17 @@ class _SideMenuState extends State<SideMenu> {
                 session.pageIndex = 0;
                 session.selectedStudent = session.kids.isEmpty ? null : session.kids[0];
                 session.controller.jumpToPage(0);
+
               });
+              if(MediaQuery.of(context).size.width >= 1100!=true){
+
+                Navigator.pop(context);
+              }
+
             },
           ),
           DrawerListTile(
+            src: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
             title: "Add Student",
             svgSrc: "assets/icons/menu_tran.svg",
             selected: session.pageIndex == 1,
@@ -63,9 +76,14 @@ class _SideMenuState extends State<SideMenu> {
                 session.selectedStudent = null;
                 session.controller.jumpToPage(1);
               });
+              if(MediaQuery.of(context).size.width >= 1100!=true){
+
+                Navigator.pop(context);
+              }
             },
           ),
           DrawerListTile(
+            src: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
             title: "Dashboard",
             svgSrc: "assets/icons/menu_tran.svg",
             selected: session.pageIndex == 2,
@@ -75,9 +93,15 @@ class _SideMenuState extends State<SideMenu> {
 
                 session.controller.jumpToPage(2);
               });
+              if(MediaQuery.of(context).size.width >= 1100!=true){
+
+                Navigator.pop(context);
+              }
             },
           ),
           DrawerListTile(
+            src: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
+
             title: "Carousel",
             svgSrc: "assets/icons/menu_tran.svg",
             // selected: session.pageIndex == 2,
@@ -91,6 +115,7 @@ class _SideMenuState extends State<SideMenu> {
             },
           ),
           DrawerListTile(
+            src: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
             title: "Log out",
             svgSrc: "assets/icons/menu_tran.svg",
             press: () {
@@ -110,24 +135,32 @@ class DrawerListTile extends StatelessWidget {
     required this.title,
     required this.svgSrc,
     required this.press,
-    this.selected = false,
+    this.selected = false, required this.src,
   }) : super(key: key);
 
   final String title, svgSrc;
+  final String src ;
   final VoidCallback press;
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: press,
-      selected: selected,
-      selectedTileColor: Colors.blueAccent,
-      hoverColor: Colors.blue.shade100,
-      horizontalTitleGap: 0.0,
-      title: Text(
-        title,
-        style: const TextStyle(color: Colors.black),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: ListTile(
+        leading: CircleAvatar(backgroundImage: NetworkImage(src)),
+        onTap: press,
+        selected: selected,
+        selectedTileColor: Colors.blueAccent,
+        hoverColor: Colors.blue.shade100,
+        horizontalTitleGap: 0.0,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: Text(
+            title,
+            style: getText(context).button,
+          ),
+        ),
       ),
     );
   }

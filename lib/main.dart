@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/landing_page.dart';
+import 'package:school_app/screens/dashboard.dart';
+import 'package:school_app/widgets/theme.dart';
 
 import 'controllers/auth_controller.dart';
 import 'firebase_options.dart';
@@ -27,7 +29,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue, textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme)),
+      theme: ThemeData(
+        dataTableTheme: DataTableThemeData(
+          headingRowColor: MaterialStateProperty.all(getColor(context).onTertiaryContainer)
+          
+        ),
+
+        colorScheme: lightColorScheme,
+          primarySwatch: Colors.blue,
+          textTheme:
+              GoogleFonts.montserratTextTheme(Theme.of(context).textTheme)),
       home: const LandingPage(),
     );
   }

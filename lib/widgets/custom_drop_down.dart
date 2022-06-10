@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/widgets/theme.dart';
 
 class CustomDropDown<T> extends StatelessWidget {
   const CustomDropDown({
@@ -37,7 +38,7 @@ class CustomDropDown<T> extends StatelessWidget {
         onChanged: onChanged,
         onTap: onTap,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
+          // border: const OutlineInputBorder(),
           // labelText: labelText,
           labelStyle: const TextStyle(
             fontFamily: 'Lexend Deca',
