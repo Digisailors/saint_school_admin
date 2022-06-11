@@ -30,11 +30,12 @@ class _EntityListState extends State<EntityList> {
             stream: getStream(),
             builder: (context, snapshot) {
               print(snapshot.connectionState);
-
+              
               if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
                 var list = snapshot.data;
                 var source = BioSource(list!, context);
                 return PaginatedDataTable(
+              
                   header: Text(widget.entityType.toString()),
                   actions: [
                     ElevatedButton(

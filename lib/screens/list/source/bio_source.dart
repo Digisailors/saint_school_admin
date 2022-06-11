@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/controllers/crude_controller.dart';
+import 'package:school_app/controllers/crud_controller.dart';
 import 'package:school_app/controllers/parent_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/controllers/teacher_controller.dart';
@@ -16,7 +16,7 @@ class BioSource extends DataTableSource {
     assert(index >= 0);
     if (index >= entities.length) return null;
     var entity = entities[index];
-    final crud object = getEntity(entity);
+    final CRUD object = getEntity(entity);
 
     return DataRow.byIndex(index: index, cells: [
       DataCell(IconButton(

@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:school_app/controllers/crude_controller.dart';
+import 'package:school_app/controllers/crud_controller.dart';
 import 'package:school_app/models/student.dart';
 
 import '../constants/constant.dart';
 import '../models/response.dart';
 
-class StudentController extends GetxController implements crud {
+class StudentController extends GetxController implements CRUD {
   StudentController(this.student);
 
   final Student student;

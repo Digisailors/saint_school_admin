@@ -35,24 +35,27 @@ class AuthRouter extends StatelessWidget {
           StudentController.listenStudents();
           TeacherController.listenTeachers();
           return GetMaterialApp(
+            builder: (context, child) {
+              return LandingPage(child: child ?? Container());
+            },
             onGenerateRoute: (settings) {
               if (settings.name == EntityList.routeName) {
                 final args = settings.arguments as EntityType;
-                return MaterialPageRoute(builder: (context) => LandingPage(child: EntityList(entityType: args)));
+                return MaterialPageRoute(builder: (context) => EntityList(entityType: args));
               }
               if (settings.name == StudentForm.routeName) {
                 final args = settings.arguments as Student?;
-                return MaterialPageRoute(builder: (context) => LandingPage(child: StudentForm(student: args)));
+                return MaterialPageRoute(builder: (context) => StudentForm(student: args));
               }
-              if (settings.name == StudentForm.routeName) {
+              if (settings.name == Dashboard.routeName) {
                 final args = settings.arguments as Student?;
-                return MaterialPageRoute(builder: (context) => LandingPage(child: StudentForm(student: args)));
+                return MaterialPageRoute(builder: (context) => const Dashboard());
               }
             },
             routes: {
               '/Carousel': (context) => const Carousel(),
-              Dashboard.routeName: (context) => const LandingPage(child: Dashboard()),
-              '/': (context) => const LandingPage(child: Dashboard()),
+              Dashboard.routeName: (context) => const Dashboard(),
+              '/': (context) => const Dashboard(),
             },
           );
         }
