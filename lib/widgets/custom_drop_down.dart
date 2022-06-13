@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../constants/get_constants.dart';
+import 'package:school_app/widgets/theme.dart';
 
 class CustomDropDown<T> extends StatelessWidget {
   const CustomDropDown({
@@ -27,47 +26,51 @@ class CustomDropDown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: getWidth(context) / (4),
-      child: ListTile(
-        leading: Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Text(labelText),
-        ),
-        subtitle: DropdownButtonFormField<T>(
-          isExpanded: false,
-          value: selectedValue,
-          validator: validator,
-          onChanged: onChanged,
-          onTap: onTap,
-          decoration: InputDecoration(
-            // border: const OutlineInputBorder(),
-            // labelText: labelText,
-            labelStyle: const TextStyle(
-              fontFamily: 'Lexend Deca',
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
-            hintText: hintText,
-            hintStyle: const TextStyle(
-              fontFamily: 'Lexend Deca',
-              color: Color(0xFF95A1AC),
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
-
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
-          ),
-          style: const TextStyle(
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(labelText),
+      ),
+      subtitle: DropdownButtonFormField<T>(
+        isExpanded: false,
+        value: selectedValue,
+        validator: validator,
+        onChanged: onChanged,
+        onTap: onTap,
+        decoration: InputDecoration(
+          // border: const OutlineInputBorder(),
+          // labelText: labelText,
+          labelStyle: const TextStyle(
             fontFamily: 'Lexend Deca',
-            color: Colors.black,
             fontSize: 14,
             fontWeight: FontWeight.normal,
           ),
-          items: items,
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            fontFamily: 'Lexend Deca',
+            color: Color(0xFF95A1AC),
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: const BorderSide(color: Colors.blue, width: 1)),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Color(0xFFDBE2E7),
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
         ),
+        style: const TextStyle(
+          fontFamily: 'Lexend Deca',
+          color: Colors.black,
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
+        items: items,
       ),
     );
   }

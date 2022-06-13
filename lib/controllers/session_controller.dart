@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/models/session.dart';
 
+import '../form_controller.dart';
+
 final CollectionReference<Map<String, dynamic>> queue = firestore.collection('NewQueue');
 
 class SessionController extends GetxController {
@@ -11,6 +13,7 @@ class SessionController extends GetxController {
   SessionController(this.session);
   final MySession session;
   final PageController controller = PageController(initialPage: 0);
+  StudentFormController formcontroller = StudentFormController();
 
   int get pageIndex => session.page;
   set pageIndex(int page) {

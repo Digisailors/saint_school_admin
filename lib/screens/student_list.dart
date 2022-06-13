@@ -23,7 +23,7 @@ class _StudentListState extends State<StudentList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+
       body: GetBuilder(
           init: session,
           builder: (_) {

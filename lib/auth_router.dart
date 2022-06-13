@@ -15,7 +15,9 @@ import 'package:school_app/screens/dashboard.dart';
 import 'package:school_app/screens/landing_page.dart.dart';
 import 'package:school_app/screens/list/list.dart';
 import 'package:school_app/screens/log_in.dart';
+import 'package:school_app/widgets/theme.dart';
 
+import 'constants/get_constants.dart';
 import 'controllers/class_controller.dart';
 import 'controllers/session_controller.dart';
 import 'controllers/teacher_controller.dart';
@@ -35,8 +37,59 @@ class AuthRouter extends StatelessWidget {
           StudentController.listenStudents();
           TeacherController.listenTeachers();
           return GetMaterialApp(
+            defaultTransition: Transition.leftToRight,
+
+     theme: ThemeData(
+
+
+       listTileTheme: const ListTileThemeData(),
+       pageTransitionsTheme: const PageTransitionsTheme(
+         builders: {
+           TargetPlatform.windows:FadeUpwardsPageTransitionsBuilder(),
+         }
+
+       ),
+            colorScheme: lightColorScheme,
+            textTheme: MyTexTheme,
+            tabBarTheme: TabBarTheme(
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(width: 4.0,color: getColor(context).tertiary),
+
+              ),
+            ),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              backgroundColor:lightColorScheme.secondaryContainer,
+              elevation: 3,
+
+            ),
+            // This is the theme of your application.
+            //
+            // Try running your application with "flutter run". You'll see the
+            // application has a blue toolbar. Then, without quitting the app, try
+            // changing the primarySwatch below to Colors.green and then invoke
+            // "hot reload" (press "r" in the console where you ran "flutter run",
+            // or simply save your changes to "hot reload" in a Flutter IDE).
+            // Notice that the counter didn't reset back to zero; the application
+            // is not restarted.
+            primarySwatch: Colors.blue,
+          ),
+
+            transitionDuration: const Duration(
+              microseconds: 0
+            ),
             builder: (context, child) {
-              return LandingPage(child: child ?? Container());
+              return Overlay(
+
+                initialEntries: [
+
+                  OverlayEntry(builder: (context){
+
+                    return LandingPage(child: child ?? Container());
+
+                  })
+                ],
+
+              );
             },
             onGenerateRoute: (settings) {
               if (settings.name == EntityList.routeName) {
@@ -64,8 +117,35 @@ class AuthRouter extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        return const MaterialApp(
-          home: LoginPage(),
+        return  MaterialApp(
+
+
+          theme: ThemeData(
+            colorScheme: lightColorScheme,
+            textTheme: MyTexTheme,
+            tabBarTheme: TabBarTheme(
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(width: 4.0,color: getColor(context).tertiary),
+
+              ),
+            ),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              backgroundColor:lightColorScheme.secondaryContainer,
+              elevation: 3,
+
+            ),
+            // This is the theme of your application.
+            //
+            // Try running your application with "flutter run". You'll see the
+            // application has a blue toolbar. Then, without quitting the app, try
+            // changing the primarySwatch below to Colors.green and then invoke
+            // "hot reload" (press "r" in the console where you ran "flutter run",
+            // or simply save your changes to "hot reload" in a Flutter IDE).
+            // Notice that the counter didn't reset back to zero; the application
+            // is not restarted.
+            primarySwatch: Colors.blue,
+          ),
+          home: const LoginPage(),
         );
       },
     );

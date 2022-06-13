@@ -17,21 +17,17 @@ class BioSource extends DataTableSource {
     if (index >= entities.length) return null;
     var entity = entities[index];
     final CRUD object = getEntity(entity);
+     int SiNo =index+1;
 
     return DataRow.byIndex(index: index, cells: [
-      DataCell(IconButton(
-        icon: const Icon(Icons.edit),
-        onPressed: () {
-          // controller.change();
-        },
-      )),
+      DataCell(Text(SiNo.toString())),
       const DataCell(CircleAvatar(
         child: Text("IMG"),
       )),
       DataCell(Text(entity.name)),
       DataCell(Text(entity.icNumber)),
       DataCell(Text(entity.email)),
-      DataCell(Text(entity.gender.toString())),
+      DataCell(Text(entity.gender.name.toString().toUpperCase())),
       DataCell(Text(entity.address ?? '')),
       DataCell(IconButton(
         icon: const Icon(Icons.delete),
@@ -65,7 +61,8 @@ class BioSource extends DataTableSource {
 
   static List<DataColumn> getCoumns(EntityType entity) {
     List<DataColumn> columns = [
-      const DataColumn(label: Text('EDIT')),
+      const DataColumn(
+          label: Text('SINO')),
       const DataColumn(label: Text('PROFILE')),
       const DataColumn(label: Text('NAME')),
       const DataColumn(label: Text('IC NUMBER')),

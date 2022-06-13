@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 class CustomLayout extends StatelessWidget {
-  const CustomLayout({Key? key, required this.children}) : super(key: key);
+  const CustomLayout({Key? key, required this.children, required this.mainAxisAlignment}) : super(key: key);
 
   static bool isMobile(BuildContext context) =>
       MediaQuery.of(context).size.width < 650;
@@ -20,6 +20,7 @@ class CustomLayout extends StatelessWidget {
   static  bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 1100;
   final List<Widget> children;
+  final MainAxisAlignment mainAxisAlignment;
 
 
   @override
@@ -33,10 +34,15 @@ class CustomLayout extends StatelessWidget {
         return LayoutBuilder(
           builder: (context, constraints) {
             if (isDesktop(context)) {
-              return Row(children: children,);
+              return Row(
+
+                mainAxisAlignment: mainAxisAlignment,
+                children: children,);
             }
             if(isTablet(context)){
-              return Row(children: children,);
+              return Row(
+                mainAxisAlignment: mainAxisAlignment,
+                children: children,);
             }
 
             else {
