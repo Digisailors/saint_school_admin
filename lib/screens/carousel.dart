@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/queue_controller.dart';
+import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/id.dart';
 import 'package:school_app/widgets/student_tile.dart';
 
@@ -27,6 +28,20 @@ class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 30,
+        automaticallyImplyLeading: false,
+        leading: Center(
+          child: IconButton(onPressed: (){
+            Navigator.of(context).pop();
+            session.pageIndex = 0;
+          }, icon: const Icon(Icons.arrow_back,
+
+            size: 10,
+
+          )),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
 
       body: GetBuilder(

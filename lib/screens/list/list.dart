@@ -47,76 +47,77 @@ class _EntityListState extends State<EntityList> {
                     children: [
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: SizedBox(
+                          width: isMobile(context)?getWidth(context)*2:getWidth(context)*0.80,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(widget.entityType.name.toString().toUpperCase()),
 
-                          children: [
-                            Text(widget.entityType.name.toString().toUpperCase()),
+                              SizedBox(
+                                  height: getHeight(context)*0.08,
+                                  width: isMobile(context)
+                                      ? getWidth(context) * 0.80
+                                      : getWidth(context) * 0.20,
+                                  child: Center(
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
 
-                            SizedBox(
-                                height: getHeight(context)*0.08,
-                                width: isMobile(context)
-                                    ? getWidth(context) * 0.80
-                                    : getWidth(context) * 0.20,
-                                child: Center(
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.search, color: getColor(context).secondary,),
+                                        border:const OutlineInputBorder(
 
-                                      prefixIcon: Icon(Icons.search, color: getColor(context).secondary,),
-                                      border:const OutlineInputBorder(
-
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )),
-                            SizedBox(
+                                  )),
+                              SizedBox(
+                                  height: getHeight(context)*0.053,
+                                  width:  getWidth(context) * 0.10,
+                                  child: DropdownButtonFormField<String>(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Class',
+
+
+                                      border:OutlineInputBorder(
+
+
+                                      ),
+                                    ), items: controller.classItems,
+
+                                    onChanged: (text) {
+                                      setState(() {
+                                        if (controller.classField != text) {
+                                          controller.classField = text ?? controller.classField;
+                                          controller.sectionField = null;
+                                        }
+                                      });
+                                    },
+                                  )
+
+                              ),
+                              SizedBox(
                                 height: getHeight(context)*0.053,
                                 width:  getWidth(context) * 0.10,
-                                child: DropdownButtonFormField<String>(
+                                child: DropdownButtonFormField<String?>(
                                   decoration: const InputDecoration(
-                                    labelText: 'Class',
+                                    labelText: 'Section',
 
 
                                     border:OutlineInputBorder(
 
 
                                     ),
-                                  ), items: controller.classItems,
+                                  ),
+                                  items: controller.sectionItems,
 
                                   onChanged: (text) {
                                     setState(() {
-                                      if (controller.classField != text) {
-                                        controller.classField = text ?? controller.classField;
-                                        controller.sectionField = null;
-                                      }
+                                      controller.sectionField =
+                                          text ?? controller.sectionField;
                                     });
                                   },
-                                )
-
-                            ),
-                            SizedBox(
-                              height: getHeight(context)*0.053,
-                              width:  getWidth(context) * 0.10,
-                              child: DropdownButtonFormField<String?>(
-                                decoration: const InputDecoration(
-                                  labelText: 'Section',
-
-
-                                  border:OutlineInputBorder(
-
-
-                                  ),
                                 ),
-                                items: controller.sectionItems,
-
-                                onChanged: (text) {
-                                  setState(() {
-                                    controller.sectionField =
-                                        text ?? controller.sectionField;
-                                  });
-                                },
                               ),
-                            ),
 
 
 
@@ -124,23 +125,24 @@ class _EntityListState extends State<EntityList> {
 
 
 
-                            ElevatedButton(
-                                onPressed: () {
-                                  Get.toNamed(StudentForm.routeName, arguments: null);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: const Text("Add"),
-                                )),
-                            ElevatedButton(
-                                onPressed: () {
-                                  setState(() {});
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: const Text("Refresh"),
-                                ))
-                          ],
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Get.toNamed(StudentForm.routeName, arguments: null);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: const Text("Add"),
+                                  )),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {});
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: const Text("Refresh"),
+                                  ))
+                            ],
+                          ),
                         ),
                       ),
                       ConstrainedBox(

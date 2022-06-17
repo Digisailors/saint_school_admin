@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +38,20 @@ class AuthRouter extends StatelessWidget {
           StudentController.listenStudents();
           TeacherController.listenTeachers();
           return GetMaterialApp(
+            scrollBehavior: MyCustomScrollBehavior(),
             defaultTransition: Transition.leftToRight,
 
      theme: ThemeData(
 
 
+
+
        listTileTheme: const ListTileThemeData(),
-       pageTransitionsTheme: const PageTransitionsTheme(
+       pageTransitionsTheme: PageTransitionsTheme(
          builders: {
            TargetPlatform.windows:FadeUpwardsPageTransitionsBuilder(),
+           TargetPlatform.android:FadeUpwardsPageTransitionsBuilder(),
+           TargetPlatform.iOS:FadeUpwardsPageTransitionsBuilder(),
          }
 
        ),
@@ -150,4 +156,13 @@ class AuthRouter extends StatelessWidget {
       },
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }

@@ -6,6 +6,7 @@ import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
+import 'package:school_app/screens/list/appointmentlist.dart';
 import 'package:school_app/screens/list/list.dart';
 
 class SideMenu extends StatelessWidget {
@@ -22,8 +23,7 @@ class SideMenu extends StatelessWidget {
         builder: (_) {
           final currentPage = session.pageIndex;
           return Drawer(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+
 
             // backgroundColor: Colors.blue.shade50,
             child: ListView(
@@ -100,11 +100,10 @@ class SideMenu extends StatelessWidget {
                   ),
                   title: "Appointments",
                   svgSrc: "assets/icons/menu_tran.svg",
-                  // selected: currentPage == 2,
+                  selected: currentPage == 3,
                   press: () {
                     session.pageIndex = 3;
-                    Get.offAllNamed(EntityList.routeName,
-                        arguments: EntityType.teacher);
+                    Get.offAll(AppoinmentList());
                     // Get.offAll(() => const Carousel());
                   },
                 ),

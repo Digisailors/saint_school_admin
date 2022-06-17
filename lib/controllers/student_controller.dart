@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/crud_controller.dart';
 import 'package:school_app/models/student.dart';
@@ -25,12 +26,17 @@ class StudentController extends GetxController implements CRUD {
 
   @override
   Future<Result> add() async {
-    return firestore
+    QuerySnapshot querySnapshot = await firestore.collection('students').get();
+    if(querySnapshot.docs.isNotEmpty) {
+      return firestore
         .collection('students')
         .doc(student.icNumber)
         .set(student.toJson())
         .then((value) => Result.success("Student added successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
+    } else {
+      return Result.error("Another IC Number found");
+    }
   }
 
   @override

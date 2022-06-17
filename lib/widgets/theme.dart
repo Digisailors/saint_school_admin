@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -60,6 +61,40 @@ class CustomLayout extends StatelessWidget {
 
   }
 }
+
+
+
+ double responsiveSize(BuildContext context ,double dsize
+     ,double tsize,double msize){
+
+
+   bool isMobile(BuildContext context) =>
+   MediaQuery.of(context).size.width < 650;
+
+    bool isTablet(BuildContext context) =>
+   MediaQuery.of(context).size.width < 1100 &&
+       MediaQuery.of(context).size.width >= 650;
+
+   bool isDesktop(BuildContext context) =>
+   MediaQuery.of(context).size.width >= 1100;
+
+
+
+  if (isDesktop(context)){
+
+    return dsize;
+  }
+   if (isTablet(context)){
+
+     return tsize;
+   }
+   else{
+
+     return msize;
+   }
+
+
+ }
 
 
 

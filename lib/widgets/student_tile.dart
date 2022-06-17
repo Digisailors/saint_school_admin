@@ -23,7 +23,7 @@ class StudentTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
         ),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 200),
+          constraints: const BoxConstraints(maxHeight: 300),
           child: Row(
             children: [
               Expanded(
@@ -41,47 +41,51 @@ class StudentTile extends StatelessWidget {
               Expanded(
                   flex: 5,
                   child: ListTile(
+
                     enabled: true,
                     title: Text(
                       student.name,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.headline4,
                     ),
                     subtitle: Table(
                       columnWidths: const {
                         0: FixedColumnWidth(40),
                       },
                       children: [
+                        // TableRow(
+                        //   children: [
+                        //     const Text("IC"),
+                        //     Text(
+                        //       student.icNumber,
+                        //       style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey),
+                        //     ),
+                        //   ],
+                        // ),
                         TableRow(
                           children: [
-                            const Text("IC"),
-                            Text(
-                              student.icNumber,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        TableRow(
-                          children: [
-                            const Text("Class"),
-                            Text(
-                              student.studentClass + " - " + student.section,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey),
+
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: Text(
+                                 "CLASS : " + student.studentClass + " - " + student.section,
+                                style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.grey),
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
                     isThreeLine: true,
-                    trailing: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18))),
-                      ),
-                      onPressed: () {},
-                      child: Text(
-                        string,
-                      ),
-                    ),
+                    // trailing: ElevatedButton(
+                    //   style: ButtonStyle(
+                    //     backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer),
+                    //     shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18))),
+                    //   ),
+                    //   onPressed: () {},
+                    //   child: Text(
+                    //     string,
+                    //   ),
+                    // ),
                   )),
             ],
           ),

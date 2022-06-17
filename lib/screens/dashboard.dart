@@ -37,9 +37,44 @@ class Dashboard extends StatelessWidget {
                   CustomeTile(),
                 ],
               ),
-              CustomLayout(children: [
-                Column(
-                  children: [
+              Center(
+                child: SizedBox(
+                  width: responsiveSize(context, getWidth(context)*0.80, getWidth(context)*0.80, getWidth(context)*0.90),
+                  child: CustomLayout(
+
+
+                      children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            elevation: 5,
+                            child: SizedBox(
+                              height: getHeight(context) * 0.33,
+                              width: isMobile(context)
+                                  ? getWidth(context) * 0.90
+                                  : getWidth(context) * 0.54,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            elevation: 5,
+                            child: SizedBox(
+                              height: getHeight(context) * 0.33,
+                              width: responsiveSize(context, getWidth(context)*0.54, getWidth(context)*0.54, getWidth(context)*0.90),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -47,47 +82,17 @@ class Dashboard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20)),
                         elevation: 5,
                         child: SizedBox(
-                          height: getHeight(context) * 0.33,
-                          width: isMobile(context)
-                              ? getWidth(context) * 0.90
-                              : getWidth(context) * 0.50,
+                          height: getHeight(context) * 0.68,
+                          width:responsiveSize(context, getWidth(context)*0.20, getWidth(context)*0.30, getWidth(context)*0.90)
+
+
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        elevation: 5,
-                        child: SizedBox(
-                          height: getHeight(context) * 0.33,
-                          width: isMobile(context)
-                              ? getWidth(context) * 0.90
-                              : getWidth(context) * 0.50,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: getWidth(context) * 0.10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    elevation: 5,
-                    child: SizedBox(
-                      height: getHeight(context) * 0.70,
-                      width: isMobile(context)
-                          ? getWidth(context) * 0.90
-                          : getWidth(context) * 0.18,
-                    ),
+                    )
+                  ], mainAxisAlignment: MainAxisAlignment.spaceAround
                   ),
-                )
-              ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
+                ),
+              )
             ],
           ),
         ),
@@ -109,10 +114,8 @@ class CustomeTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 5,
         child: SizedBox(
-          height: getHeight(context) * 0.12,
-          width: isMobile(context)
-              ? getWidth(context) * 0.90
-              : getWidth(context) * 0.18,
+          height: getHeight(context) * 0.15,
+          width: responsiveSize(context, getWidth(context)*0.16, getWidth(context)*0.20, getWidth(context)*0.90)
         ),
       ),
     );
