@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/models/student.dart';
 
-class StudentTile extends StatelessWidget {
+class StudentTile extends StatelessWidget
+{
   const StudentTile({
     Key? key,
     required this.student,
