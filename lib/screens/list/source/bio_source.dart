@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:school_app/controllers/crud_controller.dart';
 import 'package:school_app/controllers/parent_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/controllers/teacher_controller.dart';
 import 'package:school_app/models/biodata.dart';
+import 'package:school_app/models/student.dart';
+import 'package:school_app/screens/Form/student_form.dart';
 
 class BioSource extends DataTableSource {
-  final List<Bio> entities;
+  final List<dynamic> entities;
   final BuildContext context;
 
   BioSource(this.entities, this.context);
@@ -15,9 +18,10 @@ class BioSource extends DataTableSource {
   DataRow? getRow(int index) {
     assert(index >= 0);
     if (index >= entities.length) return null;
-    var entity = entities[index];
+    Bio entity = entities[index];
+
     final CRUD object = getEntity(entity);
-     int SiNo =index+1;
+    int SiNo = index + 1;
 
     return DataRow.byIndex(index: index, cells: [
       DataCell(Text(SiNo.toString())),
@@ -35,6 +39,26 @@ class BioSource extends DataTableSource {
           object.delete();
         },
       )),
+      DataCell(IconButton(
+          onPressed: () {
+            switch (entity.entityType) {
+              case EntityType.student:
+                Student student = entities[index];
+                print(student.toJson());
+                Get.to(() => StudentForm(student: student));
+                break;
+              case EntityType.teacher:
+                // TODO: Handle this case.
+                break;
+              case EntityType.parent:
+                // TODO: Handle this case.
+                break;
+              case EntityType.admin:
+                // TODO: Handle this case.
+                break;
+            }
+          },
+          icon: const Icon(Icons.edit))),
     ]);
   }
 
@@ -61,8 +85,7 @@ class BioSource extends DataTableSource {
 
   static List<DataColumn> getCoumns(EntityType entity) {
     List<DataColumn> columns = [
-      const DataColumn(
-          label: Text('SINO')),
+      const DataColumn(label: Text('SINO')),
       const DataColumn(label: Text('PROFILE')),
       const DataColumn(label: Text('NAME')),
       const DataColumn(label: Text('IC NUMBER')),
@@ -70,6 +93,7 @@ class BioSource extends DataTableSource {
       const DataColumn(label: Text('GENDER')),
       const DataColumn(label: Text('ADDRESS')),
       const DataColumn(label: Text('DELETE')),
+      const DataColumn(label: Text('EDIT')),
     ];
 
     return columns;

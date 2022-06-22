@@ -29,7 +29,15 @@ class StudentFormController {
 
   Gender gender = Gender.male;
 
-  final address = TextEditingController();
+  final addressLine1 = TextEditingController();
+  final addressLine2 = TextEditingController();
+  final city = TextEditingController();
+  final state = TextEditingController();
+  final primareyMobile = TextEditingController();
+  final secondaryMobile = TextEditingController();
+
+  final List<TextEditingController> siblings = [TextEditingController()];
+
   final guardian = TextEditingController();
   String? image;
 
@@ -78,7 +86,7 @@ class StudentFormController {
     father.clear();
     mother.clear();
     contact.clear();
-    address.clear();
+    addressLine1.clear();
     classField = null;
     sectionField = null;
     image = null;
@@ -104,12 +112,16 @@ class StudentFormController {
     });
   }
 
-  Future<r.Result> updateUser() async {
-    if (StudentController.selectedStudent == null) {
-      return r.Result.error("Please select a student");
-    }
+  Future<r.Result> updateUser({bool nameCheck = false}) async {
     if (fileData != null) {
       image = await uploadImage(fileData!, id.text);
+    }
+    if (nameCheck) {
+      var snapshot = await students.doc(id.text.toUpperCase().removeAllWhitespace).get();
+      if (snapshot.exists) {
+        var data = snapshot.data();
+        return r.Result.error("ID is taken by another student ${data!['name']}");
+      }
     }
     var controller = StudentController(student);
     return controller.change().then((value) {
@@ -123,11 +135,20 @@ class StudentFormController {
         icNumber: id.text.toUpperCase().removeAllWhitespace,
         email: contact.text,
         studentClass: classField!,
+        imageUrl: image,
+        addressLine1: addressLine1.text,
+        addressLine2: addressLine2.text,
+        city: city.text,
+        primaryPhone: primareyMobile.text,
+        secondaryPhone: secondaryMobile.text,
         section: sectionField!,
-        address: address.text,
-        parent: [],
-        siblings: [],
+        address: addressLine1.text,
+        siblings: siblings.map((e) => e.text).where((element) => element.isNotEmpty).toList(),
         gender: gender,
+        father: father.text,
+        guardian: guardian.text,
+        mother: mother.text,
+        state: state.text,
       );
 
   factory StudentFormController.fromStudent(Student student) {
@@ -135,13 +156,22 @@ class StudentFormController {
     controller.name.text = student.name;
     controller.id.text = student.icNumber;
     controller.image = student.imageUrl;
-
+    controller.state.text = student.state ?? '';
     controller.studentClass.text = student.studentClass;
     controller.section.text = student.section;
     controller.classField = student.studentClass;
     controller.sectionField = student.section;
-
+    controller.contact.text = student.email;
+    controller.addressLine1.text = student.addressLine1 ?? '';
+    controller.addressLine2.text = student.addressLine2 ?? '';
+    controller.city.text = student.city ?? '';
+    controller.mother.text = student.mother ?? '';
+    controller.father.text = student.father ?? '';
     controller.gender = student.gender;
+    controller.primareyMobile.text = student.primaryPhone ?? '';
+    controller.secondaryMobile.text = student.secondaryPhone ?? '';
+    controller.siblings.clear();
+    controller.siblings.addAll(student.siblings.map((e) => TextEditingController(text: e)));
 
     return controller;
   }

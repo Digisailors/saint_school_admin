@@ -7,5 +7,12 @@ class BioFormState {
   final email = TextEditingController();
   final address = TextEditingController();
   final imageUrl = TextEditingController();
+  final lastName = TextEditingController();
+  final addressLine1 = TextEditingController();
+  final addressLine2 = TextEditingController();
+  final city = TextEditingController();
+  final primaryPhone = TextEditingController();
+  final secondaryPhone = TextEditingController();
+  final state = TextEditingController();
   Gender gender = Gender.male;
 }

@@ -27,20 +27,27 @@ class StudentController extends GetxController implements CRUD {
   @override
   Future<Result> add() async {
     QuerySnapshot querySnapshot = await firestore.collection('students').get();
-    if(querySnapshot.docs.isNotEmpty) {
+    if (querySnapshot.docs.isNotEmpty) {
       return firestore
-        .collection('students')
-        .doc(student.icNumber)
-        .set(student.toJson())
-        .then((value) => Result.success("Student added successfully"))
-        .onError((error, stackTrace) => Result.error(error.toString()));
+          .collection('students')
+          .doc(student.icNumber)
+          .set(student.toJson())
+          .then((value) => Result.success("Student added successfully"))
+          .onError((error, stackTrace) => Result.error(error.toString()));
     } else {
       return Result.error("Another IC Number found");
     }
   }
 
   @override
-  Future<Result> change() async {
+  Future<Result> change({bool checkName = false, bool uploadPic = false}) async {
+    if (checkName) {
+      QuerySnapshot querySnapshot = await firestore.collection('students').get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return Result.error("Another IC Number found");
+      }
+    }
+    if (uploadPic) {}
     return firestore
         .collection('students')
         .doc(student.icNumber)

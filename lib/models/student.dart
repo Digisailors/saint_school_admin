@@ -2,21 +2,62 @@ import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
 
 class Student extends Bio {
-  Student(
-      {required icNumber,
-      required this.studentClass,
-      required this.section,
-      required name,
-      required email,
-      required this.parent,
-      required this.siblings,
-      required gender,
-      address})
-      : super(name: name, email: email, entityType: EntityType.student, icNumber: icNumber, address: address, gender: gender);
+  Student({
+    required String icNumber,
+    required this.studentClass,
+    required this.section,
+    required String name,
+    required String email,
+    required this.siblings,
+    required Gender gender,
+    required this.father,
+    required this.guardian,
+    required this.mother,
+    String? address,
+    String? addressLine1,
+    String? addressLine2,
+    String? city,
+    String? imageUrl,
+    String? lastName,
+    String? primaryPhone,
+    String? secondaryPhone,
+    String? state,
+  }) : super(
+          name: name,
+          email: email,
+          entityType: EntityType.student,
+          icNumber: icNumber,
+          address: address,
+          gender: gender,
+          addressLine1: addressLine1,
+          addressLine2: addressLine2,
+          city: city,
+          imageUrl: imageUrl,
+          lastName: lastName,
+          primaryPhone: primaryPhone,
+          secondaryPhone: secondaryPhone,
+          state: state,
+        );
 
   String studentClass;
   String section;
-  List<String> parent;
+  String? father;
+  String? mother;
+  String? guardian;
+  List<String> get parent {
+    List<String> result = [];
+    if (father != null) {
+      result.add(father!);
+    }
+    if (mother != null) {
+      result.add(mother!);
+    }
+    if (guardian != null) {
+      result.add(guardian!);
+    }
+    return result;
+  }
+
   List<String> siblings;
 
   Bio get bio => this;
@@ -28,8 +69,19 @@ class Student extends Bio {
         name: json["name"],
         email: json["email"] ?? '',
         gender: json["gender"] == null ? Gender.male : Gender.values.elementAt(json["gender"]),
-        parent: json["parent"] == null ? [] : List<String>.from(json["parent"].map((x) => x)),
         siblings: json["siblings"] == null ? [] : List<String>.from(json["siblings"].map((x) => x)),
+        father: json["father"],
+        guardian: json["guardian"],
+        mother: json["mother"],
+        address: json["address"],
+        addressLine1: json["addressLine1"],
+        addressLine2: json["addressLine2"],
+        city: json["city"],
+        imageUrl: json["imageUrl"],
+        lastName: json["lastName"],
+        primaryPhone: json["primaryPhone"],
+        secondaryPhone: json["secondaryPhone"],
+        state: json["state"],
       );
 
   @override
@@ -39,7 +91,19 @@ class Student extends Bio {
         "section": section,
         "name": name,
         "email": email,
-        "parent": List<dynamic>.from(parent.map((x) => x)),
+        "parent": parent,
         "siblings": siblings,
+        "father": father,
+        "mother": mother,
+        "guardian": guardian,
+        "address": address,
+        "addressLine1": addressLine1,
+        "addressLine2": addressLine2,
+        "city": city,
+        "imageUrl": imageUrl,
+        "lastName": lastName,
+        "primaryPhone": primaryPhone,
+        'secondaryPhone': secondaryPhone,
+        "state": state,
       };
 }

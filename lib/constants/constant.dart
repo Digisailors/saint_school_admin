@@ -16,7 +16,7 @@ Future<String> uploadImage(Uint8List file, String name) async {
   return url;
 }
 
-showFutureCustomDialog({required BuildContext context, required Future<dynamic> future, required void Function()? onTapOk}) {
+showFutureCustomDialog({required BuildContext context, required Future<Result> future, required void Function()? onTapOk}) {
   showDialog(
       context: context,
       builder: (context) {

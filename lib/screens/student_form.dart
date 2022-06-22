@@ -149,7 +149,7 @@ class _StudentFormState extends State<StudentForm> {
                                           ),
                                           CustomTextField(
                                             validator: requiredValidator,
-                                            controller: controller.address,
+                                            controller: controller.addressLine1,
                                             labelText: "Address",
                                           ),
                                           const Divider(),
