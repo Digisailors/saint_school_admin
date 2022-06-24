@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/get_constants.dart';
-import 'package:school_app/controllers/auth_controller.dart';
-import 'package:school_app/controllers/crud_controller.dart';
-import 'package:school_app/controllers/parent_controller.dart';
-import 'package:school_app/controllers/student_controller.dart';
-import 'package:school_app/controllers/teacher_controller.dart';
-import 'package:school_app/models/biodata.dart';
+import 'package:school_app/controllers/appointment_controller.dart';
 import 'package:school_app/models/appointment.dart';
 
-import '../../appointmentreschedule.dart';
+import '../../Form/appointment_form.dart';
 
 class AppointmentSource extends DataTableSource {
   final BuildContext context;
   List<Appointment> appointments;
-
-
 
   AppointmentSource(
     this.appointments,
@@ -31,43 +24,49 @@ class AppointmentSource extends DataTableSource {
 
     return DataRow.byIndex(index: index, cells: [
       DataCell(Text(SiNo.toString())),
-      DataCell(CircleAvatar(
-        child: Text("IMG"),
-      )),
-      DataCell(Text(appointment.raisedBy)),
-      DataCell(Text(appointment.date)),
-      DataCell(Text('10:00 AM-11:00 AM')),
-      DataCell(Text(appointment.status == 1 ? 'Apporoved' : 'Not Approved')),
+      DataCell(Text(appointment.purpose)),
+      // DataCell(Text(appointment.raisedBy ?? '')),
+      DataCell(Text(appointment.date.toString())),
+      DataCell(Text(appointment.fromTime.format(context) + " : " + appointment.toTime.format(context))),
+
+      DataCell(Text(appointment.parentApproval ? "Accepted" : "Pending")),
+      DataCell(
+        appointment.adminApproval
+            ? const Text("Accepted")
+            : ElevatedButton(
+                onPressed: () {
+                  appointment.adminApproval = true;
+                  appointment.status =
+                      (appointment.parentApproval && appointment.adminApproval) ? AppointmentStatus.approved : AppointmentStatus.pending;
+                  appointment.approve();
+                },
+                child: const Text('Approve'),
+              ),
+      ),
+      DataCell(Text(appointment.status.toString().split('.').last.toUpperCase())),
       DataCell(ElevatedButton(
         onPressed: () {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-
-                  content: SizedBox(
-                    width: isMobile(context)?getWidth(context)*0.80:getWidth(context)*0.30,
-
-                      child: AppointmentPage())
-                );
+                    content: SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.30,
+                        child: AppointmentPage(
+                          appointment: appointment,
+                        )));
               });
         },
-        child: Text('Reschedule'),
-      )),
-      DataCell(ElevatedButton(
-
-        onPressed: () {
-
-
-        },
-        child: Text('Accept'),
+        child: const Text('Reschedule'),
       )),
       DataCell(IconButton(
         icon: const Icon(
           Icons.delete,
           color: Colors.red,
         ),
-        onPressed: () {},
+        onPressed: () {
+          AppointmentController(appointment).delete();
+        },
       )),
     ]);
   }
@@ -81,31 +80,14 @@ class AppointmentSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  getEntity(Bio entity) {
-    switch (entity.entityType) {
-      case EntityType.parent:
-        return ParentController.parentsList
-            .firstWhere((p0) => p0.icNumber == entity.icNumber)
-            .controller;
-      case EntityType.teacher:
-        return TeacherController.teacherList
-            .firstWhere((p0) => p0.icNumber == entity.icNumber)
-            .controller;
-      case EntityType.student:
-        return StudentController.studentList
-            .firstWhere((p0) => p0.icNumber == entity.icNumber)
-            .controller;
-      default:
-    }
-  }
-
   static List<DataColumn> getCoumns() {
     List<DataColumn> columns = [
       const DataColumn(label: Text('SINO')),
-      const DataColumn(label: Text('PROFILE')),
-      const DataColumn(label: Text('NAME')),
+      const DataColumn(label: Text('TITLE')),
       const DataColumn(label: Text('DATE')),
       const DataColumn(label: Text('TIME')),
+      const DataColumn(label: SizedBox(child: Center(child: Text('PARENT APPROVAL')))),
+      const DataColumn(label: SizedBox(child: Center(child: Text('ADMIN APPROVAL')))),
       const DataColumn(label: Text('STATUS')),
       const DataColumn(
           label: Center(
@@ -115,8 +97,6 @@ class AppointmentSource extends DataTableSource {
                     'RESCHEDULE',
                     textAlign: TextAlign.center,
                   )))),
-      const DataColumn(
-          label: SizedBox( child: Center(child: Text('APPROVAL')))),
       const DataColumn(label: Text('DELETE'))
     ];
 

@@ -29,6 +29,7 @@ class AppointmentController extends GetxController {
   }
 
   Future<Result> change() async {
+    printInfo(info: appointment.id.toString());
     return firestore
         .collection('appointments')
         .doc(appointment.id)

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,61 +39,43 @@ class AuthRouter extends StatelessWidget {
           return GetMaterialApp(
             scrollBehavior: MyCustomScrollBehavior(),
             defaultTransition: Transition.leftToRight,
-
-     theme: ThemeData(
-
-
-
-
-       listTileTheme: const ListTileThemeData(),
-       pageTransitionsTheme: PageTransitionsTheme(
-         builders: {
-           TargetPlatform.windows:FadeUpwardsPageTransitionsBuilder(),
-           TargetPlatform.android:FadeUpwardsPageTransitionsBuilder(),
-           TargetPlatform.iOS:FadeUpwardsPageTransitionsBuilder(),
-         }
-
-       ),
-            colorScheme: lightColorScheme,
-            textTheme: MyTexTheme,
-            tabBarTheme: TabBarTheme(
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 4.0,color: getColor(context).tertiary),
-
+            theme: ThemeData(
+              listTileTheme: const ListTileThemeData(),
+              pageTransitionsTheme: const PageTransitionsTheme(builders: {
+                TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+                TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+                TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+              }),
+              colorScheme: lightColorScheme,
+              textTheme: myTexTheme,
+              tabBarTheme: TabBarTheme(
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(width: 4.0, color: getColor(context).tertiary),
+                ),
               ),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                backgroundColor: lightColorScheme.secondaryContainer,
+                elevation: 3,
+              ),
+              // This is the theme of your application.
+              //
+              // Try running your application with "flutter run". You'll see the
+              // application has a blue toolbar. Then, without quitting the app, try
+              // changing the primarySwatch below to Colors.green and then invoke
+              // "hot reload" (press "r" in the console where you ran "flutter run",
+              // or simply save your changes to "hot reload" in a Flutter IDE).
+              // Notice that the counter didn't reset back to zero; the application
+              // is not restarted.
+              primarySwatch: Colors.blue,
             ),
-            bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              backgroundColor:lightColorScheme.secondaryContainer,
-              elevation: 3,
-
-            ),
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            primarySwatch: Colors.blue,
-          ),
-
-            transitionDuration: const Duration(
-              microseconds: 0
-            ),
+            transitionDuration: const Duration(microseconds: 0),
             builder: (context, child) {
               return Overlay(
-
                 initialEntries: [
-
-                  OverlayEntry(builder: (context){
-
+                  OverlayEntry(builder: (context) {
                     return LandingPage(child: child ?? Container());
-
                   })
                 ],
-
               );
             },
             onGenerateRoute: (settings) {
@@ -123,22 +104,18 @@ class AuthRouter extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        return  MaterialApp(
-
-
+        return MaterialApp(
           theme: ThemeData(
             colorScheme: lightColorScheme,
-            textTheme: MyTexTheme,
+            textTheme: myTexTheme,
             tabBarTheme: TabBarTheme(
               indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 4.0,color: getColor(context).tertiary),
-
+                borderSide: BorderSide(width: 4.0, color: getColor(context).tertiary),
               ),
             ),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              backgroundColor:lightColorScheme.secondaryContainer,
+              backgroundColor: lightColorScheme.secondaryContainer,
               elevation: 3,
-
             ),
             // This is the theme of your application.
             //
@@ -162,7 +139,7 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }

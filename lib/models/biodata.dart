@@ -31,15 +31,48 @@ class Bio {
   String? imageUrl;
   Gender gender;
 
-  Map<String, dynamic> toJson() => {
+  @override
+  bool operator ==(other) {
+    return icNumber == (other as Bio).icNumber;
+  }
+
+  factory Bio.fromBioJson(json) => Bio(
+        name: json["name"] ?? '',
+        entityType: EntityType.values.elementAt(json["entityType"]),
+        icNumber: json["icNumber"] ?? '',
+        email: json["email"] ?? '',
+        gender: Gender.values.elementAt(json["gender"]),
+        address: json["address"],
+        addressLine1: json["addressLine1"],
+        addressLine2: json["addressLine2"],
+        city: json["city"],
+        imageUrl: json["imageUrl"],
+        lastName: json["lastName"],
+        primaryPhone: json["primaryPhone"],
+        secondaryPhone: json["secondaryPhone"],
+        state: json["state"],
+      );
+
+  Map<String, dynamic> toBioJson() => {
         "name": name,
-        "entityType": entityType,
+        "lastName": lastName,
+        "entityType": entityType.index,
         "icNumber": icNumber,
         "email": email,
         "address": address,
+        "addressLine1": addressLine1,
+        "addressLine2": addressLine2,
+        "city": city,
+        "state": state,
+        "primaryPhone": primaryPhone,
+        "secondaryPhone": secondaryPhone,
         "imageUrl": imageUrl,
-        "lastName": lastName,
+        "gender": gender.index,
       };
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
 }
 
 enum EntityType { student, teacher, parent, admin }

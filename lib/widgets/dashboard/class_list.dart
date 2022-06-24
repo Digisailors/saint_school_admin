@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/widgets/custom_drop_down.dart';
 
 import '../../controllers/class_controller.dart';
 
+// ignore: must_be_immutable
 class ClassList extends StatelessWidget {
   ClassList({Key? key}) : super(key: key);
 

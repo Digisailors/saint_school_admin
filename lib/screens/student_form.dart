@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/form_controller.dart';
+import 'package:school_app/screens/Form/controllers/student_form_controller.dart';
 import 'package:school_app/widgets/custom_drop_down.dart';
 import 'package:school_app/widgets/custom_text_field.dart';
+import 'Form/controllers/bio_form_controller.dart';
 
 enum FormMode { add, update, view }
 
@@ -81,7 +82,7 @@ class _StudentFormState extends State<StudentForm> {
                                                 children: [
                                                   CustomTextField(
                                                     validator: requiredValidator,
-                                                    controller: controller.id,
+                                                    controller: controller.icNumber,
                                                     labelText: 'ID     ',
                                                     enabled: (formMode != FormMode.update),
                                                   ),
@@ -144,7 +145,7 @@ class _StudentFormState extends State<StudentForm> {
                                           ),
                                           CustomTextField(
                                             validator: requiredValidator,
-                                            controller: controller.contact,
+                                            controller: controller.email,
                                             labelText: "Contact",
                                           ),
                                           CustomTextField(

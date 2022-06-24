@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/widgets/theme.dart';
 
 class CustomDropDown<T> extends StatelessWidget {
   const CustomDropDown({

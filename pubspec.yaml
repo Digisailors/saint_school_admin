@@ -47,6 +47,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^20.1.59
   time_range: ^1.0.2
   syncfusion_officechart: ^20.1.60-beta
+  firebase_database: ^9.0.16
 
 dev_dependencies:
   flutter_test:

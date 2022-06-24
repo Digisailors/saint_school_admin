@@ -25,7 +25,7 @@ class AdminController extends GetxController implements CRUD {
     return firestore
         .collection('admins')
         .doc(admin.icNumber)
-        .set(admin.toJson())
+        .set(admin.toBioJson())
         .then((value) => Result.success("Admin added successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
   }
@@ -35,7 +35,7 @@ class AdminController extends GetxController implements CRUD {
     return firestore
         .collection('admins')
         .doc(admin.icNumber)
-        .update(admin.toJson())
+        .update(admin.toBioJson())
         .then((value) => Result.success("Admin Updated successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
   }

@@ -8,13 +8,10 @@ import 'package:school_app/controllers/teacher_controller.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/screens/Form/student_form.dart';
 import 'package:school_app/screens/list/source/bio_source.dart';
-import 'package:school_app/screens/student_form.dart' as students;
-import 'package:school_app/widgets/custom_text_field.dart';
 
 import '../../constants/get_constants.dart';
 import '../../controllers/session_controller.dart';
-import '../../form_controller.dart';
-import '../../widgets/custom_drop_down.dart';
+import '../Form/controllers/student_form_controller.dart';
 
 class EntityList extends StatefulWidget {
   const EntityList({Key? key, required this.entityType}) : super(key: key);
@@ -26,13 +23,12 @@ class EntityList extends StatefulWidget {
 }
 
 class _EntityListState extends State<EntityList> {
-
   StudentFormController get controller => session.formcontroller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding:  EdgeInsets.all(isMobile(context)?2:8),
+        padding: EdgeInsets.all(isMobile(context) ? 2 : 8),
         child: StreamBuilder<List<Bio>>(
             initialData: getList(),
             stream: getStream(),
@@ -48,42 +44,34 @@ class _EntityListState extends State<EntityList> {
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          width: isMobile(context)?getWidth(context)*2:getWidth(context)*0.80,
+                          width: isMobile(context) ? getWidth(context) * 2 : getWidth(context) * 0.80,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(widget.entityType.name.toString().toUpperCase()),
-
                               SizedBox(
-                                  height: getHeight(context)*0.08,
-                                  width: isMobile(context)
-                                      ? getWidth(context) * 0.80
-                                      : getWidth(context) * 0.20,
+                                  height: getHeight(context) * 0.08,
+                                  width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                                   child: Center(
                                     child: TextFormField(
                                       decoration: InputDecoration(
-
-                                        prefixIcon: Icon(Icons.search, color: getColor(context).secondary,),
-                                        border:const OutlineInputBorder(
-
+                                        prefixIcon: Icon(
+                                          Icons.search,
+                                          color: getColor(context).secondary,
                                         ),
+                                        border: const OutlineInputBorder(),
                                       ),
                                     ),
                                   )),
                               SizedBox(
-                                  height: getHeight(context)*0.053,
-                                  width:  getWidth(context) * 0.10,
+                                  height: getHeight(context) * 0.053,
+                                  width: getWidth(context) * 0.10,
                                   child: DropdownButtonFormField<String>(
                                     decoration: const InputDecoration(
                                       labelText: 'Class',
-
-
-                                      border:OutlineInputBorder(
-
-
-                                      ),
-                                    ), items: controller.classItems,
-
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    items: controller.classItems,
                                     onChanged: (text) {
                                       setState(() {
                                         if (controller.classField != text) {
@@ -92,71 +80,53 @@ class _EntityListState extends State<EntityList> {
                                         }
                                       });
                                     },
-                                  )
-
-                              ),
+                                  )),
                               SizedBox(
-                                height: getHeight(context)*0.053,
-                                width:  getWidth(context) * 0.10,
+                                height: getHeight(context) * 0.053,
+                                width: getWidth(context) * 0.10,
                                 child: DropdownButtonFormField<String?>(
                                   decoration: const InputDecoration(
                                     labelText: 'Section',
-
-
-                                    border:OutlineInputBorder(
-
-
-                                    ),
+                                    border: OutlineInputBorder(),
                                   ),
                                   items: controller.sectionItems,
-
                                   onChanged: (text) {
                                     setState(() {
-                                      controller.sectionField =
-                                          text ?? controller.sectionField;
+                                      controller.sectionField = text ?? controller.sectionField;
                                     });
                                   },
                                 ),
                               ),
-
-
-
-
-
-
-
                               ElevatedButton(
                                   onPressed: () {
                                     Get.toNamed(StudentForm.routeName, arguments: null);
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: const Text("Add"),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text("Add"),
                                   )),
                               ElevatedButton(
                                   onPressed: () {
                                     setState(() {});
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: const Text("Refresh"),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text("Refresh"),
                                   ))
                             ],
                           ),
                         ),
                       ),
                       ConstrainedBox(
-                        constraints: BoxConstraints(minWidth: getWidth(context)*0.90, maxWidth:1980,),
+                        constraints: BoxConstraints(
+                          minWidth: getWidth(context) * 0.90,
+                          maxWidth: 1980,
+                        ),
                         child: PaginatedDataTable(
                           dragStartBehavior: DragStartBehavior.start,
-
-
-
-
-
                           columns: BioSource.getCoumns(widget.entityType),
                           source: source,
-                          rowsPerPage:isDesktop(context)?14:10,
+                          rowsPerPage: isDesktop(context) ? 14 : 10,
                         ),
                       ),
                     ],

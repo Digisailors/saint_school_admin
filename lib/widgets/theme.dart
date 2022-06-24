@@ -1,107 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
-
-
-
-
 
 class CustomLayout extends StatelessWidget {
   const CustomLayout({Key? key, required this.children, required this.mainAxisAlignment}) : super(key: key);
 
-  static bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 650;
+  static bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 650;
 
-  static  bool isTablet(BuildContext context) =>
-      MediaQuery.of(context).size.width < 1100 &&
-          MediaQuery.of(context).size.width >= 650;
+  static bool isTablet(BuildContext context) => MediaQuery.of(context).size.width < 1100 && MediaQuery.of(context).size.width >= 650;
 
-  static  bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 1100;
+  static bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1100;
   final List<Widget> children;
   final MainAxisAlignment mainAxisAlignment;
 
-
   @override
   Widget build(BuildContext context) {
-    return
-
-
-
-      LayoutBuilder(builder: (context,constraints){
-
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            if (isDesktop(context)) {
-              return Row(
-
-                mainAxisAlignment: mainAxisAlignment,
-                children: children,);
-            }
-            if(isTablet(context)){
-              return Row(
-                mainAxisAlignment: mainAxisAlignment,
-                children: children,);
-            }
-
-            else {
-              return Column(
-
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: children,);
-            }
-          },
-        );
-
-      });
-
-
+    return LayoutBuilder(builder: (context, constraints) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          if (isDesktop(context)) {
+            return Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: children,
+            );
+          }
+          if (isTablet(context)) {
+            return Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: children,
+            );
+          } else {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            );
+          }
+        },
+      );
+    });
   }
 }
 
+double responsiveSize(BuildContext context, double dsize, double tsize, double msize) {
+  bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 650;
 
+  bool isTablet(BuildContext context) => MediaQuery.of(context).size.width < 1100 && MediaQuery.of(context).size.width >= 650;
 
- double responsiveSize(BuildContext context ,double dsize
-     ,double tsize,double msize){
+  bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1100;
 
-
-   bool isMobile(BuildContext context) =>
-   MediaQuery.of(context).size.width < 650;
-
-    bool isTablet(BuildContext context) =>
-   MediaQuery.of(context).size.width < 1100 &&
-       MediaQuery.of(context).size.width >= 650;
-
-   bool isDesktop(BuildContext context) =>
-   MediaQuery.of(context).size.width >= 1100;
-
-
-
-  if (isDesktop(context)){
-
+  if (isDesktop(context)) {
     return dsize;
   }
-   if (isTablet(context)){
-
-     return tsize;
-   }
-   else{
-
-     return msize;
-   }
-
-
- }
-
-
-
-
+  if (isTablet(context)) {
+    return tsize;
+  } else {
+    return msize;
+  }
+}
 
 const seed = Color(0xFF6750A4);
-
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
@@ -165,7 +122,7 @@ const darkColorScheme = ColorScheme(
   shadow: Color(0xFF000000),
 );
 
-TextTheme MyTexTheme = TextTheme(
+TextTheme myTexTheme = TextTheme(
   headline1: GoogleFonts.roboto(fontSize: 96, fontWeight: FontWeight.w300, letterSpacing: -1.5),
   headline2: GoogleFonts.roboto(fontSize: 60, fontWeight: FontWeight.w300, letterSpacing: -0.5),
   headline3: GoogleFonts.roboto(fontSize: 48, fontWeight: FontWeight.w400),

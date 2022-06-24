@@ -1,14 +1,32 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:math';
+import 'dart:convert';
 import '../models/response.dart';
 
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
-final CollectionReference<Map<String, dynamic>> students = firestore.collection('Students');
+final CollectionReference<Map<String, dynamic>> students = firestore.collection('students');
+DatabaseReference ref = FirebaseDatabase.instance.ref();
+
+List<String> makeSearchstring(String string) {
+  List<String> list = [];
+  for (int i = 1; i < string.length; i++) {
+    list.add(string.substring(0, i).toLowerCase());
+  }
+  list.add(string.toLowerCase());
+  return list;
+}
+
+String getRandString(int len) {
+  var random = Random.secure();
+  var values = List<int>.generate(len, (i) => random.nextInt(255));
+  return base64UrlEncode(values);
+}
 
 Future<String> uploadImage(Uint8List file, String name) async {
   var ref = storage.ref(name).child(name + DateTime.now().microsecondsSinceEpoch.toString());

@@ -23,8 +23,6 @@ class SideMenu extends StatelessWidget {
         builder: (_) {
           final currentPage = session.pageIndex;
           return Drawer(
-
-
             // backgroundColor: Colors.blue.shade50,
             child: ListView(
               children: [
@@ -60,8 +58,7 @@ class SideMenu extends StatelessWidget {
                   selected: currentPage == 1,
                   press: () {
                     session.pageIndex = 1;
-                    Get.offAllNamed(EntityList.routeName,
-                        arguments: EntityType.student);
+                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.student);
                   },
                 ),
                 DrawerListTile(
@@ -74,8 +71,7 @@ class SideMenu extends StatelessWidget {
                   selected: currentPage == 2,
                   press: () {
                     session.pageIndex = 2;
-                    Get.offAllNamed(EntityList.routeName,
-                        arguments: EntityType.parent);
+                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.parent);
                   },
                 ),
                 DrawerListTile(
@@ -88,8 +84,7 @@ class SideMenu extends StatelessWidget {
                   // selected: currentPage == 2,
                   press: () {
                     session.pageIndex = 3;
-                    Get.offAllNamed(EntityList.routeName,
-                        arguments: EntityType.teacher);
+                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
                     // Get.offAll(() => const Carousel());
                   },
                 ),
@@ -103,7 +98,7 @@ class SideMenu extends StatelessWidget {
                   selected: currentPage == 3,
                   press: () {
                     session.pageIndex = 3;
-                    Get.offAll(AppoinmentList());
+                    Get.offAll(const AppoinmentList());
                     // Get.offAll(() => const Carousel());
                   },
                 ),
@@ -158,10 +153,7 @@ class DrawerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selectedColor: Colors.yellowAccent.shade100,
-      leading: SizedBox(
-          width: getWidth(context) * 0.02,
-          height: getHeight(context) * 0.03,
-          child: leading),
+      leading: SizedBox(width: getWidth(context) * 0.02, height: getHeight(context) * 0.03, child: leading),
       onTap: press,
       selected: selected,
       selectedTileColor: Colors.blueAccent.shade100,

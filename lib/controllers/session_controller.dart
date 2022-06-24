@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/models/session.dart';
 
-import '../form_controller.dart';
+import '../screens/Form/controllers/student_form_controller.dart';
 
 final CollectionReference<Map<String, dynamic>> queue = firestore.collection('NewQueue');
 

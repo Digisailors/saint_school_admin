@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
+
+import '../constants/constant.dart';
 
 class Student extends Bio {
   Student({
@@ -84,7 +87,22 @@ class Student extends Bio {
         state: json["state"],
       );
 
-  @override
+  List<String> get search {
+    List<String> results = [];
+    name.split(' ').map((e) => makeSearchstring(e)).forEach((element) {
+      results.addAll(element);
+    });
+    results.addAll(makeSearchstring(icNumber));
+    try {
+      results.addAll(makeSearchstring(email.split('@').first));
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return results;
+  }
+
   Map<String, dynamic> toJson() => {
         "ic": icNumber,
         "class": studentClass,
@@ -95,6 +113,7 @@ class Student extends Bio {
         "siblings": siblings,
         "father": father,
         "mother": mother,
+        "entityType": entityType.index,
         "guardian": guardian,
         "address": address,
         "addressLine1": addressLine1,
@@ -105,5 +124,6 @@ class Student extends Bio {
         "primaryPhone": primaryPhone,
         'secondaryPhone': secondaryPhone,
         "state": state,
+        "search": search,
       };
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:school_app/constants/constant.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/student_form.dart';
 
 class StudentList extends StatefulWidget {
-  StudentList({Key? key}) : super(key: key);
+  const StudentList({Key? key}) : super(key: key);
 
   @override
   State<StudentList> createState() => _StudentListState();
@@ -23,7 +22,6 @@ class _StudentListState extends State<StudentList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: GetBuilder(
           init: session,
           builder: (_) {
@@ -55,7 +53,7 @@ class _StudentListState extends State<StudentList> {
                               child: DropdownButton<dynamic>(
                                 icon: const Icon(Icons.sort_sharp),
                                 // items: session.getOrderByItems(),
-                                items: [],
+                                items: const [],
                                 hint: const Icon(Icons.sort),
                                 // value: session.sortBy,
                                 onChanged: (text) {
