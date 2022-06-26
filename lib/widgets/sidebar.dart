@@ -8,6 +8,9 @@ import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
 import 'package:school_app/screens/list/appointmentlist.dart';
 import 'package:school_app/screens/list/list.dart';
+import 'package:school_app/screens/list/parent_list.dart';
+import 'package:school_app/screens/list/student_list.dart';
+import 'package:school_app/screens/list/teachers_list.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -58,7 +61,8 @@ class SideMenu extends StatelessWidget {
                   selected: currentPage == 1,
                   press: () {
                     session.pageIndex = 1;
-                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.student);
+                    // Get.offAllNamed(EntityList.routeName, arguments: EntityType.student);
+                    Get.offAll(() => const StudentList());
                   },
                 ),
                 DrawerListTile(
@@ -71,7 +75,8 @@ class SideMenu extends StatelessWidget {
                   selected: currentPage == 2,
                   press: () {
                     session.pageIndex = 2;
-                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.parent);
+                    // Get.offAllNamed(EntityList.routeName, arguments: EntityType.parent);
+                    Get.offAll(() => const ParentList());
                   },
                 ),
                 DrawerListTile(
@@ -81,11 +86,11 @@ class SideMenu extends StatelessWidget {
                   ),
                   title: "Teacher List",
                   svgSrc: "assets/icons/menu_tran.svg",
-                  // selected: currentPage == 2,
+                  selected: currentPage == 3,
                   press: () {
                     session.pageIndex = 3;
-                    Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
-                    // Get.offAll(() => const Carousel());
+                    // Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
+                    Get.offAll(() => const TeacherList());
                   },
                 ),
                 DrawerListTile(
@@ -95,9 +100,9 @@ class SideMenu extends StatelessWidget {
                   ),
                   title: "Appointments",
                   svgSrc: "assets/icons/menu_tran.svg",
-                  selected: currentPage == 3,
+                  selected: currentPage == 4,
                   press: () {
-                    session.pageIndex = 3;
+                    session.pageIndex = 4;
                     Get.offAll(const AppoinmentList());
                     // Get.offAll(() => const Carousel());
                   },
@@ -111,8 +116,11 @@ class SideMenu extends StatelessWidget {
                   svgSrc: "assets/icons/menu_tran.svg",
                   // selected: currentPage == 2,
                   press: () {
-                    session.pageIndex = 9;
-                    Get.to(() => const Carousel());
+                    session.showSideBar = false;
+                    session.update();
+                    Get.to(
+                      () => const Carousel(),
+                    );
                   },
                 ),
                 DrawerListTile(

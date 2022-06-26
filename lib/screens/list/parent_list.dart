@@ -1,41 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:school_app/controllers/admin_controller.dart';
+import 'package:school_app/constants/constant.dart';
 import 'package:school_app/controllers/parent_controller.dart';
-import 'package:school_app/controllers/student_controller.dart';
-import 'package:school_app/controllers/teacher_controller.dart';
 import 'package:school_app/models/biodata.dart';
+import 'package:school_app/models/parent.dart';
 import 'package:school_app/screens/Form/parent_form.dart';
-import 'package:school_app/screens/Form/student_form.dart';
-import 'package:school_app/screens/Form/teacher_form.dart';
 import 'package:school_app/screens/list/source/bio_source.dart';
 
 import '../../constants/get_constants.dart';
-import '../../controllers/session_controller.dart';
-import '../Form/controllers/student_form_controller.dart';
 
-class EntityList extends StatefulWidget {
-  const EntityList({Key? key, required this.entityType}) : super(key: key);
-  final EntityType entityType;
+class ParentList extends StatefulWidget {
+  const ParentList({Key? key}) : super(key: key);
 
-  static const routeName = '/passArguments';
+  static const routeName = '/parentList';
   @override
-  State<EntityList> createState() => _EntityListState();
+  State<ParentList> createState() => _ParentListState();
 }
 
-class _EntityListState extends State<EntityList> {
-  StudentFormController get controller => session.formcontroller;
+class _ParentListState extends State<ParentList> {
   String? className;
   String? search;
   String? section;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(isMobile(context) ? 2 : 8),
-        child: StreamBuilder<List<Bio>>(
-            initialData: getList(),
+        child: StreamBuilder<List<Parent>>(
+            initialData: ParentController.parentsList.toList(),
             stream: getStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
@@ -55,13 +50,14 @@ class _EntityListState extends State<EntityList> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(widget.entityType.name.toString().toUpperCase()),
+                              const Text("Parents List"),
                               Expanded(child: Container()),
                               SizedBox(
                                   height: getHeight(context) * 0.08,
                                   width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                                   child: Center(
                                     child: TextFormField(
+                                      onChanged: ((value) => search = value),
                                       decoration: InputDecoration(
                                         prefixIcon: Icon(
                                           Icons.search,
@@ -108,37 +104,24 @@ class _EntityListState extends State<EntityList> {
                                 padding: const EdgeInsets.all(4.0),
                                 child: ElevatedButton(
                                     onPressed: () {
-                                      switch (widget.entityType) {
-                                        case EntityType.student:
-                                          Get.toNamed(StudentForm.routeName, arguments: null);
-                                          break;
-                                        case EntityType.teacher:
-                                          Get.to(() => const TeacherForm());
-                                          break;
-                                        case EntityType.parent:
-                                          Get.to(() => const ParentForm());
-                                          break;
-                                        case EntityType.admin:
-                                          // TODO: Handle this case.
-                                          break;
-                                      }
+                                      setState(() {});
                                     },
                                     child: const Padding(
                                       padding: EdgeInsets.all(16.0),
-                                      child: Text("Add"),
+                                      child: Text("Search"),
                                     )),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: ElevatedButton(
                                     onPressed: () {
-                                      setState(() {});
+                                      Get.to(() => const ParentForm());
                                     },
                                     child: const Padding(
                                       padding: EdgeInsets.all(16.0),
-                                      child: Text("Refresh"),
+                                      child: Text("Add"),
                                     )),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -150,7 +133,7 @@ class _EntityListState extends State<EntityList> {
                         ),
                         child: PaginatedDataTable(
                           dragStartBehavior: DragStartBehavior.start,
-                          columns: BioSource.getCoumns(widget.entityType),
+                          columns: BioSource.getCoumns(EntityType.parent),
                           source: source,
                           rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
                         ),
@@ -172,29 +155,11 @@ class _EntityListState extends State<EntityList> {
     );
   }
 
-  List<Bio> getList() {
-    switch (widget.entityType) {
-      case EntityType.student:
-        return StudentController.studentList.toList();
-      case EntityType.teacher:
-        return TeacherController.teacherList.toList();
-      case EntityType.parent:
-        return ParentController.parentsList.toList();
-      case EntityType.admin:
-        return AdminController.adminList.toList();
-    }
-  }
-
   getStream() {
-    switch (widget.entityType) {
-      case EntityType.student:
-        return StudentController.listenStudents();
-      case EntityType.teacher:
-        return TeacherController.listenTeachers();
-      case EntityType.parent:
-        return ParentController.listenParents();
-      case EntityType.admin:
-        return AdminController.adminList.stream;
+    Query<Map<String, dynamic>> query = firestore.collection('parents');
+    if (search != null) {
+      query = query.where('search', arrayContains: search);
     }
+    return query.snapshots().map((event) => event.docs.map((e) => Parent.fromJson(e.data())).toList());
   }
 }

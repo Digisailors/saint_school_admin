@@ -5,8 +5,12 @@ import 'package:school_app/controllers/parent_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/controllers/teacher_controller.dart';
 import 'package:school_app/models/biodata.dart';
+import 'package:school_app/models/parent.dart';
 import 'package:school_app/models/student.dart';
+import 'package:school_app/models/teacher.dart';
+import 'package:school_app/screens/Form/parent_form.dart';
 import 'package:school_app/screens/Form/student_form.dart';
+import 'package:school_app/screens/Form/teacher_form.dart';
 
 class BioSource extends DataTableSource {
   final List<dynamic> entities;
@@ -25,8 +29,8 @@ class BioSource extends DataTableSource {
 
     return DataRow.byIndex(index: index, cells: [
       DataCell(Text(SiNo.toString())),
-      const DataCell(CircleAvatar(
-        child: Text("IMG"),
+      DataCell(CircleAvatar(
+        child: (entity.imageUrl ?? '').isNotEmpty ? Image.network(entity.imageUrl!) : const Text("IMG"),
       )),
       DataCell(Text(entity.name)),
       DataCell(Text(entity.icNumber)),
@@ -48,10 +52,13 @@ class BioSource extends DataTableSource {
                 Get.to(() => StudentForm(student: student));
                 break;
               case EntityType.teacher:
-                // TODO: Handle this case.
+                Teacher teacher = entities[index];
+                Get.to(() => TeacherForm(teacher: teacher));
                 break;
               case EntityType.parent:
-                // TODO: Handle this case.
+                Parent parent = entities[index];
+                print(parent.toJson());
+                Get.to(() => ParentForm(parent: parent));
                 break;
               case EntityType.admin:
                 // TODO: Handle this case.

@@ -33,8 +33,10 @@ class _CarouselState extends State<Carousel> {
         leading: Center(
           child: IconButton(
               onPressed: () {
+                session.showSideBar = true;
+
+                session.update();
                 Navigator.of(context).pop();
-                session.pageIndex = 0;
               },
               icon: const Icon(
                 Icons.arrow_back,

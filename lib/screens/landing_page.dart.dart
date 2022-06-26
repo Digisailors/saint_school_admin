@@ -17,7 +17,7 @@ class LandingPage extends StatelessWidget {
           builder: (_) {
             return Row(
               children: [
-                (isDesktop(context) && session.pageIndex != 9)
+                (isDesktop(context) && session.showSideBar)
                     ? const Expanded(
                         flex: 1,
                         child: Card(elevation: 10, child: SideMenu()),

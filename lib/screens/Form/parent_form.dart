@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/constants/constant.dart';
-import 'package:school_app/models/biodata.dart';
-import 'package:school_app/models/response.dart';
-import 'package:school_app/models/student.dart';
-// import 'package:school_app/screens/student_form.dart';
-import 'package:school_app/widgets/custom_drop_down.dart';
+import 'package:school_app/controllers/parent_controller.dart';
+import 'package:school_app/models/parent.dart';
+import 'package:school_app/screens/Form/controllers/parent_form_controller.dart';
+import 'package:school_app/widgets/theme.dart';
 
+import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
-import 'controllers/student_form_controller.dart';
+import '../../models/biodata.dart';
+import '../../models/response.dart';
+import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_text_field.dart';
-import '../../widgets/theme.dart';
 
-class StudentForm extends StatefulWidget {
-  const StudentForm({
+class ParentForm extends StatefulWidget {
+  const ParentForm({
     Key? key,
-    this.student,
+    this.parent,
   }) : super(key: key);
 
-  final Student? student;
-  static String routeName = '/student';
+  final Parent? parent;
+  static String routeName = '/parent';
 
   @override
-  State<StudentForm> createState() => _StudentFormState();
+  State<ParentForm> createState() => _ParentFormState();
 }
 
 enum FormMode { add, update, view }
 
-class _StudentFormState extends State<StudentForm> {
+class _ParentFormState extends State<ParentForm> {
   late FormMode formMode;
-  late StudentFormController controller;
+  late ParentFormController controller;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    formMode = widget.student == null ? FormMode.add : FormMode.update;
-    controller = widget.student == null ? StudentFormController() : StudentFormController.fromStudent(widget.student!);
+    formMode = widget.parent == null ? FormMode.add : FormMode.update;
+    controller = widget.parent == null ? ParentFormController() : ParentFormController.fromParent(widget.parent!);
     super.initState();
   }
 
@@ -45,13 +45,6 @@ class _StudentFormState extends State<StudentForm> {
       return "This is a required field";
     }
     return null;
-  }
-
-  String? anyOneValidator(String? val) {
-    if (controller.father.text.isNotEmpty || controller.mother.text.isNotEmpty || controller.guardian.text.isNotEmpty) {
-      return null;
-    }
-    return "Either a parent or guardian is required";
   }
 
   @override
@@ -65,10 +58,13 @@ class _StudentFormState extends State<StudentForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Add Student',
+              ListTile(
+                leading: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                title: Text(
+                  'Parent Form',
                   style: getText(context).headline6!.apply(color: getColor(context).primary),
                 ),
               ),
@@ -134,75 +130,11 @@ class _StudentFormState extends State<StudentForm> {
                     ),
                     SizedBox(
                       width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomDropDown<String?>(
-                        labelText: 'Class',
-                        items: controller.classItems,
-                        selectedValue: controller.classField,
-                        onChanged: (text) {
-                          setState(() {
-                            controller.classField = text;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomDropDown<String?>(
-                        labelText: 'Section',
-                        items: <String>['A', 'B', 'C', 'D'].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        selectedValue: controller.sectionField,
-                        onChanged: (text) {
-                          setState(() {
-                            controller.sectionField = text;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Center(
-                child: CustomLayout(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                       child: CustomTextField(
                         validator: requiredValidator,
                         controller: controller.icNumber,
                         labelText: 'IC Number',
                         hintText: 'Enter IC Number',
-                      ),
-                    ),
-                    SizedBox(
-                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                        child: CustomTextField(
-                          hintText: 'Enter IC Number',
-                          validator: anyOneValidator,
-                          controller: controller.father,
-                          labelText: "Father",
-                        )),
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomTextField(
-                        hintText: 'Enter IC Number',
-                        validator: anyOneValidator,
-                        controller: controller.mother,
-                        labelText: "Mother ",
-                      ),
-                    ),
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomTextField(
-                        hintText: 'Enter IC Number',
-                        validator: anyOneValidator,
-                        controller: controller.guardian,
-                        labelText: "Guardian",
                       ),
                     ),
                   ],
@@ -284,7 +216,7 @@ class _StudentFormState extends State<StudentForm> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Siblings',
+                  'Children',
                   style: getText(context).headline6!.apply(color: getColor(context).primary),
                 ),
               ),
@@ -302,13 +234,13 @@ class _StudentFormState extends State<StudentForm> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          var student = controller.student;
-
+                          var parent = controller.parent;
+                          var parentController = ParentController(parent: parent);
                           Future<Result> future;
                           if (formMode == FormMode.add) {
-                            future = controller.createUser();
+                            future = parentController.add();
                           } else {
-                            future = controller.updateUser();
+                            future = parentController.change();
                           }
                           showFutureCustomDialog(
                               context: context,
@@ -333,7 +265,7 @@ class _StudentFormState extends State<StudentForm> {
   }
 
   List<Widget> getSiblingsField(BuildContext context) {
-    List<Widget> list = controller.siblings
+    List<Widget> list = controller.children
         .map(
           (e) => SizedBox(
             width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
@@ -351,7 +283,7 @@ class _StudentFormState extends State<StudentForm> {
         child: TextButton(
             onPressed: () {
               setState(() {
-                controller.siblings.add(TextEditingController());
+                controller.children.add(TextEditingController());
               });
             },
             child: const Text("Add")),

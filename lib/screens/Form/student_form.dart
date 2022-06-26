@@ -65,10 +65,14 @@ class _StudentFormState extends State<StudentForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Add Student',
+              ListTile(
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.arrow_back)),
+                title: Text(
+                  'Student Form',
                   style: getText(context).headline6!.apply(color: getColor(context).primary),
                 ),
               ),
@@ -141,6 +145,7 @@ class _StudentFormState extends State<StudentForm> {
                         onChanged: (text) {
                           setState(() {
                             controller.classField = text;
+                            controller.sectionField = null;
                           });
                         },
                       ),
@@ -149,12 +154,7 @@ class _StudentFormState extends State<StudentForm> {
                       width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                       child: CustomDropDown<String?>(
                         labelText: 'Section',
-                        items: <String>['A', 'B', 'C', 'D'].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                        items: controller.sectionItems,
                         selectedValue: controller.sectionField,
                         onChanged: (text) {
                           setState(() {

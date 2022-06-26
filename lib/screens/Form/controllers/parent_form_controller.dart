@@ -13,7 +13,7 @@ enum Provide { network, memory, logo }
 
 class ParentFormController with BioFormController {
   ParentFormController();
-  List<String> children = [];
+  List<TextEditingController> children = [];
   EntityType entityType = EntityType.parent;
   String? uid;
 
@@ -75,7 +75,7 @@ class ParentFormController with BioFormController {
         lastName: lastName.text,
 
         //------------------------
-        children: children,
+        children: children.map((e) => e.text).toList(),
         uid: uid,
       );
 
@@ -93,7 +93,7 @@ class ParentFormController with BioFormController {
     controller.primaryPhone.text = parent.primaryPhone ?? '';
     controller.secondaryPhone.text = parent.secondaryPhone ?? '';
 
-    controller.children = parent.children;
+    controller.children = parent.children.map((e) => TextEditingController(text: e)).toList();
     controller.uid = parent.uid;
 
     return controller;

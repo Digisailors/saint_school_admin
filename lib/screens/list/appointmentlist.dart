@@ -90,7 +90,7 @@ class _AppoinmentListState extends State<AppoinmentList> {
                                   dragStartBehavior: DragStartBehavior.start,
                                   columns: AppointmentSource.getCoumns(),
                                   source: sourcelist,
-                                  rowsPerPage: isDesktop(context) ? 14 : 10,
+                                  rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
                                 ),
                               ],
                             ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:time_range/time_range.dart';
 
-import '../../models/appointment.dart';
-import '../../models/parent.dart';
+import '../../../models/appointment.dart';
+import '../../../models/parent.dart';
 
 class AppointmentFormController {
   DateTime date = DateTime.now();

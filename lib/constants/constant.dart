@@ -11,6 +11,7 @@ import '../models/response.dart';
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final CollectionReference<Map<String, dynamic>> students = firestore.collection('students');
+final CollectionReference<Map<String, dynamic>> classes = firestore.collection('classes');
 DatabaseReference ref = FirebaseDatabase.instance.ref();
 
 List<String> makeSearchstring(String string) {

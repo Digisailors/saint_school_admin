@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+
+import '../constants/constant.dart';
+
 class Bio {
   Bio({
     required this.name,
@@ -53,6 +57,22 @@ class Bio {
         state: json["state"],
       );
 
+  List<String> get search {
+    List<String> results = [];
+    name.split(' ').map((e) => makeSearchstring(e)).forEach((element) {
+      results.addAll(element);
+    });
+    results.addAll(makeSearchstring(icNumber));
+    try {
+      results.addAll(makeSearchstring(email.split('@').first));
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return results;
+  }
+
   Map<String, dynamic> toBioJson() => {
         "name": name,
         "lastName": lastName,
@@ -68,6 +88,7 @@ class Bio {
         "secondaryPhone": secondaryPhone,
         "imageUrl": imageUrl,
         "gender": gender.index,
+        "search": search,
       };
 
   @override

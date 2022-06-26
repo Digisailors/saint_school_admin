@@ -34,6 +34,13 @@ class StudentFormController with BioFormController {
     return classController.classes[classField]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
   }
 
+  List<DropdownMenuItem<String>> getSectionItems(String? className) {
+    if (className == null) {
+      return <DropdownMenuItem<String>>[];
+    }
+    return classController.classes[className]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
+  }
+
   @override
   clear() {
     super.clear();

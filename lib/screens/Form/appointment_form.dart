@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:school_app/controllers/Form%20Controllers/appointment_form_controller.dart';
+import 'package:school_app/screens/Form/controllers/appointment_form_controller.dart';
 import 'package:school_app/controllers/appointment_controller.dart';
-import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/models/appointment.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/response.dart';
@@ -116,60 +115,69 @@ class _AppointmentPageState extends State<AppointmentPage> {
               ),
               subtitle: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Autocomplete<Parent>(
-                  initialValue: TextEditingValue(text: controller.parent?.name ?? ''),
-                  optionsBuilder: (textEditingValue) async {
-                    return findParent(textEditingValue.text);
-                  },
-                  optionsViewBuilder: (context, onSelected, options) {
-                    return SizedBox(
-                      height: 200,
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Material(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(maxHeight: 200, maxWidth: MediaQuery.of(context).size.width / 4.57),
-                              child: ListView.builder(
-                                  itemCount: options.length,
-                                  itemBuilder: (context, index) {
-                                    return ListTile(
-                                      leading: Image.network(
-                                        getUrl(options.elementAt(index).entityType),
-                                        height: getHeight(context) * 0.03,
-                                      ),
-                                      title: Text(options.elementAt(index).name),
-                                      subtitle: Text(options.elementAt(index).icNumber),
-                                      onTap: () {
-                                        onSelected(options.elementAt(index));
-                                      },
-                                    );
-                                  }),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return Autocomplete<Parent>(
+                    initialValue: TextEditingValue(text: controller.parent?.name ?? ''),
+                    optionsBuilder: (textEditingValue) async {
+                      return findParent(textEditingValue.text);
+                    },
+                    optionsViewBuilder: (context, onSelected, options) {
+                      return SizedBox(
+                        height: 200,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Material(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: ConstrainedBox(
+                                constraints: constraints.copyWith(maxHeight: 600),
+                                child: Card(
+                                  child: ListView.builder(
+                                      itemCount: options.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Card(
+                                            child: ListTile(
+                                              leading: Image.network(
+                                                getUrl(options.elementAt(index).entityType),
+                                                height: getHeight(context) * 0.03,
+                                              ),
+                                              title: Text(options.elementAt(index).name),
+                                              subtitle: Text(options.elementAt(index).icNumber),
+                                              onTap: () {
+                                                onSelected(options.elementAt(index));
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  onSelected: (Parent _parent) {
-                    controller.parent = _parent;
-                  },
-                  displayStringForOption: (e) => e.name,
-                  fieldViewBuilder: (context, _controller, focusNode, builder) {
-                    return TextFormField(
-                      focusNode: focusNode,
-                      controller: _controller,
-                      decoration: const InputDecoration(border: OutlineInputBorder()),
-                      validator: (text) {
-                        if (controller.parent == null) {
-                          return "Select a Parent";
-                        }
-                        return null;
-                      },
-                    );
-                  },
-                ),
+                      );
+                    },
+                    onSelected: (Parent _parent) {
+                      controller.parent = _parent;
+                    },
+                    displayStringForOption: (e) => e.name,
+                    fieldViewBuilder: (context, _controller, focusNode, builder) {
+                      return TextFormField(
+                        focusNode: focusNode,
+                        controller: _controller,
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        validator: (text) {
+                          if (controller.parent == null) {
+                            return "Select a Parent";
+                          }
+                          return null;
+                        },
+                      );
+                    },
+                  );
+                }),
               ),
             ),
             ListTile(
@@ -179,58 +187,64 @@ class _AppointmentPageState extends State<AppointmentPage> {
               ),
               subtitle: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Autocomplete<Bio>(
-                  optionsBuilder: (textEditingValue) async {
-                    return findPeople(textEditingValue.text);
-                  },
-                  optionsViewBuilder: (context, onSelected, options) {
-                    return Align(
-                      alignment: Alignment.topLeft,
-                      child: Material(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(maxHeight: 600, maxWidth: MediaQuery.of(context).size.width / 4.57),
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: options.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    leading: Image.network(
-                                      getUrl(options.elementAt(index).entityType),
-                                      height: getHeight(context) * 0.03,
-                                    ),
-                                    title: Text(options.elementAt(index).name),
-                                    subtitle: Text(options.elementAt(index).icNumber),
-                                    onTap: () {
-                                      onSelected(options.elementAt(index));
-                                    },
-                                  );
-                                }),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return Autocomplete<Bio>(
+                    optionsBuilder: (textEditingValue) async {
+                      return findPeople(textEditingValue.text);
+                    },
+                    optionsViewBuilder: (context, onSelected, options) {
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: Material(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: ConstrainedBox(
+                              constraints: constraints.copyWith(maxHeight: 600),
+                              child: Card(
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: options.length,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                        child: ListTile(
+                                          leading: Image.network(
+                                            getUrl(options.elementAt(index).entityType),
+                                            height: getHeight(context) * 0.03,
+                                          ),
+                                          title: Text(options.elementAt(index).name),
+                                          subtitle: Text(options.elementAt(index).icNumber),
+                                          onTap: () {
+                                            onSelected(options.elementAt(index));
+                                          },
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  onSelected: (Bio bio) {
-                    setState(() {
-                      Bio tempBio = bio;
-                      controller.participants.add(tempBio);
-                      textEditingController.text = '';
-                    });
-                  },
-                  displayStringForOption: (bio) => bio.name,
-                  fieldViewBuilder: (context, controller, focusNode, builder) {
-                    return TextFormField(
-                      focusNode: focusNode,
-                      controller: textEditingController,
-                      onChanged: (text) {
-                        controller.text = text;
-                      },
-                      decoration: const InputDecoration(border: OutlineInputBorder()),
-                    );
-                  },
-                ),
+                      );
+                    },
+                    onSelected: (Bio bio) {
+                      setState(() {
+                        Bio tempBio = bio;
+                        controller.participants.add(tempBio);
+                        textEditingController.text = '';
+                      });
+                    },
+                    displayStringForOption: (bio) => bio.name,
+                    fieldViewBuilder: (context, controller, focusNode, builder) {
+                      return TextFormField(
+                        focusNode: focusNode,
+                        controller: textEditingController,
+                        onChanged: (text) {
+                          controller.text = text;
+                        },
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                      );
+                    },
+                  );
+                }),
               ),
             ),
             Padding(
@@ -334,10 +348,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   onPressed: () {
                     var appointmentController = AppointmentController(controller.appointment);
-
+                    controller.parentApproval = false;
                     Future<Result> future;
                     if (widget.appointment != null) {
-                      future = widget.appointment!.update();
+                      future = appointmentController.change();
                     } else {
                       future = appointmentController.add();
                     }

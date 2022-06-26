@@ -15,6 +15,8 @@ class SessionController extends GetxController {
   final PageController controller = PageController(initialPage: 0);
   StudentFormController formcontroller = StudentFormController();
 
+  bool showSideBar = true;
+
   int get pageIndex => session.page;
   set pageIndex(int page) {
     session.page = page;
