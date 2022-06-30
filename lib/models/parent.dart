@@ -66,7 +66,7 @@ class Parent extends Bio {
         icNumber: json["icNumber"] ?? '',
         email: json["email"] ?? '',
         name: json["name"],
-        children: List<String>.from(json["children"].map((x) => x)),
+        children: List<String>.from((json["children"]).map((x) => x)),
         addressLine1: json["addressLine1"],
         addressLine2: json["addressLine2"],
         city: json["city"],

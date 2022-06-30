@@ -11,7 +11,6 @@ import 'package:time_range/time_range.dart';
 import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
 import '../../models/parent.dart';
-import '../../models/student.dart';
 import '../../models/teacher.dart';
 
 class AppointmentPage extends StatefulWidget {
@@ -38,19 +37,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   Future<List<Bio>> findPeople(String string) async {
     List<Bio> bios = [];
-    print(string);
 
     try {
-      var studentList = students.where("search", arrayContains: string.toLowerCase()).get().then((value) {
-        bios.addAll(value.docs.map((e) => Student.fromJson(e.data())));
-      });
-      var parentsList = firestore.collection('parents').where("search", arrayContains: string.toLowerCase()).get().then((value) {
-        bios.addAll(value.docs.map((e) => Parent.fromJson(e.data())));
-      });
+      // var studentList = students.where("search", arrayContains: string.toLowerCase()).get().then((value) {
+      //   bios.addAll(value.docs.map((e) => Student.fromJson(e.data())));
+      // });
+      // var parentsList = firestore.collection('parents').where("search", arrayContains: string.toLowerCase()).get().then((value) {
+      //   bios.addAll(value.docs.map((e) => Parent.fromJson(e.data())));
+      // });
       var teachersList = firestore.collection('teachers').where("search", arrayContains: string.toLowerCase()).get().then((value) {
         bios.addAll(value.docs.map((e) => Teacher.fromJson(e.data())));
       });
-      await Future.wait([studentList, parentsList, teachersList]);
+      await Future.wait([teachersList]);
       return bios;
     } catch (e) {
       return bios;
@@ -182,7 +180,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             ),
             ListTile(
               title: Text(
-                'Participants',
+                'Teachers',
                 style: getText(context).titleLarge,
               ),
               subtitle: Padding(
@@ -267,7 +265,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               onDeleted: () {
                                 setState(() {
                                   controller.participants.removeWhere((element) => element.icNumber == bio.icNumber);
-                                  print(controller.participants.where((element) => element.icNumber == bio.icNumber).length);
                                 });
                               },
                               deleteButtonTooltipMessage: 'Remove',
@@ -294,6 +291,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       selectionMode: DateRangePickerSelectionMode.single,
                       onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
                         controller.date = args.value;
+                        controller.parentApproval = false;
                       },
                     ),
                   ),
@@ -333,6 +331,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     if (range != null) {
                       controller.fromTime = range.start;
                       controller.toTime = range.end;
+                      controller.parentApproval = false;
                     }
                   }),
                 ),
@@ -348,19 +347,22 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   onPressed: () {
                     var appointmentController = AppointmentController(controller.appointment);
-                    controller.parentApproval = false;
-                    Future<Result> future;
-                    if (widget.appointment != null) {
-                      future = appointmentController.change();
+                    if (controller.appointment.date.isAfter(DateTime.now())) {
+                      Future<Result> future;
+                      if (widget.appointment != null) {
+                        future = appointmentController.change();
+                      } else {
+                        future = appointmentController.add();
+                      }
+                      showFutureCustomDialog(
+                          context: context,
+                          future: future,
+                          onTapOk: () {
+                            Navigator.of(context).pop();
+                          });
                     } else {
-                      future = appointmentController.add();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please enter a future Date and Time")));
                     }
-                    showFutureCustomDialog(
-                        context: context,
-                        future: future,
-                        onTapOk: () {
-                          Navigator.of(context).pop();
-                        });
                   },
                 ),
               ),

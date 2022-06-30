@@ -38,19 +38,19 @@ class TeacherFormController with BioFormController {
     controller.className = teacher.className;
     controller.section = teacher.section;
     controller.uid = teacher.uid;
-    controller.email.text = teacher.email;
+    controller.email.text = teacher.email ?? '';
     controller.gender = teacher.gender;
     controller.icNumber.text = teacher.icNumber;
     controller.name.text = teacher.name;
     controller.address.text = teacher.address ?? '';
     controller.addressLine1.text = teacher.addressLine1 ?? '';
     controller.addressLine2.text = teacher.addressLine2 ?? '';
-    controller.city.text = teacher.city ?? '';
+    controller.city = teacher.city;
     controller.image = teacher.imageUrl ?? '';
     controller.lastName.text = teacher.lastName ?? '';
     controller.primaryPhone.text = teacher.primaryPhone ?? '';
     controller.secondaryPhone.text = teacher.secondaryPhone ?? '';
-    controller.state.text = teacher.state ?? '';
+    controller.state = teacher.state;
     return controller;
   }
 
@@ -65,11 +65,11 @@ class TeacherFormController with BioFormController {
         address: address.text,
         addressLine1: addressLine1.text,
         addressLine2: addressLine2.text,
-        city: city.text,
+        city: city,
         imageUrl: image,
         lastName: lastName.text,
         primaryPhone: primaryPhone.text,
         secondaryPhone: secondaryPhone.text,
-        state: state.text,
+        state: state,
       );
 }

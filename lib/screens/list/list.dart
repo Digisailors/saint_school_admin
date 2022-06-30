@@ -119,6 +119,7 @@ class _EntityListState extends State<EntityList> {
                                           Get.to(() => const ParentForm());
                                           break;
                                         case EntityType.admin:
+                                          // ignore: todo
                                           // TODO: Handle this case.
                                           break;
                                       }

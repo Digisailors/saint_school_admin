@@ -20,15 +20,14 @@ class AppointmentSource extends DataTableSource {
     if (index >= appointments.length) return null;
     var appointment = appointments[index];
     // final CRUD object = getEntity(entity);
-    int SiNo = index + 1;
+    int sNo = index + 1;
 
     return DataRow.byIndex(index: index, cells: [
-      DataCell(Text(SiNo.toString())),
+      DataCell(Text(sNo.toString())),
       DataCell(Text(appointment.purpose)),
-      // DataCell(Text(appointment.raisedBy ?? '')),
+      DataCell(Text(appointment.parent.name)),
       DataCell(Text(appointment.date.toString())),
       DataCell(Text(appointment.fromTime.format(context) + " : " + appointment.toTime.format(context))),
-
       DataCell(Text(appointment.parentApproval ? "Accepted" : "Pending")),
       DataCell(
         appointment.adminApproval
@@ -44,21 +43,23 @@ class AppointmentSource extends DataTableSource {
               ),
       ),
       DataCell(Text(appointment.status.toString().split('.').last.toUpperCase())),
-      DataCell(ElevatedButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                    content: SizedBox(
-                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.30,
-                        child: AppointmentPage(
-                          appointment: appointment,
-                        )));
-              });
-        },
-        child: const Text('Reschedule'),
-      )),
+      DataCell(appointment.adminApproval
+          ? ElevatedButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                          content: SizedBox(
+                              width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.30,
+                              child: AppointmentPage(
+                                appointment: appointment,
+                              )));
+                    });
+              },
+              child: const Text('Reschedule'),
+            )
+          : Container()),
       DataCell(IconButton(
         icon: const Icon(
           Icons.delete,
@@ -84,6 +85,7 @@ class AppointmentSource extends DataTableSource {
     List<DataColumn> columns = [
       const DataColumn(label: Text('SINO')),
       const DataColumn(label: Text('TITLE')),
+      const DataColumn(label: Text('PARENT')),
       const DataColumn(label: Text('DATE')),
       const DataColumn(label: Text('TIME')),
       const DataColumn(label: SizedBox(child: Center(child: Text('PARENT APPROVAL')))),
@@ -94,7 +96,7 @@ class AppointmentSource extends DataTableSource {
               child: SizedBox(
                   width: 110,
                   child: Text(
-                    'RESCHEDULE',
+                    'CONFIRMATION',
                     textAlign: TextAlign.center,
                   )))),
       const DataColumn(label: Text('DELETE'))

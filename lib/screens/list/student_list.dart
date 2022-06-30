@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/student.dart';
 import 'package:school_app/screens/Form/student_form.dart';
@@ -95,7 +95,6 @@ class _StudentListState extends State<StudentList> {
                                 setState(() {
                                   className = text;
                                   section = null;
-                                  print(controller.sectionItems);
                                 });
                               },
                             )),
@@ -163,7 +162,9 @@ class _StudentListState extends State<StudentList> {
                       );
                     }
                     if (snapshot.hasError) {
-                      print(snapshot.error);
+                      if (kDebugMode) {
+                        print(snapshot.error);
+                      }
                       return const Text("Error occured");
                     }
                     return const Center(

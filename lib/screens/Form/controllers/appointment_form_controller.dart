@@ -47,7 +47,7 @@ class AppointmentFormController {
     var controller = AppointmentFormController();
     controller.date = appointment.date;
     controller.id = appointment.id;
-    controller.purpose.text = appointment.purpose;
+    controller.purpose.text = appointment.purpose; 
     controller.fromTime = appointment.fromTime;
     controller.toTime = appointment.toTime;
     controller.approvedBy = appointment.approvedBy;
@@ -56,6 +56,7 @@ class AppointmentFormController {
     controller.participants = appointment.participants;
     controller.parent = appointment.parent;
     controller.adminApproval = appointment.adminApproval;
+    controller.status = appointment.status;
     return controller;
   }
 }

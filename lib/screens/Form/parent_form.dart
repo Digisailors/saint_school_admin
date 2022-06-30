@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:school_app/controllers/parent_controller.dart';
 import 'package:school_app/models/parent.dart';
 import 'package:school_app/screens/Form/controllers/parent_form_controller.dart';
@@ -6,6 +7,7 @@ import 'package:school_app/widgets/theme.dart';
 
 import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
+import '../../constants/states.dart';
 import '../../models/biodata.dart';
 import '../../models/response.dart';
 import '../../widgets/custom_drop_down.dart';
@@ -50,218 +52,213 @@ class _ParentFormState extends State<ParentForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Padding(
-        padding: isDesktop(context) && isTablet(context) ? EdgeInsets.only(left: getWidth(context) * 0.25) : const EdgeInsets.all(8),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                leading: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.arrow_back),
-                ),
-                title: Text(
-                  'Parent Form',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
-                ),
-              ),
-              Padding(
-                padding: isMobile(context) ? EdgeInsets.symmetric(horizontal: getWidth(context) * 0.25) : EdgeInsets.all(getWidth(context) * 0.05),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        radius: 80,
-                        foregroundImage: controller.getAvatar(),
-                      ),
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          controller.imagePicker().then((value) {
-                            setState(() {});
-                          });
-                        },
-                        child: const Text(
-                          "Upload Picture",
-                        )),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Personal Details',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
-                ),
-              ),
-              Center(
-                child: CustomLayout(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomTextField(
-                        hintText: 'Student Name',
-                        validator: requiredValidator,
-                        controller: controller.name,
-                        labelText: 'Name   ',
-                      ),
-                    ),
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomDropDown(
-                          onChanged: (Gender? text) {
-                            setState(() {
-                              controller.gender = text!;
-                            });
-                          },
-                          labelText: 'Gender',
-                          items: const [
-                            DropdownMenuItem(child: Text('Male'), value: Gender.male),
-                            DropdownMenuItem(child: Text('Female'), value: Gender.female),
-                            DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
-                          ],
-                          selectedValue: controller.gender),
-                    ),
-                    SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                      child: CustomTextField(
-                        validator: requiredValidator,
-                        controller: controller.icNumber,
-                        labelText: 'IC Number',
-                        hintText: 'Enter IC Number',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Contact Details',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
-                ),
-              ),
-              Center(
-                child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.email,
-                      labelText: "Email",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.addressLine1,
-                      labelText: "Address Line 1",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.addressLine2,
-                      labelText: "Address Line 2",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.city,
-                      labelText: "City",
-                    ),
-                  ),
-                ]),
-              ),
-              Center(
-                child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.state,
-                      labelText: "State",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.primaryPhone,
-                      labelText: "Primary Mobile ",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.secondaryPhone,
-                      labelText: "Secondary Mobile",
-                    ),
-                  ),
-                ]),
-              ),
-              const Divider(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Children',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
-                ),
-              ),
-              Center(
-                child: CustomLayout(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: getSiblingsField(context),
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                  ),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          var parent = controller.parent;
-                          var parentController = ParentController(parent: parent);
-                          Future<Result> future;
-                          if (formMode == FormMode.add) {
-                            future = parentController.add();
-                          } else {
-                            future = parentController.change();
-                          }
-                          showFutureCustomDialog(
-                              context: context,
-                              future: future,
-                              onTapOk: () {
-                                Navigator.of(context).pop();
-                                formMode = FormMode.update;
-                              });
-                        }
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 50),
-                        child: Text("Submit"),
-                      )),
-                ),
-              ),
-            ],
+        appBar: AppBar(
+          title: Text(
+            'Parent Form',
+            style: getText(context).headline6!.apply(color: Colors.white),
           ),
         ),
-      ),
-    ));
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: isDesktop(context) && isTablet(context) ? EdgeInsets.only(left: getWidth(context) * 0.25) : const EdgeInsets.all(8),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        isMobile(context) ? EdgeInsets.symmetric(horizontal: getWidth(context) * 0.25) : EdgeInsets.all(getWidth(context) * 0.05),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            radius: 80,
+                            foregroundImage: controller.getAvatar(),
+                          ),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              controller.imagePicker().then((value) {
+                                setState(() {});
+                              });
+                            },
+                            child: const Text(
+                              "Upload Picture",
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Personal Details',
+                      style: getText(context).headline6!.apply(color: getColor(context).primary),
+                    ),
+                  ),
+                  Center(
+                    child: CustomLayout(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          child: CustomTextField(
+                            hintText: 'Parent Name',
+                            validator: requiredValidator,
+                            controller: controller.name,
+                            labelText: 'Name   ',
+                          ),
+                        ),
+                        SizedBox(
+                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          child: CustomDropDown(
+                              onChanged: (Gender? text) {
+                                setState(() {
+                                  controller.gender = text!;
+                                });
+                              },
+                              labelText: 'Gender',
+                              items: const [
+                                DropdownMenuItem(child: Text('Male'), value: Gender.male),
+                                DropdownMenuItem(child: Text('Female'), value: Gender.female),
+                                DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
+                              ],
+                              selectedValue: controller.gender),
+                        ),
+                        SizedBox(
+                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          child: CustomTextField(
+                            validator: requiredValidator,
+                            controller: controller.icNumber,
+                            labelText: 'IC Number',
+                            hintText: 'Enter IC Number',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Contact Details',
+                      style: getText(context).headline6!.apply(color: getColor(context).primary),
+                    ),
+                  ),
+                  Center(
+                    child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.email,
+                          labelText: "Email",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.addressLine1,
+                          labelText: "Address Line 1",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.addressLine2,
+                          labelText: "Address Line 2",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.primaryPhone,
+                          labelText: "Primary Mobile ",
+                        ),
+                      ),
+                    ]),
+                  ),
+                  Center(
+                    child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          controller: controller.secondaryPhone,
+                          labelText: "Secondary Mobile",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomDropDown<String?>(
+                          selectedValue: controller.state,
+                          validator: requiredValidator,
+                          items: stateItems,
+                          labelText: "State",
+                          onChanged: (state) {
+                            setState(() {
+                              controller.state = state;
+                              controller.city = null;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                        child: CustomDropDown<String?>(
+                          selectedValue: controller.city,
+                          items: getCities(controller.state),
+                          labelText: "City",
+                          onChanged: (city) {
+                            controller.city = city;
+                          },
+                        ),
+                      ),
+                    ]),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                      ),
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            if (controller.fileData != null) {
+                              controller.image = await uploadImage(controller.fileData!, controller.icNumber.text.toUpperCase().removeAllWhitespace);
+                            }
+                            if (_formKey.currentState!.validate()) {
+                              var parent = controller.parent!;
+                              var parentController = ParentController(parent: parent);
+                              Future<Result> future;
+                              if (formMode == FormMode.add) {
+                                future = parentController.add();
+                              } else {
+                                future = parentController.change();
+                              }
+                              showFutureCustomDialog(
+                                  context: context,
+                                  future: future,
+                                  onTapOk: () {
+                                    Navigator.of(context).pop();
+                                    formMode = FormMode.update;
+                                  });
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 50),
+                            child: Text("Submit"),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 
   List<Widget> getSiblingsField(BuildContext context) {

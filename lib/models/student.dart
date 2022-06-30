@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
-
-import '../constants/constant.dart';
+import 'parent.dart';
 
 class Student extends Bio {
   Student({
@@ -11,7 +9,6 @@ class Student extends Bio {
     required this.section,
     required String name,
     required String email,
-    required this.siblings,
     required Gender gender,
     required this.father,
     required this.guardian,
@@ -44,38 +41,32 @@ class Student extends Bio {
 
   String studentClass;
   String section;
-  String? father;
-  String? mother;
-  String? guardian;
-  List<String> get parent {
+
+  Parent? father;
+  Parent? mother;
+  Parent? guardian;
+
+  List<String> get parents {
     List<String> result = [];
     if (father != null) {
-      result.add(father!);
+      result.add(father!.icNumber);
     }
     if (mother != null) {
-      result.add(mother!);
+      result.add(mother!.icNumber);
     }
     if (guardian != null) {
-      result.add(guardian!);
+      result.add(guardian!.icNumber);
     }
     return result;
   }
-
-  List<String> siblings;
 
   Bio get bio => this;
   StudentController get controller => StudentController(this);
   factory Student.fromJson(Map<String, dynamic> json) => Student(
         icNumber: json["ic"],
-        studentClass: json["class"],
-        section: json["section"],
         name: json["name"],
         email: json["email"] ?? '',
         gender: json["gender"] == null ? Gender.male : Gender.values.elementAt(json["gender"]),
-        siblings: json["siblings"] == null ? [] : List<String>.from(json["siblings"].map((x) => x)),
-        father: json["father"],
-        guardian: json["guardian"],
-        mother: json["mother"],
         address: json["address"],
         addressLine1: json["addressLine1"],
         addressLine2: json["addressLine2"],
@@ -85,36 +76,21 @@ class Student extends Bio {
         primaryPhone: json["primaryPhone"],
         secondaryPhone: json["secondaryPhone"],
         state: json["state"],
+        //-------------------------------------------
+        father: json["father"] != null ? Parent.fromJson(json['father']) : null,
+        guardian: json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
+        mother: json["mother"] != null ? Parent.fromJson(json['mother']) : null,
+        //-------------------------------------------
+        studentClass: json["class"],
+        section: json["section"],
       );
-
-  List<String> get search {
-    List<String> results = [];
-    name.split(' ').map((e) => makeSearchstring(e)).forEach((element) {
-      results.addAll(element);
-    });
-    results.addAll(makeSearchstring(icNumber));
-    try {
-      results.addAll(makeSearchstring(email.split('@').first));
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-    }
-    return results;
-  }
 
   Map<String, dynamic> toJson() => {
         "ic": icNumber,
-        "class": studentClass,
-        "section": section,
         "name": name,
         "email": email,
-        "parent": parent,
-        "siblings": siblings,
-        "father": father,
-        "mother": mother,
+        "gender": gender.index,
         "entityType": entityType.index,
-        "guardian": guardian,
         "address": address,
         "addressLine1": addressLine1,
         "addressLine2": addressLine2,
@@ -125,5 +101,14 @@ class Student extends Bio {
         'secondaryPhone': secondaryPhone,
         "state": state,
         "search": search,
+        //------------
+        "father": father?.toJson(),
+        "mother": mother?.toJson(),
+        "guardian": guardian?.toJson(),
+        //------------
+        "class": studentClass,
+        "section": section,
+        //------------
+        "parents": parents,
       };
 }

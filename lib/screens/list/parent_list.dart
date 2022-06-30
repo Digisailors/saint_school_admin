@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/controllers/parent_controller.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/parent.dart';
-import 'package:school_app/screens/Form/parent_form.dart';
 import 'package:school_app/screens/list/source/bio_source.dart';
 
 import '../../constants/get_constants.dart';
@@ -67,39 +65,6 @@ class _ParentListState extends State<ParentList> {
                                       ),
                                     ),
                                   )),
-                              // SizedBox(
-                              //     height: getHeight(context) * 0.053,
-                              //     width: getWidth(context) * 0.10,
-                              //     child: DropdownButtonFormField<String?>(
-                              //       value: className,
-                              //       decoration: const InputDecoration(
-                              //         labelText: 'Class',
-                              //         border: OutlineInputBorder(),
-                              //       ),
-                              //       items: controller.classItems,
-                              //       onChanged: (text) {
-                              //         setState(() {
-                              //           className = text;
-                              //         });
-                              //       },
-                              //     )),
-                              // SizedBox(
-                              //   height: getHeight(context) * 0.053,
-                              //   width: getWidth(context) * 0.10,
-                              //   child: DropdownButtonFormField<String?>(
-                              //     value: section,
-                              //     decoration: const InputDecoration(
-                              //       labelText: 'Section',
-                              //       border: OutlineInputBorder(),
-                              //     ),
-                              //     items: controller.sectionItems,
-                              //     onChanged: (text) {
-                              //       setState(() {
-                              //         section = text;
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: ElevatedButton(
@@ -109,17 +74,6 @@ class _ParentListState extends State<ParentList> {
                                     child: const Padding(
                                       padding: EdgeInsets.all(16.0),
                                       child: Text("Search"),
-                                    )),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      Get.to(() => const ParentForm());
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: Text("Add"),
                                     )),
                               ),
                             ],

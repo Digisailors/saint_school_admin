@@ -42,6 +42,7 @@ class CustomLayout extends StatelessWidget {
 }
 
 double responsiveSize(BuildContext context, double dsize, double tsize, double msize) {
+  // ignore: unused_element
   bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 650;
 
   bool isTablet(BuildContext context) => MediaQuery.of(context).size.width < 1100 && MediaQuery.of(context).size.width >= 650;

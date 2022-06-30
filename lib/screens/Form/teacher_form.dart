@@ -5,6 +5,7 @@ import 'package:school_app/widgets/theme.dart';
 
 import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
+import '../../constants/states.dart';
 import '../../models/biodata.dart';
 import '../../models/response.dart';
 import '../../widgets/custom_drop_down.dart';
@@ -178,8 +179,8 @@ class _TeacherFormState extends State<TeacherForm> {
                     width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                     child: CustomTextField(
                       validator: requiredValidator,
-                      controller: controller.city,
-                      labelText: "City",
+                      controller: controller.primaryPhone,
+                      labelText: "Primary Mobile ",
                     ),
                   ),
                 ]),
@@ -190,24 +191,34 @@ class _TeacherFormState extends State<TeacherForm> {
                     width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                     child: CustomTextField(
                       validator: requiredValidator,
-                      controller: controller.state,
-                      labelText: "State",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.primaryPhone,
-                      labelText: "Primary Mobile ",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
                       controller: controller.secondaryPhone,
                       labelText: "Secondary Mobile",
+                    ),
+                  ),
+                  SizedBox(
+                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                    child: CustomDropDown<String?>(
+                      selectedValue: controller.state,
+                      validator: requiredValidator,
+                      items: stateItems,
+                      labelText: "State",
+                      onChanged: (state) {
+                        setState(() {
+                          controller.state = state;
+                          controller.city = null;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                    child: CustomDropDown<String?>(
+                      selectedValue: controller.city,
+                      items: getCities(controller.state),
+                      labelText: "City",
+                      onChanged: (city) {
+                        controller.city = city;
+                      },
                     ),
                   ),
                 ]),

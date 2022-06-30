@@ -26,30 +26,30 @@ class LandingPage extends StatelessWidget {
                 Expanded(
                     flex: 5,
                     child: Scaffold(
-                      appBar: session.pageIndex == 9
-                          ? null
-                          : AppBar(
-                              actions: [
-                                IconButton(
-                                    iconSize: getWidth(context) * 0.03,
-                                    onPressed: () {},
-                                    icon: Image.network(
-                                      'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
-                                    )),
-                                IconButton(
-                                    iconSize: getWidth(context) * 0.03,
-                                    onPressed: () {},
-                                    icon: Image.network(
-                                      'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
-                                    )),
-                                IconButton(
-                                    iconSize: getWidth(context) * 0.03,
-                                    onPressed: () {},
-                                    icon: Image.network(
-                                      'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
-                                    )),
-                              ],
-                            ),
+                      // appBar: session.pageIndex == 9
+                      //     ? null
+                      //     : AppBar(
+                      //         actions: [
+                      //           IconButton(
+                      //               iconSize: getWidth(context) * 0.03,
+                      //               onPressed: () {},
+                      //               icon: Image.network(
+                      //                 'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
+                      //               )),
+                      //           IconButton(
+                      //               iconSize: getWidth(context) * 0.03,
+                      //               onPressed: () {},
+                      //               icon: Image.network(
+                      //                 'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
+                      //               )),
+                      //           IconButton(
+                      //               iconSize: getWidth(context) * 0.03,
+                      //               onPressed: () {},
+                      //               icon: Image.network(
+                      //                 'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
+                      //               )),
+                      //         ],
+                      //       ),
                       drawer: isDesktop(context) ? null : const SideMenu(),
                       body: child,
                     )),

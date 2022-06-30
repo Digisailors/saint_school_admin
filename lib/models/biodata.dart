@@ -24,7 +24,7 @@ class Bio {
   String? lastName;
   EntityType entityType;
   String icNumber;
-  String email;
+  String? email;
   String? address;
   String? addressLine1;
   String? addressLine2;
@@ -36,6 +36,7 @@ class Bio {
   Gender gender;
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(other) {
     return icNumber == (other as Bio).icNumber;
   }
@@ -63,8 +64,9 @@ class Bio {
       results.addAll(element);
     });
     results.addAll(makeSearchstring(icNumber));
+    if (email != null) {}
     try {
-      results.addAll(makeSearchstring(email.split('@').first));
+      results.addAll(makeSearchstring(email!.split('@').first));
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
@@ -90,10 +92,6 @@ class Bio {
         "gender": gender.index,
         "search": search,
       };
-
-  @override
-  // TODO: implement hashCode
-  int get hashCode => super.hashCode;
 }
 
 enum EntityType { student, teacher, parent, admin }

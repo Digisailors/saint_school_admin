@@ -39,6 +39,7 @@ class AuthRouter extends StatelessWidget {
           return GetMaterialApp(
             scrollBehavior: MyCustomScrollBehavior(),
             defaultTransition: Transition.leftToRight,
+            title: 'SAINT SCHOOL ADMIN',
             theme: ThemeData(
               listTileTheme: const ListTileThemeData(),
               pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -57,15 +58,6 @@ class AuthRouter extends StatelessWidget {
                 backgroundColor: lightColorScheme.secondaryContainer,
                 elevation: 3,
               ),
-              // This is the theme of your application.
-              //
-              // Try running your application with "flutter run". You'll see the
-              // application has a blue toolbar. Then, without quitting the app, try
-              // changing the primarySwatch below to Colors.green and then invoke
-              // "hot reload" (press "r" in the console where you ran "flutter run",
-              // or simply save your changes to "hot reload" in a Flutter IDE).
-              // Notice that the counter didn't reset back to zero; the application
-              // is not restarted.
               primarySwatch: Colors.blue,
             ),
             transitionDuration: const Duration(microseconds: 0),
@@ -88,9 +80,9 @@ class AuthRouter extends StatelessWidget {
                 return MaterialPageRoute(builder: (context) => StudentForm(student: args));
               }
               if (settings.name == Dashboard.routeName) {
-                final args = settings.arguments as Student?;
                 return MaterialPageRoute(builder: (context) => const Dashboard());
               }
+              return null;
             },
             routes: {
               '/Carousel': (context) => const Carousel(),

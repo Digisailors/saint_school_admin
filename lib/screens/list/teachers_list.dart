@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
-import 'package:school_app/models/student.dart';
 import 'package:school_app/models/teacher.dart';
-import 'package:school_app/screens/Form/student_form.dart';
+import 'package:school_app/screens/Form/teacher_form.dart';
 import 'package:school_app/screens/list/source/bio_source.dart';
 
 import '../../constants/constant.dart';
@@ -62,7 +61,7 @@ class _TeacherListState extends State<TeacherList> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Text("STUDENT LIST"),
+                      const Text("TEACHERS LIST"),
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -98,7 +97,6 @@ class _TeacherListState extends State<TeacherList> {
                                 setState(() {
                                   className = text;
                                   section = null;
-                                  print(controller.sectionItems);
                                 });
                               },
                             )),
@@ -124,7 +122,7 @@ class _TeacherListState extends State<TeacherList> {
                         padding: const EdgeInsets.all(4.0),
                         child: ElevatedButton(
                             onPressed: () {
-                              Get.toNamed(StudentForm.routeName, arguments: null);
+                              Get.to(() => const TeacherForm());
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -161,14 +159,16 @@ class _TeacherListState extends State<TeacherList> {
                           ),
                           child: PaginatedDataTable(
                             dragStartBehavior: DragStartBehavior.start,
-                            columns: BioSource.getCoumns(EntityType.student),
+                            columns: BioSource.getCoumns(EntityType.teacher),
                             source: source,
                             rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
                           ),
                         );
                       }
                       if (snapshot.hasError) {
-                        print(snapshot.error);
+                        if (kDebugMode) {
+                          print(snapshot.error);
+                        }
                         return const Text("Error occured");
                       }
                       return const Center(

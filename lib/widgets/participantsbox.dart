@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/models/biodata.dart';
@@ -40,7 +41,9 @@ class _CCTextBoxState extends State<CCTextBox> {
       await Future.wait([studentList, parentsList, teachersList]);
       return bios;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return bios;
     }
   }

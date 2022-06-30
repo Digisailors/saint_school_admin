@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/crud_controller.dart';
+import 'package:school_app/models/parent.dart';
 import 'package:school_app/models/student.dart';
 
 import '../constants/constant.dart';
@@ -15,6 +15,10 @@ class StudentController extends GetxController implements CRUD {
   static String? selectedIcNumber;
   bool get selected => selectedIcNumber == student.icNumber;
 
+  Parent? father;
+  Parent? mother;
+  Parent? guardian;
+
   static Student? get selectedStudent => selectedIcNumber == null ? null : studentList.firstWhere((element) => element.icNumber == selectedIcNumber);
 
   static listenStudents() {
@@ -25,29 +29,67 @@ class StudentController extends GetxController implements CRUD {
   }
 
   @override
-  Future<Result> add() async {
-    QuerySnapshot querySnapshot = await firestore.collection('students').get();
-    if (querySnapshot.docs.isNotEmpty) {
-      return firestore
-          .collection('students')
-          .doc(student.icNumber)
-          .set(student.toJson())
-          .then((value) => Result.success("Student added successfully"))
-          .onError((error, stackTrace) => Result.error(error.toString()));
-    } else {
-      return Result.error("Another IC Number found");
+  Future<Result> add({Parent? father, Parent? mother, Parent? guardian}) async {
+    if (father == null && mother == null && guardian == null) {
+      return Result(code: 'Error', message: 'Either Parent or Guardian is Required');
     }
+    if (father != null && father.icNumber.isNotEmpty) {
+      if (!father.children.contains(student.icNumber)) {
+        father.children.add(student.icNumber);
+      }
+      student.father = father;
+      firestore.collection('parents').doc(father.icNumber).set(father.toJson());
+    }
+    if (mother != null && mother.icNumber.isNotEmpty) {
+      if (!mother.children.contains(student.icNumber)) {
+        mother.children.add(student.icNumber);
+      }
+      student.mother = mother;
+      firestore.collection('parents').doc(mother.icNumber).set(mother.toJson());
+    }
+    if (guardian != null && guardian.icNumber.isNotEmpty) {
+      if (!guardian.children.contains(student.icNumber)) {
+        guardian.children.add(student.icNumber);
+      }
+      student.guardian = guardian;
+      firestore.collection('parents').doc(guardian.icNumber).set(guardian.toJson());
+    }
+
+    return firestore
+        .collection('students')
+        .doc(student.icNumber)
+        .set(student.toJson())
+        .then((value) => Result.success("Student added successfully"))
+        .onError((error, stackTrace) => Result.error(error.toString()));
   }
 
   @override
-  Future<Result> change({bool checkName = false, bool uploadPic = false}) async {
-    if (checkName) {
-      QuerySnapshot querySnapshot = await firestore.collection('students').get();
-      if (querySnapshot.docs.isNotEmpty) {
-        return Result.error("Another IC Number found");
-      }
+  Future<Result> change({Parent? father, Parent? mother, Parent? guardian, bool uploadPic = false}) async {
+    if (father == null && mother == null && guardian == null) {
+      return Result(code: 'Error', message: 'Either Parent or Guardian is Required');
     }
-    if (uploadPic) {}
+    if (father != null && father.icNumber.isNotEmpty) {
+      if (!father.children.contains(student.icNumber)) {
+        father.children.add(student.icNumber);
+      }
+      student.father = father;
+      firestore.collection('parents').doc(father.icNumber).set(father.toJson());
+    }
+    if (mother != null && mother.icNumber.isNotEmpty) {
+      if (!mother.children.contains(student.icNumber)) {
+        mother.children.add(student.icNumber);
+      }
+      student.mother = mother;
+      firestore.collection('parents').doc(mother.icNumber).set(mother.toJson());
+    }
+    if (guardian != null && guardian.icNumber.isNotEmpty) {
+      if (!guardian.children.contains(student.icNumber)) {
+        guardian.children.add(student.icNumber);
+      }
+      student.guardian = guardian;
+      firestore.collection('parents').doc(guardian.icNumber).set(guardian.toJson());
+    }
+
     return firestore
         .collection('students')
         .doc(student.icNumber)
@@ -58,6 +100,12 @@ class StudentController extends GetxController implements CRUD {
 
   @override
   Future<Result> delete() async {
+    await firestore.collection('parents').where('parents', arrayContains: student.icNumber).get().then((value) {
+      value.docs.map((e) => Parent.fromJson(e.data())).forEach((element) {
+        element.children.remove(student.icNumber);
+        firestore.collection('parents').doc(element.icNumber).update({'children': element.children});
+      });
+    });
     return firestore
         .collection('students')
         .doc(student.icNumber)

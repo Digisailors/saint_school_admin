@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/models/student.dart';
 
-class StudentTile extends StatelessWidget
-{
+class StudentTile extends StatelessWidget {
   const StudentTile({
     Key? key,
     required this.student,
@@ -35,14 +34,15 @@ class StudentTile extends StatelessWidget
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
                         radius: MediaQuery.of(context).size.width * 0.15,
-                        backgroundImage: NetworkImage('https://i.pravatar.cc/3${student.icNumber}'),
+                        backgroundImage: (student.imageUrl ?? '').isNotEmpty
+                            ? NetworkImage(student.imageUrl!)
+                            : NetworkImage('https://i.pravatar.cc/3${student.icNumber}'),
                       ),
                     ),
                   )),
               Expanded(
                   flex: 5,
                   child: ListTile(
-
                     enabled: true,
                     title: Text(
                       student.name,
@@ -64,11 +64,10 @@ class StudentTile extends StatelessWidget
                         // ),
                         TableRow(
                           children: [
-
                             Padding(
                               padding: const EdgeInsets.only(top: 16.0),
                               child: Text(
-                                 "CLASS : " + student.studentClass + " - " + student.section,
+                                "CLASS : " + student.studentClass + " - " + student.section,
                                 style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.grey),
                               ),
                             ),

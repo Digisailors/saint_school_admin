@@ -25,16 +25,20 @@ class BioSource extends DataTableSource {
     Bio entity = entities[index];
 
     final CRUD object = getEntity(entity);
-    int SiNo = index + 1;
+    int sNo = index + 1;
 
     return DataRow.byIndex(index: index, cells: [
-      DataCell(Text(SiNo.toString())),
-      DataCell(CircleAvatar(
-        child: (entity.imageUrl ?? '').isNotEmpty ? Image.network(entity.imageUrl!) : const Text("IMG"),
-      )),
+      DataCell(Text(sNo.toString())),
+      DataCell((entity.imageUrl ?? '').isEmpty
+          ? const CircleAvatar(
+              child: Text("IMG"),
+            )
+          : CircleAvatar(
+              backgroundImage: NetworkImage(entity.imageUrl!),
+            )),
       DataCell(Text(entity.name)),
       DataCell(Text(entity.icNumber)),
-      DataCell(Text(entity.email)),
+      DataCell(Text(entity.email ?? '')),
       DataCell(Text(entity.gender.name.toString().toUpperCase())),
       DataCell(Text(entity.address ?? '')),
       DataCell(IconButton(
@@ -48,7 +52,7 @@ class BioSource extends DataTableSource {
             switch (entity.entityType) {
               case EntityType.student:
                 Student student = entities[index];
-                print(student.toJson());
+
                 Get.to(() => StudentForm(student: student));
                 break;
               case EntityType.teacher:
@@ -57,10 +61,11 @@ class BioSource extends DataTableSource {
                 break;
               case EntityType.parent:
                 Parent parent = entities[index];
-                print(parent.toJson());
+
                 Get.to(() => ParentForm(parent: parent));
                 break;
               case EntityType.admin:
+                // ignore: todo
                 // TODO: Handle this case.
                 break;
             }

@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:school_app/controllers/teacher_controller.dart';
 
-import '../constants/constant.dart';
 import 'biodata.dart';
 
 class Teacher extends Bio {
@@ -44,22 +42,6 @@ class Teacher extends Bio {
   String? uid;
 
   TeacherController get controller => TeacherController(this);
-
-  List<String> get search {
-    List<String> results = [];
-    name.split(' ').map((e) => makeSearchstring(e)).forEach((element) {
-      results.addAll(element);
-    });
-    results.addAll(makeSearchstring(icNumber));
-    try {
-      results.addAll(makeSearchstring(email.split('@').first));
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-    }
-    return results;
-  }
 
   factory Teacher.fromJson(json) => Teacher(
         gender: Gender.values.elementAt(json["gender"]),

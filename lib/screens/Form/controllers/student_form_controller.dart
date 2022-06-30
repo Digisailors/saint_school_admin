@@ -5,27 +5,34 @@ import 'package:school_app/controllers/class_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
 
+import '../../../models/parent.dart';
 import '../../../models/response.dart' as r;
 import '../../../models/student.dart';
 
 class StudentFormController with BioFormController {
-  final father = TextEditingController();
-  final mother = TextEditingController();
+  Parent? father;
+  Parent? mother;
+  Parent? guardian;
+
   final studentClass = TextEditingController();
   final section = TextEditingController();
-  final guardian = TextEditingController();
+
   String? classField;
   String? sectionField;
   final List<TextEditingController> siblings = [TextEditingController()];
 
   StudentFormController();
 
-  get classItems => classController.classes.keys
-      .map((e) => DropdownMenuItem(
-            child: Text(e.toString()),
-            value: e.toString(),
-          ))
-      .toList();
+  get classItems {
+    List<DropdownMenuItem<String?>> items = classController.classes.keys
+        .map((e) => DropdownMenuItem<String?>(
+              child: Text(e.toString()),
+              value: e.toString(),
+            ))
+        .toList();
+    items.add(const DropdownMenuItem(child: Text("None")));
+    return items;
+  }
 
   List<DropdownMenuItem<String>> get sectionItems {
     if (classField == null) {
@@ -45,11 +52,8 @@ class StudentFormController with BioFormController {
   clear() {
     super.clear();
     siblings.clear();
-    father.clear();
-    mother.clear();
     studentClass.clear();
     section.clear();
-    guardian.clear();
   }
 
   Future<r.Result> createUser() async {
@@ -96,17 +100,16 @@ class StudentFormController with BioFormController {
         imageUrl: image,
         addressLine1: addressLine1.text,
         addressLine2: addressLine2.text,
-        city: city.text,
+        city: city,
         primaryPhone: primaryPhone.text,
         secondaryPhone: secondaryPhone.text,
         section: sectionField!,
         address: addressLine1.text,
-        siblings: siblings.map((e) => e.text).where((element) => element.isNotEmpty).toList(),
         gender: gender,
-        father: father.text,
-        guardian: guardian.text,
-        mother: mother.text,
-        state: state.text,
+        father: father,
+        guardian: guardian,
+        mother: mother,
+        state: state,
       );
 
   factory StudentFormController.fromStudent(Student student) {
@@ -114,22 +117,23 @@ class StudentFormController with BioFormController {
     controller.name.text = student.name;
     controller.icNumber.text = student.icNumber;
     controller.image = student.imageUrl;
-    controller.state.text = student.state ?? '';
+    controller.state = student.state;
     controller.studentClass.text = student.studentClass;
     controller.section.text = student.section;
     controller.classField = student.studentClass;
     controller.sectionField = student.section;
-    controller.email.text = student.email;
+    controller.email.text = student.email ?? '';
     controller.addressLine1.text = student.addressLine1 ?? '';
     controller.addressLine2.text = student.addressLine2 ?? '';
-    controller.city.text = student.city ?? '';
-    controller.mother.text = student.mother ?? '';
-    controller.father.text = student.father ?? '';
+    controller.city = student.city;
+    controller.mother = student.mother;
+    controller.father = student.father;
+    controller.guardian = student.guardian;
     controller.gender = student.gender;
     controller.primaryPhone.text = student.primaryPhone ?? '';
     controller.secondaryPhone.text = student.secondaryPhone ?? '';
     controller.siblings.clear();
-    controller.siblings.addAll(student.siblings.map((e) => TextEditingController(text: e)));
+
     return controller;
   }
 }
