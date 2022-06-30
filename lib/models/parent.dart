@@ -66,19 +66,22 @@ class Parent extends Bio {
         icNumber: json["icNumber"] ?? '',
         email: json["email"] ?? '',
         name: json["name"],
-        children: List<String>.from((json["children"]).map((x) => x)),
-        addressLine1: json["addressLine1"],
-        addressLine2: json["addressLine2"],
-        city: json["city"],
         imageUrl: json["imageUrl"],
         lastName: json["lastName"],
         primaryPhone: json["primaryPhone"],
         secondaryPhone: json["secondaryPhone"],
+        addressLine1: json["addressLine1"],
+        addressLine2: json["addressLine2"],
         state: json["state"],
+        city: json["city"],
+        children: List<String>.from((json["children"]).map((x) => x)),
       );
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {"children": children};
+    Map<String, dynamic> map = {
+      "children": children,
+      "uid": uid,
+    };
     map.addAll(super.toBioJson());
     return map;
   }

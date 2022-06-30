@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/controllers/queue_controller.dart';
 import 'package:school_app/models/student.dart';
 
 class StudentTile extends StatelessWidget {
