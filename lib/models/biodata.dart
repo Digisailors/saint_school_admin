@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:school_app/models/student.dart';
+import 'package:school_app/models/teacher.dart';
 
 import '../constants/constant.dart';
+import 'parent.dart';
 
 class Bio {
   Bio({
@@ -92,6 +95,41 @@ class Bio {
         "gender": gender.index,
         "search": search,
       };
+
+  static String getUrl(EntityType type) {
+    switch (type) {
+      case EntityType.student:
+        return 'https://cdn-icons-png.flaticon.com/512/3829/3829933.png';
+
+      case EntityType.teacher:
+        return 'https://cdn-icons-png.flaticon.com/512/4696/4696727.png';
+
+      case EntityType.parent:
+        return 'https://cdn-icons-png.flaticon.com/512/780/780270.png';
+
+      case EntityType.admin:
+        return 'https://cdn-icons-png.flaticon.com/512/2345/2345338.png';
+    }
+  }
+
+  static Future<List<Bio>> findPeople(String string) async {
+    List<Bio> bios = [];
+    try {
+      var studentList = students.where("search", arrayContains: string.toLowerCase()).get().then((value) {
+        bios.addAll(value.docs.map((e) => Student.fromJson(e.data())));
+      });
+      var parentsList = firestore.collection('parents').where("search", arrayContains: string.toLowerCase()).get().then((value) {
+        bios.addAll(value.docs.map((e) => Parent.fromJson(e.data())));
+      });
+      var teachersList = firestore.collection('teachers').where("search", arrayContains: string.toLowerCase()).get().then((value) {
+        bios.addAll(value.docs.map((e) => Teacher.fromJson(e.data())));
+      });
+      await Future.wait([studentList, parentsList, teachersList]);
+      return bios;
+    } catch (e) {
+      return bios;
+    }
+  }
 }
 
 enum EntityType { student, teacher, parent, admin }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/constants/get_constants.dart';
 
 class CustomDropDown<T> extends StatelessWidget {
   const CustomDropDown({
@@ -39,11 +40,7 @@ class CustomDropDown<T> extends StatelessWidget {
         decoration: InputDecoration(
           // border: const OutlineInputBorder(),
           // labelText: labelText,
-          labelStyle: const TextStyle(
-            fontFamily: 'Lexend Deca',
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-          ),
+          labelStyle: getText(context).bodyText1,
           hintText: hintText,
           hintStyle: const TextStyle(
             fontFamily: 'Lexend Deca',

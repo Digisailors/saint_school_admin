@@ -48,6 +48,9 @@ dependencies:
   time_range: ^1.0.2
   syncfusion_officechart: ^20.1.60-beta
   firebase_database: ^9.0.16
+  file_picker: ^3.0.4
+  font_awesome_flutter: ^10.1.0
+  firebase_messaging: ^11.4.3
 
 dev_dependencies:
   flutter_test:

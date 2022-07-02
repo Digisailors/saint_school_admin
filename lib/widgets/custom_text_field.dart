@@ -74,6 +74,63 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
+class CustomTextBox extends StatelessWidget {
+  const CustomTextBox(
+      {Key? key,
+      this.onTap,
+      this.readOnly = false,
+      this.controller,
+      this.hintText,
+      this.validator,
+      this.onChanged,
+      this.trailing,
+      this.textInputAction,
+      this.onFieldSubmitted,
+      this.maxLines = 1,
+      this.onEditingComplete})
+      : super(key: key);
+
+  final Function()? onTap;
+  final bool readOnly;
+  final TextEditingController? controller;
+  final String? hintText;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final Widget? trailing;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onFieldSubmitted;
+  final void Function()? onEditingComplete;
+  final int? maxLines;
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Text(hintText ?? ''),
+      ),
+      trailing: trailing,
+      subtitle: TextFormField(
+        maxLines: maxLines,
+        onEditingComplete: onEditingComplete,
+        onFieldSubmitted: onFieldSubmitted,
+        textInputAction: textInputAction,
+        onChanged: onChanged,
+        validator: validator,
+        onTap: onTap,
+        readOnly: readOnly,
+        controller: controller,
+        decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            hintText: hintText,
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: const BorderSide(color: Colors.blue, width: 1)),
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4.0))),
+            errorBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4.0)), borderSide: BorderSide(color: Colors.red))),
+      ),
+    );
+  }
+}
+
 class CustomAutoComplete<T extends Object> extends StatelessWidget {
   const CustomAutoComplete({
     Key? key,

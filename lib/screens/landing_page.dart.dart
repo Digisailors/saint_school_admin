@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:school_app/constants/get_constants.dart';
+import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import '../widgets/sidebar.dart';
 
@@ -15,6 +16,26 @@ class LandingPage extends StatelessWidget {
       body: GetBuilder(
           init: session,
           builder: (_) {
+            if (auth.currentUser?.email != 'rampowiz@gmail.com' && auth.currentUser?.email != 'admin@saintschool.com') {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("The credentials you have entered does not hold admin priviliges."),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          auth.signOut();
+                        },
+                        child: const Text("Logout"),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
             return Row(
               children: [
                 (isDesktop(context) && session.showSideBar)

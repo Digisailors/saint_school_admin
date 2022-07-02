@@ -3,7 +3,7 @@ import 'biodata.dart';
 class MySession {
   static final MySession _singleton = MySession._internal();
 
-  int page = 0;
+  int page = 6;
   bool? isAuthorized;
   Bio? bio;
 

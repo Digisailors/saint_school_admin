@@ -9,11 +9,13 @@ import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/session.dart';
 import 'package:school_app/models/student.dart';
+import 'package:school_app/screens/Form/post_form.dart';
 import 'package:school_app/screens/Form/student_form.dart';
 import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
 import 'package:school_app/screens/landing_page.dart.dart';
 import 'package:school_app/screens/list/list.dart';
+import 'package:school_app/screens/list/post_list.dart';
 import 'package:school_app/screens/log_in.dart';
 import 'package:school_app/widgets/theme.dart';
 
@@ -87,7 +89,7 @@ class AuthRouter extends StatelessWidget {
             routes: {
               '/Carousel': (context) => const Carousel(),
               Dashboard.routeName: (context) => const Dashboard(),
-              '/': (context) => const Dashboard(),
+              '/': (context) => const PostList(),
             },
           );
         }

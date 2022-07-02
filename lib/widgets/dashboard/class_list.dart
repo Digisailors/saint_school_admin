@@ -46,6 +46,7 @@ class ClassList extends StatelessWidget {
                       child: Form(
                         key: _classFormKey,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             ListTile(
                                 title: const Text("Name"),

@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:school_app/constants/get_constants.dart';
+import 'package:school_app/screens/Form/post_form.dart';
+
+import '../../../models/post.dart';
+
+class PostSource extends DataTableSource {
+  final List<Post> postlist;
+  final BuildContext context;
+
+  PostSource(this.postlist, this.context);
+
+  static List<DataColumn> getCoumns() {
+    List<DataColumn> columns = [
+      const DataColumn(label: Text('SL.No')),
+      const DataColumn(label: Text('TITLE')),
+      const DataColumn(label: Text('MESSAGE')),
+      const DataColumn(label: Text('AUDIENCE')),
+      const DataColumn(label: Text('ANNOUNCEMENT DATE')),
+      const DataColumn(label: Text('VIEW')),
+    ];
+
+    return columns;
+  }
+
+  @override
+  DataRow? getRow(int index) {
+    assert(index >= 0);
+    if (index >= postlist.length) ;
+    int sNo = index + 1;
+    Post post = postlist[index];
+    return DataRow.byIndex(index: index, cells: [
+      DataCell(Text(sNo.toString())),
+      DataCell(SizedBox(width: 300, child: Text(post.title))),
+      DataCell(SizedBox(width: 600, child: Text(post.content))),
+      DataCell(Text(post.audience.toString().split('.').last.toUpperCase())),
+      DataCell(Text(post.date.toIso8601String())),
+      DataCell(IconButton(
+        icon: const Icon(Icons.visibility),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: PostForm(post: post),
+                );
+              });
+        },
+      ))
+    ]);
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => postlist.length;
+
+  @override
+  int get selectedRowCount => 0;
+}
