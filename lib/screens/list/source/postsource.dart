@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:school_app/constants/get_constants.dart';
+import 'package:school_app/constants/constant.dart';
+import 'package:school_app/models/response.dart';
 import 'package:school_app/screens/Form/post_form.dart';
 
 import '../../../models/post.dart';
@@ -18,6 +19,7 @@ class PostSource extends DataTableSource {
       const DataColumn(label: Text('AUDIENCE')),
       const DataColumn(label: Text('ANNOUNCEMENT DATE')),
       const DataColumn(label: Text('VIEW')),
+      const DataColumn(label: Text('DELETE')),
     ];
 
     return columns;
@@ -44,6 +46,23 @@ class PostSource extends DataTableSource {
                 return Dialog(
                   child: PostForm(post: post),
                 );
+              });
+        },
+      )),
+      DataCell(IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () {
+          var future = firestore
+              .collection('posts')
+              .doc(post.docId)
+              .delete()
+              .then((value) => Result.success("Deleted Successfully"))
+              .onError((error, stackTrace) => Result.error(error.toString()));
+          showFutureCustomDialog(
+              context: context,
+              future: future,
+              onTapOk: () {
+                Navigator.of(context).pop();
               });
         },
       ))

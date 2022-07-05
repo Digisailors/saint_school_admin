@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/models/post.dart';
+import 'package:school_app/screens/Form/post_form.dart';
 import 'package:school_app/screens/list/source/postsource.dart';
 
 class PostList extends StatefulWidget {
@@ -21,7 +22,7 @@ class _PostListState extends State<PostList> {
     return Scaffold(
       appBar: AppBar(title: const Text("Posts List")),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: posts.snapshots(),
+        stream: posts.orderBy('date', descending: true).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
             List<Post> list = snapshot.data!.docs.map((e) => Post.fromJson(e.data(), e.id)).toList();
@@ -33,6 +34,19 @@ class _PostListState extends State<PostList> {
                     PaginatedDataTable(
                       dataRowHeight: kMinInteractiveDimension * 2,
                       header: const Text("Announcements"),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const Dialog(
+                                      child: PostForm(),
+                                    );
+                                  });
+                            },
+                            child: const Text("Add"))
+                      ],
                       columns: PostSource.getCoumns(),
                       source: source,
                     ),
@@ -42,7 +56,7 @@ class _PostListState extends State<PostList> {
             );
           }
           if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+            return Center(child: SelectableText(snapshot.error.toString()));
           }
           return const Center(
             child: CircularProgressIndicator(),

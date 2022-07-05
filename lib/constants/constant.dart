@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:convert';
 import '../models/response.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
+final FirebaseFunctions functions = FirebaseFunctions.instance;
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final CollectionReference<Map<String, dynamic>> students = firestore.collection('students');

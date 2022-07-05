@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 
 import '../../../constants/constant.dart';
@@ -43,7 +44,7 @@ class PostFormController {
   List<Attachment?> get tempAttachments {
     List<Attachment?> returns = [];
     returns.addAll(platformFiles.map((e) => Attachment(name: e.name, url: '', attachmentLocation: AttachmentLocation.local)).toList());
-    returns.addAll(attachments.map((e) => Attachment(name: e.name, url: '', attachmentLocation: AttachmentLocation.local)).toList());
+    returns.addAll(attachments);
     returns.add(null);
     return returns;
   }
@@ -99,6 +100,9 @@ class PostFormController {
     controller.title.text = post.title;
     controller.contentImage = post.contentImage;
     controller.date = post.date;
+    if (kDebugMode) {
+      print(controller.attachments.map((e) => e.attachmentLocation).toList());
+    }
     return controller;
   }
 

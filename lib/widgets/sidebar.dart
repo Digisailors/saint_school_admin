@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/auth_controller.dart';
+import 'package:school_app/controllers/queue_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/Form/post_form.dart';
 import 'package:school_app/screens/carousel.dart';
@@ -120,6 +121,13 @@ class SideMenu extends StatelessWidget {
                   press: () {
                     session.showSideBar = false;
                     session.update();
+
+                    double screenWidth = getWidth(context);
+                    double screenHeight = getHeight(context);
+                    int columns = screenWidth ~/ 464;
+                    int rows = screenHeight ~/ 152;
+                    QueueController.tileCount = columns * rows;
+                    print(QueueController.tileCount);
                     Get.to(
                       () => const Carousel(),
                     );
@@ -127,7 +135,7 @@ class SideMenu extends StatelessWidget {
                 ),
                 DrawerListTile(
                   leading: Image.network(
-                    'https://cdn-icons-png.flaticon.com/512/942/942759.png',
+                    'https://cdn-icons-png.flaticon.com/512/942/942968.png',
                     height: getHeight(context) * 0.03,
                   ),
                   title: "Class",
@@ -141,7 +149,7 @@ class SideMenu extends StatelessWidget {
                 ),
                 DrawerListTile(
                   leading: Image.network(
-                    'https://cdn-icons-png.flaticon.com/512/942/942759.png',
+                    'https://cdn-icons-png.flaticon.com/512/1378/1378644.png',
                     height: getHeight(context) * 0.03,
                   ),
                   title: "Announcements",
@@ -155,7 +163,7 @@ class SideMenu extends StatelessWidget {
                 ),
                 DrawerListTile(
                   leading: Image.network(
-                    'https://cdn-icons-png.flaticon.com/512/1300/1300674.png',
+                    'https://cdn-icons-png.flaticon.com/512/1574/1574351.png',
                     height: getHeight(context) * 0.03,
                   ),
                   title: "Log out",

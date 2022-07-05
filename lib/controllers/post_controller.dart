@@ -51,9 +51,9 @@ class PostController {
     }
     if (post.fileData != null) {
       futures.add(
-        uploadImage(post.fileData!, post.title.text + DateTime.now().microsecondsSinceEpoch.toString()).then(
+        uploadFile(post.fileData!, post.title.text).then(
           (value) {
-            post.contentImage = value;
+            post.contentImage = value.url;
           },
         ),
       );
@@ -65,7 +65,7 @@ class PostController {
   }
 
   Future<Attachment> uploadFile(Uint8List file, String name) async {
-    var ref = storage.ref("posts").child(name + DateTime.now().microsecondsSinceEpoch.toString());
+    var ref = storage.ref("posts").child(name);
     var url = await ref.putData(file).then((p0) => p0.ref.getDownloadURL());
     return Attachment(name: name, url: url, attachmentLocation: AttachmentLocation.cloud);
   }

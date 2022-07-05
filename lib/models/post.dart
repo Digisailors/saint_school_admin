@@ -12,16 +12,17 @@ class Post {
   final String? contentImage;
   final List<Attachment> attachments;
   final DateTime date;
-  Post(
-      {this.docId,
-      required this.audience,
-      this.sentTo,
-      this.postBy,
-      required this.content,
-      required this.title,
-      this.contentImage,
-      required this.attachments,
-      required this.date});
+  Post({
+    this.docId,
+    required this.audience,
+    this.sentTo,
+    this.postBy,
+    required this.content,
+    required this.title,
+    this.contentImage,
+    required this.attachments,
+    required this.date,
+  });
 
   factory Post.fromJson(json, docId) => Post(
         docId: docId,
