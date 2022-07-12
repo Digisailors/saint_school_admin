@@ -92,7 +92,7 @@ class _MobilePostFormState extends State<MobilePostForm> {
               },
               items: Audience.values.map((e) => DropdownMenuItem(value: e, child: Text(e.toString().split('.').last.toUpperCase()))).toList(),
               selectedValue: formController.audience),
-          formController.audience == Audience.single
+          formController.audience == Audience.individual
               ? ListTile(
                   title: const Text(
                     'Receipient',

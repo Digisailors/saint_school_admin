@@ -207,7 +207,7 @@ class _DesktopPostFormState extends State<DesktopPostForm> {
                     padding: const EdgeInsets.only(top: 16),
                     child: SizedBox(
                       width: constraints.maxWidth / 2,
-                      child: formController.audience == Audience.single
+                      child: formController.audience == Audience.individual
                           ? ListTile(
                               title: const Text(
                                 'RECEPIENT',

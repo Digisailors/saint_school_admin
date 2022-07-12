@@ -8,6 +8,7 @@ class Admin extends Bio {
     name,
     address,
     imageUrl,
+    required this.docId,
   }) : super(
           email: email,
           entityType: EntityType.admin,
@@ -17,8 +18,9 @@ class Admin extends Bio {
           address: address,
           imageUrl: imageUrl,
         );
-
+  String docId;
   factory Admin.fromJson(Map<String, dynamic> json) => Admin(
+        docId: json['docId'],
         gender: Gender.values.elementAt(json["gender"]),
         icNumber: json["ic"],
         email: json["email"],

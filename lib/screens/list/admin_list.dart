@@ -4,8 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/models/biodata.dart';
-import 'package:school_app/models/teacher.dart';
-import 'package:school_app/screens/Form/teacher_form.dart';
+import 'package:school_app/models/admin.dart';
+import 'package:school_app/screens/Form/admin_form.dart';
 import 'package:school_app/screens/list/source/bio_source.dart';
 
 import '../../constants/constant.dart';
@@ -13,34 +13,27 @@ import '../../constants/get_constants.dart';
 import '../../controllers/session_controller.dart';
 import '../Form/controllers/student_form_controller.dart';
 
-class TeacherList extends StatefulWidget {
-  const TeacherList({Key? key}) : super(key: key);
+class AdminList extends StatefulWidget {
+  const AdminList({Key? key}) : super(key: key);
 
   static const routeName = '/passArguments';
   @override
-  State<TeacherList> createState() => _TeacherListState();
+  State<AdminList> createState() => _AdminListState();
 }
 
-class _TeacherListState extends State<TeacherList> {
+class _AdminListState extends State<AdminList> {
   StudentFormController get controller => session.formcontroller;
-  String? className;
-  String? search;
-  String? section;
 
-  Stream<List<Teacher>> getStream() {
-    Query<Map<String, dynamic>> query = firestore.collection('teachers');
+  String? search;
+
+  Stream<List<Admin>> getStream() {
+    Query<Map<String, dynamic>> query = firestore.collection('admins');
     if (search != null) {
       query = query.where('search', arrayContains: search);
     }
-    if (className != null) {
-      query = query.where('className', isEqualTo: className);
-    }
-    if (section != null) {
-      query = query.where('section', isEqualTo: section);
-    }
 
     return query.snapshots().map((event) => event.docs.map((e) {
-          return Teacher.fromJson(e.data());
+          return Admin.fromJson(e.data());
         }).toList());
   }
 
@@ -82,47 +75,10 @@ class _TeacherListState extends State<TeacherList> {
                             )),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: SizedBox(
-                            height: getHeight(context) * 0.053,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
-                            child: DropdownButtonFormField<String?>(
-                              value: className,
-                              decoration: const InputDecoration(
-                                labelText: 'Class',
-                                border: OutlineInputBorder(),
-                              ),
-                              items: controller.classItems,
-                              onChanged: (text) {
-                                setState(() {
-                                  className = text;
-                                  section = null;
-                                });
-                              },
-                            )),
-                      ),
-                      SizedBox(
-                        height: getHeight(context) * 0.053,
-                        width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
-                        child: DropdownButtonFormField<String?>(
-                          value: section,
-                          decoration: const InputDecoration(
-                            labelText: 'Section',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: controller.getSectionItems(className),
-                          onChanged: (text) {
-                            setState(() {
-                              section = text;
-                            });
-                          },
-                        ),
-                      ),
-                      Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: ElevatedButton(
                             onPressed: () {
-                              Get.to(() => const TeacherForm());
+                              Get.to(() => const AdminForm());
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -146,7 +102,7 @@ class _TeacherListState extends State<TeacherList> {
               ),
               StatefulBuilder(builder: (context, setState) {
                 setStreamBuilderState = setState;
-                return StreamBuilder<List<Teacher>>(
+                return StreamBuilder<List<Admin>>(
                     stream: getStream(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
@@ -159,7 +115,7 @@ class _TeacherListState extends State<TeacherList> {
                           ),
                           child: PaginatedDataTable(
                             dragStartBehavior: DragStartBehavior.start,
-                            columns: BioSource.getCoumns(EntityType.teacher),
+                            columns: BioSource.getCoumns(EntityType.admin),
                             source: source,
                             rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
                           ),

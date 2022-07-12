@@ -1,6 +1,6 @@
 import 'package:school_app/models/biodata.dart';
 
-enum Audience { single, teachers, parents, admins, all }
+enum Audience { individual, teachers, parents, admins, all }
 
 class Post {
   final String? docId;

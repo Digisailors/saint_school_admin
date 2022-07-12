@@ -89,7 +89,7 @@ class AuthRouter extends StatelessWidget {
             routes: {
               '/Carousel': (context) => const Carousel(),
               Dashboard.routeName: (context) => const Dashboard(),
-              '/': (context) => const PostList(),
+              '/': (context) => const Dashboard(),
             },
           );
         }

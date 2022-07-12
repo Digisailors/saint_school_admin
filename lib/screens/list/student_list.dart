@@ -65,7 +65,7 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.08,
-                            width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
                                 onChanged: ((value) => search = value),
@@ -83,7 +83,7 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.053,
-                            width: getWidth(context) * 0.10,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                             child: DropdownButtonFormField<String?>(
                               value: className,
                               decoration: const InputDecoration(
@@ -101,7 +101,7 @@ class _StudentListState extends State<StudentList> {
                       ),
                       SizedBox(
                         height: getHeight(context) * 0.053,
-                        width: getWidth(context) * 0.10,
+                        width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                         child: DropdownButtonFormField<String?>(
                           value: section,
                           decoration: const InputDecoration(

@@ -20,7 +20,6 @@ class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Posts List")),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: posts.orderBy('date', descending: true).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {

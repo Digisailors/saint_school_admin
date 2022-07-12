@@ -24,7 +24,7 @@ class AdminController extends GetxController implements CRUD {
   Future<Result> add() async {
     return firestore
         .collection('admins')
-        .doc(admin.icNumber)
+        .doc(admin.docId)
         .set(admin.toBioJson())
         .then((value) => Result.success("Admin added successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
@@ -34,7 +34,7 @@ class AdminController extends GetxController implements CRUD {
   Future<Result> change() async {
     return firestore
         .collection('admins')
-        .doc(admin.icNumber)
+        .doc(admin.docId)
         .update(admin.toBioJson())
         .then((value) => Result.success("Admin Updated successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
@@ -44,11 +44,11 @@ class AdminController extends GetxController implements CRUD {
   Future<Result> delete() async {
     return firestore
         .collection('admins')
-        .doc(admin.icNumber)
+        .doc(admin.docId)
         .delete()
         .then((value) => Result.success("Admin Updated successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
   }
 
-  Stream<Admin> get stream => firestore.collection('admins').doc(admin.icNumber).snapshots().map((event) => Admin.fromJson(event.data()!));
+  Stream<Admin> get stream => firestore.collection('admins').doc(admin.docId).snapshots().map((event) => Admin.fromJson(event.data()!));
 }
