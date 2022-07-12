@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:school_app/controllers/admin_controller.dart';
 import 'package:school_app/controllers/crud_controller.dart';
 import 'package:school_app/controllers/parent_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
@@ -8,9 +9,12 @@ import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/parent.dart';
 import 'package:school_app/models/student.dart';
 import 'package:school_app/models/teacher.dart';
+import 'package:school_app/screens/Form/admin_form.dart';
 import 'package:school_app/screens/Form/parent_form.dart';
 import 'package:school_app/screens/Form/student_form.dart';
 import 'package:school_app/screens/Form/teacher_form.dart';
+
+import '../../../models/admin.dart';
 
 class BioSource extends DataTableSource {
   final List<dynamic> entities;
@@ -24,7 +28,7 @@ class BioSource extends DataTableSource {
     if (index >= entities.length) return null;
     Bio entity = entities[index];
 
-    final CRUD object = getEntity(entity);
+    final CRUD object = getEntity(entity, index);
     int sNo = index + 1;
 
     return DataRow.byIndex(index: index, cells: [
@@ -40,7 +44,7 @@ class BioSource extends DataTableSource {
       DataCell(Text(entity.icNumber)),
       DataCell(Text(entity.email ?? '')),
       DataCell(Text(entity.gender.name.toString().toUpperCase())),
-      DataCell(Text(entity.address ?? '')),
+      DataCell(Text((entity.addressLine1 ?? '') + " ," + (entity.addressLine2 ?? '') + " ," + (entity.city ?? ''))),
       DataCell(IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () {
@@ -65,7 +69,8 @@ class BioSource extends DataTableSource {
                 Get.to(() => ParentForm(parent: parent));
                 break;
               case EntityType.admin:
-                // ignore: todo
+                Admin admin = entities[index];
+                Get.to(() => AdminForm(admin: admin));
                 // TODO: Handle this case.
                 break;
             }
@@ -83,7 +88,7 @@ class BioSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  getEntity(Bio entity) {
+  getEntity(Bio entity, int index) {
     switch (entity.entityType) {
       case EntityType.parent:
         return ParentController.parentsList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
@@ -91,6 +96,8 @@ class BioSource extends DataTableSource {
         return TeacherController.teacherList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
       case EntityType.student:
         return StudentController.studentList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+      case EntityType.admin:
+        return AdminController((entities[index] as Admin));
       default:
     }
   }

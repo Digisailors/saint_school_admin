@@ -7,6 +7,7 @@ import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/Form/post_form.dart';
 import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
+import 'package:school_app/screens/list/admin_list.dart';
 import 'package:school_app/screens/list/appointmentlist.dart';
 import 'package:school_app/screens/list/class_list.dart';
 import 'package:school_app/screens/list/parent_list.dart';
@@ -158,6 +159,20 @@ class SideMenu extends StatelessWidget {
                   press: () {
                     session.pageIndex = 6;
                     Get.offAll(const PostList());
+                    // Get.offAll(() => const Carousel());
+                  },
+                ),
+                DrawerListTile(
+                  leading: Image.network(
+                    'https://cdn-icons-png.flaticon.com/512/1378/1378644.png',
+                    height: getHeight(context) * 0.03,
+                  ),
+                  title: "Admins",
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  selected: currentPage == 7,
+                  press: () {
+                    session.pageIndex = 7;
+                    Get.offAll(const AdminList());
                     // Get.offAll(() => const Carousel());
                   },
                 ),

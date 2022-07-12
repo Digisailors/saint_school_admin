@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:school_app/controllers/session_controller.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -14,25 +15,45 @@ class AuthController extends GetxController {
       if (currentUser != null) {
         await currentUser!.reload();
         verified = currentUser!.emailVerified;
+
         if (verified) yield true;
       }
     }
   }
 
+  bool isAdmin = false;
+
   User? get currentUser => _firebaseAuth.currentUser;
 
   String? get uid => currentUser?.uid;
 
-  Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
+  reloadClaims() async {
+    try {
+      IdTokenResult? result = await currentUser?.getIdTokenResult();
+      if (result != null) {
+        isAdmin = result.claims?['admin'] ?? false;
+      }
+    } catch (e) {
+      isAdmin = false;
+    }
+  }
+
+  Future<User?> signInWithEmailAndPassword(String email, String password) async {
     final userCredential = await _firebaseAuth.signInWithCredential(
       EmailAuthProvider.credential(email: email, password: password),
     );
+    try {
+      IdTokenResult? result = await userCredential.user?.getIdTokenResult();
+      if (result != null) {
+        isAdmin = result.claims?['admin'] ?? false;
+      }
+    } catch (e) {
+      isAdmin = false;
+    }
     return userCredential.user;
   }
 
-  Future<User?> createUserWithEmailAndPassword(
-      String email, String password) async {
+  Future<User?> createUserWithEmailAndPassword(String email, String password) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
@@ -41,10 +62,7 @@ class AuthController extends GetxController {
   }
 
   Future<String> resetPassword({required String email}) async {
-    return _firebaseAuth
-        .sendPasswordResetEmail(email: email)
-        .then((value) => "Success")
-        .catchError((error) {
+    return _firebaseAuth.sendPasswordResetEmail(email: email).then((value) => "Success").catchError((error) {
       return error.code.toString();
     });
   }

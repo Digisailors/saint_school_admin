@@ -11,6 +11,7 @@ import '../../models/response.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_text_field.dart';
 import 'controllers/admin_form_controller.dart';
+import 'package:get/get.dart';
 
 class AdminForm extends StatefulWidget {
   const AdminForm({
@@ -44,6 +45,14 @@ class _AdminFormState extends State<AdminForm> {
     var text = val ?? '';
     if (text.isEmpty) {
       return "This is a required field";
+    }
+    return null;
+  }
+
+  String? icValidator(String? val) {
+    var text = val ?? '';
+    if (text.length != 12 && text.isNumericOnly) {
+      return "Please enter a valid IC Number";
     }
     return null;
   }
@@ -107,7 +116,7 @@ class _AdminFormState extends State<AdminForm> {
                     SizedBox(
                       width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                       child: CustomTextField(
-                        hintText: 'Student Name',
+                        hintText: 'Admin Name',
                         validator: requiredValidator,
                         controller: controller.name,
                         labelText: 'Name   ',
@@ -132,7 +141,7 @@ class _AdminFormState extends State<AdminForm> {
                     SizedBox(
                       width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                       child: CustomTextField(
-                        validator: requiredValidator,
+                        validator: icValidator,
                         controller: controller.icNumber,
                         labelText: 'IC Number',
                         hintText: 'Enter IC Number',
@@ -154,7 +163,13 @@ class _AdminFormState extends State<AdminForm> {
                   SizedBox(
                     width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                     child: CustomTextField(
-                      validator: requiredValidator,
+                      validator: (text) {
+                        if ((text ?? '').removeAllWhitespace.isEmail) {
+                          return null;
+                        } else {
+                          return 'Please enter a valid email';
+                        }
+                      },
                       controller: controller.email,
                       labelText: "Email",
                     ),
@@ -222,40 +237,6 @@ class _AdminFormState extends State<AdminForm> {
                     ),
                   ),
                 ]),
-              ),
-              const Divider(),
-              Center(
-                child: CustomLayout(children: [
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
-                      labelText: 'Class',
-                      items: controller.classItems,
-                      selectedValue: controller.className,
-                      onChanged: (text) {
-                        setState(() {
-                          if (controller.className != text) {
-                            controller.className = text ?? controller.className;
-                            controller.section = null;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
-                      labelText: 'Section',
-                      items: controller.sectionItems,
-                      selectedValue: controller.section,
-                      onChanged: (text) {
-                        setState(() {
-                          controller.section = text ?? controller.section;
-                        });
-                      },
-                    ),
-                  ),
-                ], mainAxisAlignment: MainAxisAlignment.start),
               ),
               const Divider(),
               Center(

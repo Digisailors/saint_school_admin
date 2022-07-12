@@ -16,7 +16,7 @@ class LandingPage extends StatelessWidget {
       body: GetBuilder(
           init: session,
           builder: (_) {
-            if (auth.currentUser?.email != 'rampowiz@gmail.com' && auth.currentUser?.email != 'admin@saintschool.com') {
+            if (!auth.isAdmin) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -47,10 +47,30 @@ class LandingPage extends StatelessWidget {
                 Expanded(
                     flex: 5,
                     child: Scaffold(
-                      appBar: AppBar(
-                        title: const Text("SAINT SCHOOL"),
-                        centerTitle: true,
-                      ),
+                      // appBar: session.pageIndex == 9
+                      //     ? null
+                      //     : AppBar(
+                      //         actions: [
+                      //           IconButton(
+                      //               iconSize: getWidth(context) * 0.03,
+                      //               onPressed: () {},
+                      //               icon: Image.network(
+                      //                 'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
+                      //               )),
+                      //           IconButton(
+                      //               iconSize: getWidth(context) * 0.03,
+                      //               onPressed: () {},
+                      //               icon: Image.network(
+                      //                 'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
+                      //               )),
+                      //           IconButton(
+                      //               iconSize: getWidth(context) * 0.03,
+                      //               onPressed: () {},
+                      //               icon: Image.network(
+                      //                 'https://cdn-icons-png.flaticon.com/512/7650/7650798.png',
+                      //               )),
+                      //         ],
+                      //       ),
                       drawer: isDesktop(context) ? null : const SideMenu(),
                       body: child,
                     )),

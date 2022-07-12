@@ -8,6 +8,13 @@ class Admin extends Bio {
     name,
     address,
     imageUrl,
+    addressLine1,
+    addressLine2,
+    city,
+    lastName,
+    primaryPhone,
+    secondaryPhone,
+    state,
     required this.docId,
   }) : super(
           email: email,
@@ -17,15 +24,35 @@ class Admin extends Bio {
           name: name,
           address: address,
           imageUrl: imageUrl,
+          addressLine1: addressLine1,
+          addressLine2: addressLine2,
+          city: city,
+          lastName: lastName,
+          primaryPhone: primaryPhone,
+          secondaryPhone: secondaryPhone,
+          state: state,
         );
   String docId;
   factory Admin.fromJson(Map<String, dynamic> json) => Admin(
         docId: json['docId'],
         gender: Gender.values.elementAt(json["gender"]),
-        icNumber: json["ic"],
+        icNumber: json["icNumber"],
         email: json["email"],
         name: json["name"],
-        address: json["address"],
+        address: json["address"] ?? '',
         imageUrl: json["imageUrl"],
+        addressLine1: json['addressLine1'],
+        addressLine2: json['addressLine2'],
+        city: json['city'],
+        lastName: json['lastName'],
+        primaryPhone: json['primaryPhone'],
+        secondaryPhone: json['secondaryPhone'],
+        state: json['state'],
       );
+
+  toJson() {
+    var map = toBioJson();
+    map.addAll({'docId': docId});
+    return map;
+  }
 }

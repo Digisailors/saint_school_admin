@@ -54,12 +54,18 @@ class AdminFormController with BioFormController {
   }
 
   Admin get admin => Admin(
-        email: email.text,
-        gender: gender,
-        icNumber: icNumber.text,
-        name: name.text,
-        address: address.text,
-        imageUrl: image,
-        docId: docId ?? firestore.collection('admins').doc().id,
-      );
+      email: email.text,
+      gender: gender,
+      icNumber: icNumber.text,
+      name: name.text,
+      address: address.text,
+      imageUrl: image,
+      docId: docId ?? firestore.collection('admins').doc().id,
+      addressLine1: addressLine1.text,
+      addressLine2: addressLine2.text,
+      city: city,
+      lastName: lastName.text,
+      primaryPhone: primaryPhone.text,
+      secondaryPhone: secondaryPhone.text,
+      state: state);
 }

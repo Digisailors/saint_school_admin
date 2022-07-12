@@ -33,6 +33,8 @@ class AuthRouter extends StatelessWidget {
       stream: auth.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
+          auth.reloadClaims();
+          session.update();
           Get.put(SessionController(MySession()));
           Get.put(ClassController());
           ParentController.listenParents();

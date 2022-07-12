@@ -54,7 +54,7 @@ class _AdminListState extends State<AdminList> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Text("TEACHERS LIST"),
+                      const Text("ADMIN LIST"),
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -107,6 +107,7 @@ class _AdminListState extends State<AdminList> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
                         var list = snapshot.data;
+                        print(list!.first.toJson());
                         var source = BioSource(list!, context);
                         return ConstrainedBox(
                           constraints: BoxConstraints(
