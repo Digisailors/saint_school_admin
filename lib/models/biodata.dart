@@ -21,6 +21,7 @@ class Bio {
     this.primaryPhone,
     this.secondaryPhone,
     this.state,
+    required this.empCode,
   });
 
   String name;
@@ -37,6 +38,7 @@ class Bio {
   String? secondaryPhone;
   String? imageUrl;
   Gender gender;
+  String? empCode;
 
   @override
   // ignore: hash_and_equals
@@ -45,6 +47,7 @@ class Bio {
   }
 
   factory Bio.fromBioJson(json) => Bio(
+        empCode: json["empCode"],
         name: json["name"] ?? '',
         entityType: EntityType.values.elementAt(json["entityType"]),
         icNumber: json["icNumber"] ?? '',
@@ -79,6 +82,7 @@ class Bio {
   }
 
   Map<String, dynamic> toBioJson() => {
+        "empCode": empCode,
         "name": name,
         "lastName": lastName,
         "entityType": entityType.index,

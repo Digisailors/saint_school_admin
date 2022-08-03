@@ -55,6 +55,7 @@ class TeacherFormController with BioFormController {
   }
 
   Teacher get teacher => Teacher(
+        empCode: empCode.text,
         className: className,
         section: section,
         uid: uid,

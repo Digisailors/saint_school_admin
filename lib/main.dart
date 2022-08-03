@@ -13,7 +13,10 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(AuthController());
   Get.put(SessionController(MySession()));
+  Get.put(AuthController());
+  if (auth.currentUser != null) {
+    await auth.reloadClaims();
+  }
   runApp(const AuthRouter());
 }

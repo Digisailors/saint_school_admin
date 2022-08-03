@@ -15,8 +15,10 @@ class Admin extends Bio {
     primaryPhone,
     secondaryPhone,
     state,
+    empCode,
     required this.docId,
   }) : super(
+          empCode: empCode,
           email: email,
           entityType: EntityType.admin,
           gender: gender,

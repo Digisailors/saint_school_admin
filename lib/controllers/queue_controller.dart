@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/models/queue.dart';
@@ -24,12 +25,11 @@ class QueueController extends GetxController {
         // if new document
         if (e.oldIndex == -1) {
           var student = StudentQueue.fromJson(e.doc.data()!);
+
           ttsQueue.addLast(student);
           countDown[student.icNumber] = "00:00";
           student.queuedTime = DateTime.now();
-          student.queueStatus = QueueStatus.inQueue;
           queuedStudentsList.add(student);
-          e.doc.reference.update(student.toJson());
           pivot < (queuedStudentsList.length - 1) ? pivot++ : pivot;
 
           HttpsCallable callable = FirebaseFunctions.instanceFor(region: 'asia-southeast1').httpsCallable('deQueue');
@@ -71,12 +71,17 @@ class QueueController extends GetxController {
     super.onClose();
   }
 
+  // TextToSpeech tts = TextToSpeech();
+  FlutterTts flutterTts = FlutterTts();
+
   Timer startSpeaking() {
-    TextToSpeech tts = TextToSpeech();
     return Timer.periodic(const Duration(seconds: 3), (timer) {
       if (queuedStudentsList.isNotEmpty) {
         pivot = timer.tick % queuedStudentsList.length;
-        tts.speak(queuedStudentsList[pivot].name);
+        // tts.speak(queuedStudentsList[pivot].name);
+        try {
+          flutterTts.speak(queuedStudentsList[pivot].name);
+        } catch (e) {}
       }
     });
   }

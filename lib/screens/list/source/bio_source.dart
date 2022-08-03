@@ -56,7 +56,6 @@ class BioSource extends DataTableSource {
             switch (entity.entityType) {
               case EntityType.student:
                 Student student = entities[index];
-
                 Get.to(() => StudentForm(student: student));
                 break;
               case EntityType.teacher:
@@ -65,13 +64,11 @@ class BioSource extends DataTableSource {
                 break;
               case EntityType.parent:
                 Parent parent = entities[index];
-
                 Get.to(() => ParentForm(parent: parent));
                 break;
               case EntityType.admin:
                 Admin admin = entities[index];
                 Get.to(() => AdminForm(admin: admin));
-                // TODO: Handle this case.
                 break;
             }
           },

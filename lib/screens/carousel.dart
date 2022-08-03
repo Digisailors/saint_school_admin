@@ -43,6 +43,65 @@ class _CarouselState extends State<Carousel> {
                 size: 10,
               )),
         ),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                // List<String>? voices = await queueController.flutterTts.getVoices;
+                // String? voice;
+                List<DropdownMenuItem<String>> voices = [];
+                String selectedVoice;
+                await queueController.flutterTts.getVoices.then((values) {
+                  for (var element in (values as List)) {
+                    voices.add(DropdownMenuItem<String>(
+                      child: Text(element['name']),
+                      value: element['locale'],
+                    ));
+                  }
+                });
+                if (voices.isEmpty) {
+                  return;
+                } else {
+                  selectedVoice = voices.first.value!;
+                }
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return StatefulBuilder(builder: (context, setstate) {
+                        return AlertDialog(
+                          title: const Text("Select Accent"),
+                          content: DropdownButtonFormField(
+                              value: selectedVoice,
+                              items: voices,
+                              onChanged: (v) {
+                                setstate(() {
+                                  selectedVoice = v as String;
+                                });
+                              }),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("CANCEL")),
+                            TextButton(
+                                onPressed: () {
+                                  queueController.flutterTts.isLanguageAvailable(selectedVoice).then((value) {
+                                    if (value) {
+                                      queueController.flutterTts.setLanguage(selectedVoice).then((value) {
+                                        Navigator.of(context).pop();
+                                      });
+                                      print("Langage available");
+                                    }
+                                  });
+                                },
+                                child: const Text("OKAY")),
+                          ],
+                        );
+                      });
+                    });
+              },
+              icon: const Icon(Icons.settings))
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
 

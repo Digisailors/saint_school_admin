@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
+import 'package:school_app/controllers/attendance_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/parent.dart';
@@ -87,6 +88,13 @@ class _StudentFormState extends State<StudentForm> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Student Form'),
+          actions: [
+            if (widget.student != null)
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.calendar_month),
+              ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -218,6 +226,14 @@ class _StudentFormState extends State<StudentForm> {
                             controller: controller.icNumber,
                             labelText: 'IC Number',
                             hintText: 'Enter IC Number',
+                          ),
+                        ),
+                        SizedBox(
+                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          child: CustomTextField(
+                            controller: controller.empCode,
+                            labelText: 'Attendance ID',
+                            hintText: 'Enter ID on the attendance system',
                           ),
                         ),
                       ],

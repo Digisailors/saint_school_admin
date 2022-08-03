@@ -33,65 +33,81 @@ class AuthRouter extends StatelessWidget {
       stream: auth.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
-          auth.reloadClaims();
-          session.update();
-          Get.put(SessionController(MySession()));
-          Get.put(ClassController());
-          ParentController.listenParents();
-          StudentController.listenStudents();
-          TeacherController.listenTeachers();
-          return GetMaterialApp(
-            scrollBehavior: MyCustomScrollBehavior(),
-            defaultTransition: Transition.leftToRight,
-            title: 'SAINT SCHOOL ADMIN',
-            theme: ThemeData(
-              listTileTheme: const ListTileThemeData(),
-              pageTransitionsTheme: const PageTransitionsTheme(builders: {
-                TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
-                TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-                TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
-              }),
-              colorScheme: lightColorScheme,
-              textTheme: myTexTheme,
-              tabBarTheme: TabBarTheme(
-                indicator: UnderlineTabIndicator(
-                  borderSide: BorderSide(width: 4.0, color: getColor(context).tertiary),
-                ),
-              ),
-              bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                backgroundColor: lightColorScheme.secondaryContainer,
-                elevation: 3,
-              ),
-              primarySwatch: Colors.blue,
-            ),
-            transitionDuration: const Duration(microseconds: 0),
-            builder: (context, child) {
-              return Overlay(
-                initialEntries: [
-                  OverlayEntry(builder: (context) {
-                    return LandingPage(child: child ?? Container());
-                  })
-                ],
+          return FutureBuilder<bool>(
+            future: auth.reloadClaims(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  session.session.isAdmin = snapshot.data;
+                }
+                Get.put(ClassController());
+                ParentController.listenParents();
+                StudentController.listenStudents();
+                TeacherController.listenTeachers();
+                return GetMaterialApp(
+                  scrollBehavior: MyCustomScrollBehavior(),
+                  defaultTransition: Transition.leftToRight,
+                  title: 'SAINT SCHOOL ADMIN',
+                  theme: ThemeData(
+                    listTileTheme: const ListTileThemeData(),
+                    pageTransitionsTheme: const PageTransitionsTheme(builders: {
+                      TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+                      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+                      TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+                    }),
+                    colorScheme: lightColorScheme,
+                    textTheme: myTexTheme,
+                    tabBarTheme: TabBarTheme(
+                      indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(width: 4.0, color: getColor(context).tertiary),
+                      ),
+                    ),
+                    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                      backgroundColor: lightColorScheme.secondaryContainer,
+                      elevation: 3,
+                    ),
+                    primarySwatch: Colors.blue,
+                  ),
+                  transitionDuration: const Duration(microseconds: 0),
+                  builder: (context, child) {
+                    return Overlay(
+                      initialEntries: [
+                        OverlayEntry(builder: (context) {
+                          return LandingPage(child: child ?? Container());
+                        })
+                      ],
+                    );
+                  },
+                  onGenerateRoute: (settings) {
+                    if (settings.name == EntityList.routeName) {
+                      final args = settings.arguments as EntityType;
+                      return MaterialPageRoute(builder: (context) => EntityList(entityType: args));
+                    }
+                    if (settings.name == StudentForm.routeName) {
+                      final args = settings.arguments as Student?;
+                      return MaterialPageRoute(builder: (context) => StudentForm(student: args));
+                    }
+                    if (settings.name == Dashboard.routeName) {
+                      return MaterialPageRoute(builder: (context) => const Dashboard());
+                    }
+                    return null;
+                  },
+                  routes: {
+                    '/Carousel': (context) => const Carousel(),
+                    Dashboard.routeName: (context) => const Dashboard(),
+                    '/': (context) => const Dashboard(),
+                  },
+                );
+              }
+              if (snapshot.hasError) {
+                return AlertDialog(
+                  title: const Text("Error Occured"),
+                  content: Text(snapshot.error.toString()),
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-            onGenerateRoute: (settings) {
-              if (settings.name == EntityList.routeName) {
-                final args = settings.arguments as EntityType;
-                return MaterialPageRoute(builder: (context) => EntityList(entityType: args));
-              }
-              if (settings.name == StudentForm.routeName) {
-                final args = settings.arguments as Student?;
-                return MaterialPageRoute(builder: (context) => StudentForm(student: args));
-              }
-              if (settings.name == Dashboard.routeName) {
-                return MaterialPageRoute(builder: (context) => const Dashboard());
-              }
-              return null;
-            },
-            routes: {
-              '/Carousel': (context) => const Carousel(),
-              Dashboard.routeName: (context) => const Dashboard(),
-              '/': (context) => const Dashboard(),
             },
           );
         }

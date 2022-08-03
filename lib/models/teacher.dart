@@ -19,8 +19,10 @@ class Teacher extends Bio {
     String? primaryPhone,
     String? secondaryPhone,
     String? state,
+    required String? empCode,
     this.uid,
   }) : super(
+          empCode: empCode,
           email: email,
           entityType: EntityType.teacher,
           icNumber: icNumber,
@@ -44,6 +46,7 @@ class Teacher extends Bio {
   TeacherController get controller => TeacherController(this);
 
   factory Teacher.fromJson(json) => Teacher(
+        empCode: json["empCode"],
         gender: Gender.values.elementAt(json["gender"]),
         className: json["className"],
         section: json["section"],

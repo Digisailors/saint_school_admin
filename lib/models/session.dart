@@ -9,6 +9,8 @@ class MySession {
 
   EntityType? get role => bio?.entityType;
 
+  bool? isAdmin;
+
   factory MySession() {
     return _singleton;
   }

@@ -50,10 +50,12 @@ class AdminFormController with BioFormController {
     controller.secondaryPhone.text = admin.secondaryPhone ?? '';
     controller.state = admin.state;
     controller.docId = admin.docId;
+    // controller.empCode = admin.empCode;
     return controller;
   }
 
   Admin get admin => Admin(
+      empCode: empCode.text,
       email: email.text,
       gender: gender,
       icNumber: icNumber.text,

@@ -16,7 +16,7 @@ class LandingPage extends StatelessWidget {
       body: GetBuilder(
           init: session,
           builder: (_) {
-            if (!auth.isAdmin) {
+            if (session.session.isAdmin == null || session.session.isAdmin == false) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -71,6 +71,7 @@ class LandingPage extends StatelessWidget {
                       //               )),
                       //         ],
                       //       ),
+                      appBar: AppBar(),
                       drawer: isDesktop(context) ? null : const SideMenu(),
                       body: child,
                     )),

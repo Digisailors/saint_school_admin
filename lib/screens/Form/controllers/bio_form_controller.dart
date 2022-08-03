@@ -15,6 +15,7 @@ class BioFormController {
   final address = TextEditingController();
   final addressLine1 = TextEditingController();
   final addressLine2 = TextEditingController();
+  final empCode = TextEditingController();
   String? state;
   String? city;
   final primaryPhone = TextEditingController();

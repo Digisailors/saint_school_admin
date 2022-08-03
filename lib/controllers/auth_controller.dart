@@ -6,7 +6,15 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
   final _firebaseAuth = FirebaseAuth.instance;
 
-  Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
+  @override
+  onInit() {
+    reloadClaims();
+    super.onInit();
+  }
+
+  Stream<User?> authStateChanges() {
+    return _firebaseAuth.authStateChanges();
+  }
 
   Stream<bool> checkUserVerified() async* {
     bool verified = false;
@@ -21,21 +29,23 @@ class AuthController extends GetxController {
     }
   }
 
-  bool isAdmin = false;
+  bool? isAdmin;
 
   User? get currentUser => _firebaseAuth.currentUser;
 
   String? get uid => currentUser?.uid;
 
-  reloadClaims() async {
+  Future<bool> reloadClaims() async {
+    var returns = false;
     try {
       IdTokenResult? result = await currentUser?.getIdTokenResult();
       if (result != null) {
-        isAdmin = result.claims?['admin'] ?? false;
+        returns = result.claims?['admin'] ?? false;
       }
     } catch (e) {
-      isAdmin = false;
+      returns = false;
     }
+    return returns;
   }
 
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
@@ -45,7 +55,7 @@ class AuthController extends GetxController {
     try {
       IdTokenResult? result = await userCredential.user?.getIdTokenResult();
       if (result != null) {
-        isAdmin = result.claims?['admin'] ?? false;
+        session.session.isAdmin = result.claims?['admin'] ?? false;
       }
     } catch (e) {
       isAdmin = false;
@@ -80,6 +90,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> signOut() async {
+    session.session.isAdmin = false;
     await _firebaseAuth.signOut();
   }
 }
