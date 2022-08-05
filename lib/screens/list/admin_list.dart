@@ -50,7 +50,9 @@ class _AdminListState extends State<AdminList> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  width: isMobile(context) ? getWidth(context) * 2 : getWidth(context) * 0.80,
+                  width: isMobile(context)
+                      ? getWidth(context) * 2
+                      : getWidth(context) * 0.80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -60,7 +62,9 @@ class _AdminListState extends State<AdminList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.08,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context)
+                                ? getWidth(context) * 0.40
+                                : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
                                 onChanged: ((value) => search = value),
@@ -105,10 +109,11 @@ class _AdminListState extends State<AdminList> {
                 return StreamBuilder<List<Admin>>(
                     stream: getStream(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.active &&
+                          snapshot.hasData) {
                         var list = snapshot.data;
                         print(list!.first.toJson());
-                        var source = BioSource(list!, context);
+                        var source = BioSource(list, context);
                         return ConstrainedBox(
                           constraints: BoxConstraints(
                             minWidth: getWidth(context) * 0.90,
@@ -118,7 +123,9 @@ class _AdminListState extends State<AdminList> {
                             dragStartBehavior: DragStartBehavior.start,
                             columns: BioSource.getCoumns(EntityType.admin),
                             source: source,
-                            rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
+                            rowsPerPage: (getHeight(context) ~/
+                                    kMinInteractiveDimension) -
+                                5,
                           ),
                         );
                       }

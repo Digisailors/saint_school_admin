@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:school_app/models/Attendance/department.dart';
+
 import 'student.dart';
 
 class StudentQueue {
@@ -15,9 +17,11 @@ class StudentQueue {
 
   String get name => student.name;
   String get icNumber => student.icNumber;
-  String get studentClass => student.studentClass;
-  String get section => student.section;
-  int? get remaingTime => queuedTime == null ? 0 : 10 - DateTime.now().difference(queuedTime!).inSeconds;
+  Department get studentClass => student.classDepartment;
+  Department get section => student.sectionDepartment;
+  int? get remaingTime => queuedTime == null
+      ? 0
+      : 10 - DateTime.now().difference(queuedTime!).inSeconds;
 
   factory StudentQueue.fromJson(json) => StudentQueue(
         student: Student.fromJson(json["student"]),

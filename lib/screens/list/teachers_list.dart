@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/teacher.dart';
 import 'package:school_app/screens/Form/teacher_form.dart';
@@ -23,9 +24,9 @@ class TeacherList extends StatefulWidget {
 
 class _TeacherListState extends State<TeacherList> {
   StudentFormController get controller => session.formcontroller;
-  String? className;
+  Department? className;
   String? search;
-  String? section;
+  Department? section;
 
   Stream<List<Teacher>> getStream() {
     Query<Map<String, dynamic>> query = firestore.collection('teachers');
@@ -57,7 +58,9 @@ class _TeacherListState extends State<TeacherList> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  width: isMobile(context) ? getWidth(context) * 2 : getWidth(context) * 0.80,
+                  width: isMobile(context)
+                      ? getWidth(context) * 2
+                      : getWidth(context) * 0.80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -67,7 +70,9 @@ class _TeacherListState extends State<TeacherList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.08,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context)
+                                ? getWidth(context) * 0.40
+                                : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
                                 onChanged: ((value) => search = value),
@@ -85,8 +90,10 @@ class _TeacherListState extends State<TeacherList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.053,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
-                            child: DropdownButtonFormField<String?>(
+                            width: isMobile(context)
+                                ? getWidth(context) * 0.40
+                                : getWidth(context) * 0.20,
+                            child: DropdownButtonFormField<Department?>(
                               value: className,
                               decoration: const InputDecoration(
                                 labelText: 'Class',
@@ -103,17 +110,19 @@ class _TeacherListState extends State<TeacherList> {
                       ),
                       SizedBox(
                         height: getHeight(context) * 0.053,
-                        width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
-                        child: DropdownButtonFormField<String?>(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.40
+                            : getWidth(context) * 0.20,
+                        child: DropdownButtonFormField<Department?>(
                           value: section,
                           decoration: const InputDecoration(
                             labelText: 'Section',
                             border: OutlineInputBorder(),
                           ),
-                          items: controller.getSectionItems(className),
-                          onChanged: (text) {
+                          items: controller.sectionItems,
+                          onChanged: (dept) {
                             setState(() {
-                              section = text;
+                              section = dept;
                             });
                           },
                         ),
@@ -149,7 +158,8 @@ class _TeacherListState extends State<TeacherList> {
                 return StreamBuilder<List<Teacher>>(
                     stream: getStream(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.active &&
+                          snapshot.hasData) {
                         var list = snapshot.data;
                         var source = BioSource(list!, context);
                         return ConstrainedBox(
@@ -161,7 +171,9 @@ class _TeacherListState extends State<TeacherList> {
                             dragStartBehavior: DragStartBehavior.start,
                             columns: BioSource.getCoumns(EntityType.teacher),
                             source: source,
-                            rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
+                            rowsPerPage: (getHeight(context) ~/
+                                    kMinInteractiveDimension) -
+                                5,
                           ),
                         );
                       }

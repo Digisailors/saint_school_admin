@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/controllers/teacher_controller.dart';
+import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/teacher.dart';
 import 'package:school_app/widgets/theme.dart';
 
@@ -36,7 +37,9 @@ class _TeacherFormState extends State<TeacherForm> {
   @override
   void initState() {
     formMode = widget.teacher == null ? FormMode.add : FormMode.update;
-    controller = widget.teacher == null ? TeacherFormController() : TeacherFormController.fromTeacher(widget.teacher!);
+    controller = widget.teacher == null
+        ? TeacherFormController()
+        : TeacherFormController.fromTeacher(widget.teacher!);
     super.initState();
   }
 
@@ -53,7 +56,9 @@ class _TeacherFormState extends State<TeacherForm> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
-        padding: isDesktop(context) && isTablet(context) ? EdgeInsets.only(left: getWidth(context) * 0.25) : const EdgeInsets.all(8),
+        padding: isDesktop(context) && isTablet(context)
+            ? EdgeInsets.only(left: getWidth(context) * 0.25)
+            : const EdgeInsets.all(8),
         child: Form(
           key: _formKey,
           child: Column(
@@ -66,11 +71,15 @@ class _TeacherFormState extends State<TeacherForm> {
                 ),
                 title: Text(
                   'Teacher Form',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
+                  style: getText(context)
+                      .headline6!
+                      .apply(color: getColor(context).primary),
                 ),
               ),
               Padding(
-                padding: isMobile(context) ? EdgeInsets.symmetric(horizontal: getWidth(context) * 0.25) : EdgeInsets.all(getWidth(context) * 0.05),
+                padding: isMobile(context)
+                    ? EdgeInsets.symmetric(horizontal: getWidth(context) * 0.25)
+                    : EdgeInsets.all(getWidth(context) * 0.05),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -97,7 +106,9 @@ class _TeacherFormState extends State<TeacherForm> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Personal Details',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
+                  style: getText(context)
+                      .headline6!
+                      .apply(color: getColor(context).primary),
                 ),
               ),
               Center(
@@ -105,7 +116,9 @@ class _TeacherFormState extends State<TeacherForm> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                      width: isMobile(context)
+                          ? getWidth(context) * 0.80
+                          : getWidth(context) * 0.20,
                       child: CustomTextField(
                         hintText: 'Student Name',
                         validator: requiredValidator,
@@ -114,7 +127,9 @@ class _TeacherFormState extends State<TeacherForm> {
                       ),
                     ),
                     SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                      width: isMobile(context)
+                          ? getWidth(context) * 0.80
+                          : getWidth(context) * 0.20,
                       child: CustomDropDown(
                           onChanged: (Gender? text) {
                             setState(() {
@@ -123,14 +138,20 @@ class _TeacherFormState extends State<TeacherForm> {
                           },
                           labelText: 'Gender',
                           items: const [
-                            DropdownMenuItem(child: Text('Male'), value: Gender.male),
-                            DropdownMenuItem(child: Text('Female'), value: Gender.female),
-                            DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
+                            DropdownMenuItem(
+                                child: Text('Male'), value: Gender.male),
+                            DropdownMenuItem(
+                                child: Text('Female'), value: Gender.female),
+                            DropdownMenuItem(
+                                child: Text('Unspecified'),
+                                value: Gender.unspecified),
                           ],
                           selectedValue: controller.gender),
                     ),
                     SizedBox(
-                      width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                      width: isMobile(context)
+                          ? getWidth(context) * 0.80
+                          : getWidth(context) * 0.20,
                       child: CustomTextField(
                         validator: requiredValidator,
                         controller: controller.icNumber,
@@ -146,89 +167,111 @@ class _TeacherFormState extends State<TeacherForm> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Contact Details',
-                  style: getText(context).headline6!.apply(color: getColor(context).primary),
+                  style: getText(context)
+                      .headline6!
+                      .apply(color: getColor(context).primary),
                 ),
               ),
               Center(
-                child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.email,
-                      labelText: "Email",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.addressLine1,
-                      labelText: "Address Line 1",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.addressLine2,
-                      labelText: "Address Line 2",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.primaryPhone,
-                      labelText: "Primary Mobile ",
-                    ),
-                  ),
-                ]),
+                child: CustomLayout(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.email,
+                          labelText: "Email",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.addressLine1,
+                          labelText: "Address Line 1",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.addressLine2,
+                          labelText: "Address Line 2",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.primaryPhone,
+                          labelText: "Primary Mobile ",
+                        ),
+                      ),
+                    ]),
               ),
               Center(
-                child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomTextField(
-                      validator: requiredValidator,
-                      controller: controller.secondaryPhone,
-                      labelText: "Secondary Mobile",
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
-                      selectedValue: controller.state,
-                      validator: requiredValidator,
-                      items: stateItems,
-                      labelText: "State",
-                      onChanged: (state) {
-                        setState(() {
-                          controller.state = state;
-                          controller.city = null;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
-                      selectedValue: controller.city,
-                      items: getCities(controller.state),
-                      labelText: "City",
-                      onChanged: (city) {
-                        controller.city = city;
-                      },
-                    ),
-                  ),
-                ]),
+                child: CustomLayout(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomTextField(
+                          validator: requiredValidator,
+                          controller: controller.secondaryPhone,
+                          labelText: "Secondary Mobile",
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomDropDown<String?>(
+                          selectedValue: controller.state,
+                          validator: requiredValidator,
+                          items: stateItems,
+                          labelText: "State",
+                          onChanged: (state) {
+                            setState(() {
+                              controller.state = state;
+                              controller.city = null;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: isMobile(context)
+                            ? getWidth(context) * 0.80
+                            : getWidth(context) * 0.20,
+                        child: CustomDropDown<String?>(
+                          selectedValue: controller.city,
+                          items: getCities(controller.state),
+                          labelText: "City",
+                          onChanged: (city) {
+                            controller.city = city;
+                          },
+                        ),
+                      ),
+                    ]),
               ),
               const Divider(),
               Center(
                 child: CustomLayout(children: [
                   SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
+                    width: isMobile(context)
+                        ? getWidth(context) * 0.80
+                        : getWidth(context) * 0.20,
+                    child: CustomDropDown<Department?>(
                       labelText: 'Class',
                       items: controller.classItems,
                       selectedValue: controller.className,
@@ -243,8 +286,10 @@ class _TeacherFormState extends State<TeacherForm> {
                     ),
                   ),
                   SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
+                    width: isMobile(context)
+                        ? getWidth(context) * 0.80
+                        : getWidth(context) * 0.20,
+                    child: CustomDropDown<Department?>(
                       labelText: 'Section',
                       items: controller.sectionItems,
                       selectedValue: controller.section,
@@ -284,7 +329,8 @@ class _TeacherFormState extends State<TeacherForm> {
                         }
                       },
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 50),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 30.0, horizontal: 50),
                         child: Text("Submit"),
                       )),
                 ),
@@ -318,7 +364,9 @@ class CustomTextForm extends StatelessWidget {
           TextField(
             decoration: InputDecoration(
               alignLabelWithHint: true,
-              focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 2, color: getColor(context).primary)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(width: 2, color: getColor(context).primary)),
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),

@@ -1,12 +1,13 @@
 import 'package:school_app/controllers/student_controller.dart';
+import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/biodata.dart';
 import 'parent.dart';
 
 class Student extends Bio {
   Student({
     required String icNumber,
-    required this.studentClass,
-    required this.section,
+    required this.classDepartment,
+    required this.sectionDepartment,
     required String name,
     required String email,
     required Gender gender,
@@ -41,8 +42,8 @@ class Student extends Bio {
           state: state,
         );
 
-  String studentClass;
-  String section;
+  Department classDepartment;
+  Department sectionDepartment;
 
   Parent? father;
   Parent? mother;
@@ -68,7 +69,9 @@ class Student extends Bio {
         icNumber: json["ic"],
         name: json["name"],
         email: json["email"] ?? '',
-        gender: json["gender"] == null ? Gender.male : Gender.values.elementAt(json["gender"]),
+        gender: json["gender"] == null
+            ? Gender.male
+            : Gender.values.elementAt(json["gender"]),
         address: json["address"],
         addressLine1: json["addressLine1"],
         addressLine2: json["addressLine2"],
@@ -80,11 +83,12 @@ class Student extends Bio {
         state: json["state"],
         //-------------------------------------------
         father: json["father"] != null ? Parent.fromJson(json['father']) : null,
-        guardian: json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
+        guardian:
+            json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
         mother: json["mother"] != null ? Parent.fromJson(json['mother']) : null,
         //-------------------------------------------
-        studentClass: json["class"],
-        section: json["section"],
+        classDepartment: Department.fromJson(json["classDepartment"]),
+        sectionDepartment: Department.fromJson(json["sectionDepartment"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -108,8 +112,10 @@ class Student extends Bio {
         "mother": mother?.toJson(),
         "guardian": guardian?.toJson(),
         //------------
-        "class": studentClass,
-        "section": section,
+        "class": classDepartment.id,
+        "section": sectionDepartment.id,
+        "classDepartment": classDepartment.toJson(),
+        "sectionDepartment": sectionDepartment.toJson(),
         //------------
         "parents": parents,
       };

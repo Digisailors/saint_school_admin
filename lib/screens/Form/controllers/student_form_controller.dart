@@ -1,8 +1,10 @@
 import 'package:get/get_utils/get_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/controllers/class_controller.dart';
+import 'package:school_app/controllers/classlist_controller.dart';
+import 'package:school_app/controllers/department_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
+import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
 
 import '../../../models/parent.dart';
@@ -17,35 +19,37 @@ class StudentFormController with BioFormController {
   final studentClass = TextEditingController();
   final section = TextEditingController();
 
-  String? classField;
-  String? sectionField;
+  Department? classField;
+  Department? sectionField;
   final List<TextEditingController> siblings = [TextEditingController()];
 
   StudentFormController();
 
-  get classItems {
-    List<DropdownMenuItem<String?>> items = classController.classes.keys
-        .map((e) => DropdownMenuItem<String?>(
-              child: Text(e.toString()),
-              value: e.toString(),
+  List<DropdownMenuItem<Department>> get classItems {
+    List<DropdownMenuItem<Department>> items = departmentListController
+        .getClasses()
+        .map((e) => DropdownMenuItem<Department>(
+              child: Text(e.deptName),
+              value: e,
             ))
         .toList();
     items.add(const DropdownMenuItem(child: Text("None")));
     return items;
   }
 
-  List<DropdownMenuItem<String>> get sectionItems {
-    if (classField == null) {
-      return <DropdownMenuItem<String>>[];
+  List<DropdownMenuItem<Department>> get sectionItems {
+    List<DropdownMenuItem<Department>> items = [];
+    if (classField != null) {
+      departmentListController
+          .getSections(classField!.id!)
+          .map((e) => DropdownMenuItem<Department>(
+                child: Text(e.deptName),
+                value: e,
+              ))
+          .toList();
     }
-    return classController.classes[classField]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
-  }
-
-  List<DropdownMenuItem<String>> getSectionItems(String? className) {
-    if (className == null) {
-      return <DropdownMenuItem<String>>[];
-    }
-    return classController.classes[className]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
+    items.add(const DropdownMenuItem(child: Text("None")));
+    return items;
   }
 
   @override
@@ -57,13 +61,16 @@ class StudentFormController with BioFormController {
   }
 
   Future<r.Result> createUser() async {
-    var snapshot = await students.doc(icNumber.text.toUpperCase().removeAllWhitespace).get();
+    var snapshot = await students
+        .doc(icNumber.text.toUpperCase().removeAllWhitespace)
+        .get();
     if (snapshot.exists) {
       var data = snapshot.data();
       return r.Result.error("ID is taken by another student ${data!['name']}");
     }
     if (fileData != null) {
-      image = await uploadImage(fileData!, icNumber.text.toUpperCase().removeAllWhitespace);
+      image = await uploadImage(
+          fileData!, icNumber.text.toUpperCase().removeAllWhitespace);
     }
 
     var controller = StudentController(student);
@@ -79,10 +86,13 @@ class StudentFormController with BioFormController {
       image = await uploadImage(fileData!, icNumber.text);
     }
     if (nameCheck) {
-      var snapshot = await students.doc(icNumber.text.toUpperCase().removeAllWhitespace).get();
+      var snapshot = await students
+          .doc(icNumber.text.toUpperCase().removeAllWhitespace)
+          .get();
       if (snapshot.exists) {
         var data = snapshot.data();
-        return r.Result.error("ID is taken by another student ${data!['name']}");
+        return r.Result.error(
+            "ID is taken by another student ${data!['name']}");
       }
     }
     var controller = StudentController(student);
@@ -96,14 +106,14 @@ class StudentFormController with BioFormController {
         name: name.text,
         icNumber: icNumber.text.toUpperCase().removeAllWhitespace,
         email: email.text,
-        studentClass: classField!,
+        classDepartment: classField!,
         imageUrl: image,
         addressLine1: addressLine1.text,
         addressLine2: addressLine2.text,
         city: city,
         primaryPhone: primaryPhone.text,
         secondaryPhone: secondaryPhone.text,
-        section: sectionField!,
+        sectionDepartment: sectionField!,
         address: addressLine1.text,
         gender: gender,
         father: father,
@@ -118,10 +128,8 @@ class StudentFormController with BioFormController {
     controller.icNumber.text = student.icNumber;
     controller.image = student.imageUrl;
     controller.state = student.state;
-    controller.studentClass.text = student.studentClass;
-    controller.section.text = student.section;
-    controller.classField = student.studentClass;
-    controller.sectionField = student.section;
+    controller.classField = student.classDepartment;
+    controller.sectionField = student.sectionDepartment;
     controller.email.text = student.email ?? '';
     controller.addressLine1.text = student.addressLine1 ?? '';
     controller.addressLine2.text = student.addressLine2 ?? '';

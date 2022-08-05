@@ -3,10 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:school_app/controllers/department_controller.dart';
+import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/student.dart';
 import 'package:school_app/screens/Form/student_form.dart';
 import 'package:school_app/screens/list/source/bio_source.dart';
+import 'package:school_app/screens/list/source/student_source.dart';
 
 import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
@@ -23,20 +26,20 @@ class StudentList extends StatefulWidget {
 
 class _StudentListState extends State<StudentList> {
   StudentFormController get controller => session.formcontroller;
-  String? className;
+  Department? classFilter;
+  Department? sectionFilter;
   String? search;
-  String? section;
 
   Stream<List<Student>> getStream() {
     Query<Map<String, dynamic>> query = firestore.collection('students');
     if (search != null) {
       query = query.where('search', arrayContains: search);
     }
-    if (className != null) {
-      query = query.where('class', isEqualTo: className);
+    if (classFilter != null) {
+      query = query.where('class', isEqualTo: classFilter?.id);
     }
-    if (section != null) {
-      query = query.where('section', isEqualTo: section);
+    if (sectionFilter != null) {
+      query = query.where('section', isEqualTo: sectionFilter?.id);
     }
 
     return query.snapshots().map((event) => event.docs.map((e) {
@@ -55,7 +58,9 @@ class _StudentListState extends State<StudentList> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  width: isMobile(context) ? getWidth(context) * 2 : getWidth(context) * 0.80,
+                  width: isMobile(context)
+                      ? getWidth(context) * 2
+                      : getWidth(context) * 0.80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -65,7 +70,9 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.08,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context)
+                                ? getWidth(context) * 0.40
+                                : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
                                 onChanged: ((value) => search = value),
@@ -83,38 +90,50 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.053,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
-                            child: DropdownButtonFormField<String?>(
-                              value: className,
+                            width: isMobile(context)
+                                ? getWidth(context) * 0.40
+                                : getWidth(context) * 0.20,
+                            child: DropdownButtonFormField<Department?>(
+                              value: classFilter,
                               decoration: const InputDecoration(
                                 labelText: 'Class',
                                 border: OutlineInputBorder(),
                               ),
-                              items: controller.classItems,
+                              items: departmentListController.getClassItems(),
                               onChanged: (text) {
-                                setState(() {
-                                  className = text;
-                                  section = null;
-                                });
+                                print(text?.toJson());
+                                try {
+                                  setState(() {
+                                    classFilter = text;
+                                    sectionFilter = null;
+                                  });
+                                } catch (e) {
+                                  classFilter = null;
+                                }
                               },
                             )),
                       ),
-                      SizedBox(
-                        height: getHeight(context) * 0.053,
-                        width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
-                        child: DropdownButtonFormField<String?>(
-                          value: section,
-                          decoration: const InputDecoration(
-                            labelText: 'Section',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: controller.getSectionItems(className),
-                          onChanged: (text) {
-                            setState(() {
-                              section = text;
-                            });
-                          },
-                        ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: SizedBox(
+                            height: getHeight(context) * 0.053,
+                            width: isMobile(context)
+                                ? getWidth(context) * 0.40
+                                : getWidth(context) * 0.20,
+                            child: DropdownButtonFormField<Department>(
+                              value: sectionFilter,
+                              decoration: const InputDecoration(
+                                labelText: 'Section',
+                                border: OutlineInputBorder(),
+                              ),
+                              items: departmentListController
+                                  .getSectionsItems(classFilter?.id),
+                              onChanged: (text) {
+                                setState(() {
+                                  sectionFilter = text;
+                                });
+                              },
+                            )),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -131,7 +150,8 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.all(4.0),
                         child: ElevatedButton(
                             onPressed: () {
-                              Get.toNamed(StudentForm.routeName, arguments: null);
+                              Get.toNamed(StudentForm.routeName,
+                                  arguments: null);
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -145,9 +165,10 @@ class _StudentListState extends State<StudentList> {
               StreamBuilder<List<Student>>(
                   stream: getStream(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.active &&
+                        snapshot.hasData) {
                       var list = snapshot.data;
-                      var source = BioSource(list!, context);
+                      var source = StudentSource(list!, context);
                       return ConstrainedBox(
                         constraints: BoxConstraints(
                           minWidth: getWidth(context) * 0.90,
@@ -157,7 +178,9 @@ class _StudentListState extends State<StudentList> {
                           dragStartBehavior: DragStartBehavior.start,
                           columns: BioSource.getCoumns(EntityType.student),
                           source: source,
-                          rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
+                          rowsPerPage:
+                              (getHeight(context) ~/ kMinInteractiveDimension) -
+                                  5,
                         ),
                       );
                     }

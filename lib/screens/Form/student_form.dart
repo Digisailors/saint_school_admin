@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/controllers/attendance_controller.dart';
+import 'package:school_app/controllers/department_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
+import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/biodata.dart';
 import 'package:school_app/models/parent.dart';
 import 'package:school_app/models/response.dart';
@@ -167,11 +168,11 @@ class _StudentFormState extends State<StudentForm> {
                         ),
                         SizedBox(
                           width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                          child: CustomDropDown<String?>(
+                          child: CustomDropDown<Department?>(
                             labelText: 'Class',
-                            items: controller.classItems,
+                            items: departmentListController.getClassItems(),
                             validator: (val) {
-                              if ((val ?? '').isEmpty) {
+                              if (val == null) {
                                 return 'Please select a class';
                               }
                               return null;
@@ -187,11 +188,11 @@ class _StudentFormState extends State<StudentForm> {
                         ),
                         SizedBox(
                           width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                          child: CustomDropDown<String?>(
+                          child: CustomDropDown<Department?>(
                             labelText: 'Section',
-                            items: controller.sectionItems,
+                            items: departmentListController.getSectionsItems(controller.classField?.id),
                             validator: (val) {
-                              if ((val ?? '').isEmpty) {
+                              if (val == null) {
                                 return 'Please select a Section';
                               }
                               return null;

@@ -3,7 +3,7 @@ import 'package:school_app/constants/constant.dart';
 import 'package:school_app/models/admin.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
 
-import '../../../controllers/class_controller.dart';
+import '../../../controllers/classlist_controller.dart';
 
 class AdminFormController with BioFormController {
   String? className;
@@ -19,20 +19,6 @@ class AdminFormController with BioFormController {
   }
 
   AdminFormController();
-
-  get classItems => classController.classes.keys
-      .map((e) => DropdownMenuItem(
-            child: Text(e.toString()),
-            value: e.toString(),
-          ))
-      .toList();
-
-  List<DropdownMenuItem<String>> get sectionItems {
-    if (className == null) {
-      return <DropdownMenuItem<String>>[];
-    }
-    return classController.classes[className]!.map((e) => DropdownMenuItem(child: Text(e.toString()), value: e.toString())).toList();
-  }
 
   factory AdminFormController.fromAdmin(Admin admin) {
     var controller = AdminFormController();

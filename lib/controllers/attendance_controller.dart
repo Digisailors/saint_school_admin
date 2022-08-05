@@ -4,24 +4,34 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:school_app/constants/constant.dart';
 
 import '../models/biodata.dart';
 
-const USERNAME = 'ramesh';
-const PASSWORD = 'ramesh1040@';
-const HOST = 'http://time.xmzkteco.com:8097';
+const USERNAME = 'govin';
+const PASSWORD = 'Govin1040@';
+const HOST = 'http://waxton.dvrdns.org:80';
 
 class AttendanceController extends GetxController {
   static AttendanceController instance = Get.find();
   @override
   void onInit() {
-    getAuth();
+    // getAuth();
+    loadToken();
     super.onInit();
   }
 
   static String token = '';
 
   static sendRequest() {}
+
+  static Future<void> loadToken() {
+    var calable = functions.httpsCallable('loadToken');
+    return calable.call().then((value) {
+      token = value.data;
+      print(token);
+    });
+  }
 
   static Future<void> getAuth() async {
     var url = '$HOST/jwt-api-token-auth/';
@@ -31,7 +41,8 @@ class AttendanceController extends GetxController {
       "username": USERNAME,
       "password": PASSWORD,
     };
-    var response = await http.post(uri, headers: headers, body: jsonEncode(body));
+    var response =
+        await http.post(uri, headers: headers, body: jsonEncode(body));
     var responseBody = jsonDecode(response.body);
     token = responseBody['token'];
     return;
@@ -61,7 +72,8 @@ class AttendanceController extends GetxController {
 
   loadTodayAttendance() {}
 
-  getTransactionReport(DateTime fromDate, DateTime toDate, EntityType entityType) {
+  getTransactionReport(
+      DateTime fromDate, DateTime toDate, EntityType entityType) {
     // var url = '$HOST/att/api/transactionReport/';
     var params = {
       'start_date': fromDate.toString().substring(0, 10),
@@ -74,7 +86,9 @@ class AttendanceController extends GetxController {
       'Content-Type': 'application/json',
       'Authorization': AttendanceController.token,
     };
-    http.get(uri, headers: headers).then((value) => print(jsonDecode(value.body)));
+    http
+        .get(uri, headers: headers)
+        .then((value) => print(jsonDecode(value.body)));
   }
 }
 
@@ -83,7 +97,8 @@ extension Raptor on Uri {
         'Content-Type': 'application/json',
         'Authorization': AttendanceController.token,
       };
-  Future<http.Response> post({Map<String, dynamic>? body, Map<String, String>? additionalHeaders}) {
+  Future<http.Response> post(
+      {Map<String, dynamic>? body, Map<String, String>? additionalHeaders}) {
     if (additionalHeaders != null) {
       headers.addAll(additionalHeaders);
     }

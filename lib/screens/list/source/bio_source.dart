@@ -30,7 +30,6 @@ class BioSource extends DataTableSource {
 
     final CRUD object = getEntity(entity, index);
     int sNo = index + 1;
-
     return DataRow.byIndex(index: index, cells: [
       DataCell(Text(sNo.toString())),
       DataCell((entity.imageUrl ?? '').isEmpty
@@ -44,7 +43,11 @@ class BioSource extends DataTableSource {
       DataCell(Text(entity.icNumber)),
       DataCell(Text(entity.email ?? '')),
       DataCell(Text(entity.gender.name.toString().toUpperCase())),
-      DataCell(Text((entity.addressLine1 ?? '') + " ," + (entity.addressLine2 ?? '') + " ," + (entity.city ?? ''))),
+      DataCell(Text((entity.addressLine1 ?? '') +
+          " ," +
+          (entity.addressLine2 ?? '') +
+          " ," +
+          (entity.city ?? ''))),
       DataCell(IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () {
@@ -88,11 +91,17 @@ class BioSource extends DataTableSource {
   getEntity(Bio entity, int index) {
     switch (entity.entityType) {
       case EntityType.parent:
-        return ParentController.parentsList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+        return ParentController.parentsList
+            .firstWhere((p0) => p0.icNumber == entity.icNumber)
+            .controller;
       case EntityType.teacher:
-        return TeacherController.teacherList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+        return TeacherController.teacherList
+            .firstWhere((p0) => p0.icNumber == entity.icNumber)
+            .controller;
       case EntityType.student:
-        return StudentController.studentList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+        return StudentController.studentList
+            .firstWhere((p0) => p0.icNumber == entity.icNumber)
+            .controller;
       case EntityType.admin:
         return AdminController((entities[index] as Admin));
       default:

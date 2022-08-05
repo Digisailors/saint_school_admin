@@ -37,7 +37,8 @@ class StudentTile extends StatelessWidget {
                         radius: MediaQuery.of(context).size.width * 0.15,
                         backgroundImage: (student.imageUrl ?? '').isNotEmpty
                             ? NetworkImage(student.imageUrl!)
-                            : NetworkImage('https://i.pravatar.cc/3${student.icNumber}'),
+                            : NetworkImage(
+                                'https://i.pravatar.cc/3${student.icNumber}'),
                       ),
                     ),
                   )),
@@ -68,8 +69,14 @@ class StudentTile extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 16.0),
                               child: Text(
-                                "CLASS : " + student.studentClass + " - " + student.section,
-                                style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.grey),
+                                "CLASS : " +
+                                    student.classDepartment.deptName +
+                                    " - " +
+                                    student.sectionDepartment.deptName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(color: Colors.grey),
                               ),
                             ),
                           ],

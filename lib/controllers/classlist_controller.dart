@@ -5,17 +5,19 @@ import 'package:school_app/models/response.dart' as r;
 
 import '../constants/constant.dart';
 
-final CollectionReference<Map<String, dynamic>> dashboard = firestore.collection('dashboard');
-final DocumentReference<Map<String, dynamic>> classRef = firestore.collection('dashboard').doc('class');
+final CollectionReference<Map<String, dynamic>> dashboard =
+    firestore.collection('dashboard');
+final DocumentReference<Map<String, dynamic>> classRef =
+    firestore.collection('dashboard').doc('class');
 
-class ClassController extends GetxController {
+class ClassListController extends GetxController {
   @override
   void onInit() {
     listenClass();
     super.onInit();
   }
 
-  static ClassController instance = Get.find();
+  static ClassListController instance = Get.find();
 
   Map<String, List<String>> classes = {};
 
@@ -37,14 +39,18 @@ class ClassController extends GetxController {
 
   addClass() {
     classes[name.text.removeAllWhitespace.toUpperCase()] = <String>[];
-    return classRef.update(classes).then((value) => r.Result.success("Class Submitted"));
+    return classRef
+        .update(classes)
+        .then((value) => r.Result.success("Class Submitted"));
   }
 
   addSection(String className, String section) {
     classes[className] = classes[className] ?? [];
     classes[className]!.add(section.toUpperCase());
-    return classRef.update(classes).then((value) => r.Result.success("Section added"));
+    return classRef
+        .update(classes)
+        .then((value) => r.Result.success("Section added"));
   }
 }
 
-var classController = ClassController.instance;
+// var classController = ClassListController.instance;
