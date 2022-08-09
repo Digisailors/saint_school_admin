@@ -18,9 +18,7 @@ class Parent extends Bio {
     String? primaryPhone,
     String? secondaryPhone,
     String? imageUrl,
-    required String? empCode,
   }) : super(
-          empCode: empCode,
           name: name,
           lastName: lastName,
           entityType: EntityType.parent,
@@ -62,7 +60,6 @@ class Parent extends Bio {
   }
 
   factory Parent.fromJson(Map<String, dynamic> json) => Parent(
-        empCode: json['empCode'],
         gender: Gender.values.elementAt(json["gender"]),
         address: json["address"] ?? '',
         uid: json["uid"] ?? '',

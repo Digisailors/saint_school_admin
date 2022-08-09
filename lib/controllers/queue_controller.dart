@@ -1,12 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:collection';
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/models/queue.dart';
-import 'package:text_to_speech/text_to_speech.dart';
 
 class QueueController extends GetxController {
   static QueueController instance = Get.find();
@@ -81,7 +83,11 @@ class QueueController extends GetxController {
         // tts.speak(queuedStudentsList[pivot].name);
         try {
           flutterTts.speak(queuedStudentsList[pivot].name);
-        } catch (e) {}
+        } catch (e) {
+          if (kDebugMode) {
+            print(e.toString());
+          }
+        }
       }
     });
   }

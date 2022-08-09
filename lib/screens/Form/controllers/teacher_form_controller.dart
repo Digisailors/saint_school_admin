@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/teacher.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
-import '../../../controllers/department_controller.dart';
+import '../../../controllers/Attendance API/department_controller.dart';
 
 class TeacherFormController with BioFormController {
   Department? className;
@@ -37,17 +37,14 @@ class TeacherFormController with BioFormController {
     }
     return departmentListController
         .getSections(className!.id!)
-        .map((e) =>
-            DropdownMenuItem<Department>(child: Text(e.toString()), value: e))
+        .map((e) => DropdownMenuItem<Department>(child: Text(e.toString()), value: e))
         .toList();
   }
 
   factory TeacherFormController.fromTeacher(Teacher teacher) {
     var controller = TeacherFormController();
-    controller.className =
-        departmentListController.findDepartment(className: teacher.className!);
-    controller.section = departmentListController.findDepartment(
-        className: teacher.className!, sectionName: teacher.section);
+    controller.className = departmentListController.findDepartment(className: teacher.className!);
+    controller.section = departmentListController.findDepartment(className: teacher.className!, sectionName: teacher.section);
     controller.uid = teacher.uid;
     controller.email.text = teacher.email ?? '';
     controller.gender = teacher.gender;

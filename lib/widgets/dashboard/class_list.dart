@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/controllers/department_controller.dart';
+import 'package:school_app/controllers/Attendance%20API/department_controller.dart';
 import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/response.dart';
 

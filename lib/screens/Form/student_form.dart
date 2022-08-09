@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/controllers/department_controller.dart';
+import 'package:school_app/controllers/Attendance%20API/department_controller.dart';
+import 'package:school_app/controllers/attendance_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/biodata.dart';
@@ -92,7 +93,22 @@ class _StudentFormState extends State<StudentForm> {
           actions: [
             if (widget.student != null)
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  var callable = functions.httpsCallable('getTransaction');
+
+                  var data = {
+                    'emp_code': 1,
+                    'start_time': DateTime(2022, DateTime.august, 01).toString().substring(0, 19),
+                    'end_time': DateTime.now().toString().substring(0, 19),
+                    'token': AttendanceController.token
+                  };
+                  try {
+                    var response = await callable.call(data);
+                    print(response.data);
+                  } catch (e) {
+                    print(e.toString());
+                  }
+                },
                 icon: const Icon(Icons.calendar_month),
               ),
           ],
@@ -215,6 +231,7 @@ class _StudentFormState extends State<StudentForm> {
                         SizedBox(
                           width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                           child: CustomTextField(
+                            enabled: widget.student == null,
                             validator: (val) {
                               if ((val ?? '').isEmpty) {
                                 return 'THis is a required field';
@@ -227,14 +244,6 @@ class _StudentFormState extends State<StudentForm> {
                             controller: controller.icNumber,
                             labelText: 'IC Number',
                             hintText: 'Enter IC Number',
-                          ),
-                        ),
-                        SizedBox(
-                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                          child: CustomTextField(
-                            controller: controller.empCode,
-                            labelText: 'Attendance ID',
-                            hintText: 'Enter ID on the attendance system',
                           ),
                         ),
                       ],

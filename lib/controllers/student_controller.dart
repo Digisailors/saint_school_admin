@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:school_app/controllers/Attendance%20API/employee_controller.dart';
 import 'package:school_app/controllers/crud_controller.dart';
 import 'package:school_app/models/parent.dart';
 import 'package:school_app/models/student.dart';
@@ -54,7 +56,15 @@ class StudentController extends GetxController implements CRUD {
       student.guardian = guardian;
       firestore.collection('parents').doc(guardian.icNumber).set(guardian.toJson());
     }
-
+    try {
+      var employee = await EmployeeController.addEmployee(student.employee);
+      student.empId = employee.id;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return Result.error("Could not sync attendance. Contact Admin");
+    }
     return firestore
         .collection('students')
         .doc(student.icNumber)
@@ -88,6 +98,14 @@ class StudentController extends GetxController implements CRUD {
       }
       student.guardian = guardian;
       firestore.collection('parents').doc(guardian.icNumber).set(guardian.toJson());
+    }
+
+    try {
+      var employee = await EmployeeController.updateEmployee(student.employee);
+      student.empId = employee.id;
+    } catch (e) {
+      print(e.toString());
+      return Result.error("Could not sync attendance. Contact Admin");
     }
 
     return firestore

@@ -23,7 +23,6 @@ class ParentFormController with BioFormController {
   Parent? get parent => icNumber.text.isEmpty
       ? null
       : Parent(
-          empCode: empCode.text,
           name: name.text,
           icNumber: icNumber.text.toUpperCase().removeAllWhitespace,
           email: email.text,

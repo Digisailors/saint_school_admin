@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, avoid_print
 
 import 'dart:convert';
 
@@ -41,8 +41,7 @@ class AttendanceController extends GetxController {
       "username": USERNAME,
       "password": PASSWORD,
     };
-    var response =
-        await http.post(uri, headers: headers, body: jsonEncode(body));
+    var response = await http.post(uri, headers: headers, body: jsonEncode(body));
     var responseBody = jsonDecode(response.body);
     token = responseBody['token'];
     return;
@@ -72,8 +71,7 @@ class AttendanceController extends GetxController {
 
   loadTodayAttendance() {}
 
-  getTransactionReport(
-      DateTime fromDate, DateTime toDate, EntityType entityType) {
+  getTransactionReport(DateTime fromDate, DateTime toDate, EntityType entityType) {
     // var url = '$HOST/att/api/transactionReport/';
     var params = {
       'start_date': fromDate.toString().substring(0, 10),
@@ -86,9 +84,7 @@ class AttendanceController extends GetxController {
       'Content-Type': 'application/json',
       'Authorization': AttendanceController.token,
     };
-    http
-        .get(uri, headers: headers)
-        .then((value) => print(jsonDecode(value.body)));
+    http.get(uri, headers: headers).then((value) => print(jsonDecode(value.body)));
   }
 }
 
@@ -97,8 +93,7 @@ extension Raptor on Uri {
         'Content-Type': 'application/json',
         'Authorization': AttendanceController.token,
       };
-  Future<http.Response> post(
-      {Map<String, dynamic>? body, Map<String, String>? additionalHeaders}) {
+  Future<http.Response> post({Map<String, dynamic>? body, Map<String, String>? additionalHeaders}) {
     if (additionalHeaders != null) {
       headers.addAll(additionalHeaders);
     }

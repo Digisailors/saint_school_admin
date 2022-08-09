@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
@@ -21,9 +22,7 @@ class DepartmentController extends GetxController {
   }
 
   List<DropdownMenuItem<Department>> getClassItems() {
-    var items = getClasses()
-        .map((e) => DropdownMenuItem(child: Text(e.deptName), value: e))
-        .toList();
+    var items = getClasses().map((e) => DropdownMenuItem(child: Text(e.deptName), value: e)).toList();
     items.add(const DropdownMenuItem(child: Text("None")));
     return items;
   }
@@ -31,9 +30,7 @@ class DepartmentController extends GetxController {
   List<DropdownMenuItem<Department>> getSectionsItems(int? id) {
     List<DropdownMenuItem<Department>> items = [];
     if (id != null) {
-      items = getSections(id)
-          .map((e) => DropdownMenuItem(child: Text(e.deptName), value: e))
-          .toList();
+      items = getSections(id).map((e) => DropdownMenuItem(child: Text(e.deptName), value: e)).toList();
       print(items.map((e) => e.value?.id));
     }
     items.add(const DropdownMenuItem(child: Text("None")));
@@ -81,8 +78,7 @@ class DepartmentController extends GetxController {
     });
   }
 
-  Future<Department> updateDepartment(
-      int id, String deptName, String deptCode) async {
+  Future<Department> updateDepartment(int id, String deptName, String deptCode) async {
     var callable = functions.httpsCallable('updateDepartment');
     var data = {
       "dept_code": deptCode,
@@ -95,15 +91,11 @@ class DepartmentController extends GetxController {
 
   Department? findDepartment({required String className, String? sectionName}) {
     if (sectionName == null) {
-      return departments
-          .firstWhereOrNull((element) => element.deptName == className);
+      return departments.firstWhereOrNull((element) => element.deptName == className);
     } else {
-      int? parentid = departments
-          .firstWhereOrNull((element) => element.deptName == className)
-          ?.id;
+      int? parentid = departments.firstWhereOrNull((element) => element.deptName == className)?.id;
       if (parentid != null) {
-        return departments.firstWhereOrNull((element) =>
-            element.parentDept == parentid && element.deptName == sectionName);
+        return departments.firstWhereOrNull((element) => element.parentDept == parentid && element.deptName == sectionName);
       }
     }
     return null;

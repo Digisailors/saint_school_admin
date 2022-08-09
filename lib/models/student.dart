@@ -1,5 +1,6 @@
 import 'package:school_app/controllers/student_controller.dart';
 import 'package:school_app/models/Attendance/department.dart';
+import 'package:school_app/models/Attendance/employee.dart';
 import 'package:school_app/models/biodata.dart';
 import 'parent.dart';
 
@@ -23,9 +24,8 @@ class Student extends Bio {
     String? primaryPhone,
     String? secondaryPhone,
     String? state,
-    String? empCode,
+    this.empId,
   }) : super(
-          empCode: empCode,
           name: name,
           email: email,
           entityType: EntityType.student,
@@ -48,6 +48,11 @@ class Student extends Bio {
   Parent? father;
   Parent? mother;
   Parent? guardian;
+  int? empId;
+
+  static Map<Gender, String> genderCode = {Gender.male: 'M', Gender.female: 'F', Gender.unspecified: 'S'};
+
+  Employee get employee => Employee(empCode: icNumber, department: sectionDepartment.id!, gender: genderCode[gender]!, firstName: name);
 
   List<String> get parents {
     List<String> result = [];
@@ -69,9 +74,7 @@ class Student extends Bio {
         icNumber: json["ic"],
         name: json["name"],
         email: json["email"] ?? '',
-        gender: json["gender"] == null
-            ? Gender.male
-            : Gender.values.elementAt(json["gender"]),
+        gender: json["gender"] == null ? Gender.male : Gender.values.elementAt(json["gender"]),
         address: json["address"],
         addressLine1: json["addressLine1"],
         addressLine2: json["addressLine2"],
@@ -81,10 +84,10 @@ class Student extends Bio {
         primaryPhone: json["primaryPhone"],
         secondaryPhone: json["secondaryPhone"],
         state: json["state"],
+        empId: json['empId'],
         //-------------------------------------------
         father: json["father"] != null ? Parent.fromJson(json['father']) : null,
-        guardian:
-            json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
+        guardian: json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
         mother: json["mother"] != null ? Parent.fromJson(json['mother']) : null,
         //-------------------------------------------
         classDepartment: Department.fromJson(json["classDepartment"]),
@@ -107,6 +110,7 @@ class Student extends Bio {
         'secondaryPhone': secondaryPhone,
         "state": state,
         "search": search,
+        "empId": empId,
         //------------
         "father": father?.toJson(),
         "mother": mother?.toJson(),

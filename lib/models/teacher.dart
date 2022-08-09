@@ -21,8 +21,8 @@ class Teacher extends Bio {
     String? state,
     required String? empCode,
     this.uid,
+    this.empId,
   }) : super(
-          empCode: empCode,
           email: email,
           entityType: EntityType.teacher,
           icNumber: icNumber,
@@ -42,6 +42,7 @@ class Teacher extends Bio {
   String? className;
   String? section;
   String? uid;
+  int? empId;
 
   TeacherController get controller => TeacherController(this);
 

@@ -4,22 +4,24 @@
 
 import 'dart:convert';
 
-Transaction transactionFromJson(String str) => Transaction.fromJson(json.decode(str));
+import 'package:school_app/screens/list/student_list.dart';
 
-String transactionToJson(Transaction data) => json.encode(data.toJson());
+TransactionLog transactionFromJson(String str) => TransactionLog.fromJson(json.decode(str));
 
-class Transaction {
-  Transaction({
+String transactionToJson(TransactionLog data) => json.encode(data.toJson());
+
+class TransactionLog {
+  TransactionLog({
     required this.id,
     required this.empCode,
     required this.firstName,
     this.lastName,
     required this.department,
-    required this.position,
+    this.position,
     required this.punchTime,
     required this.punchState,
-    required this.punchStateDisplay,
-    required this.verifyType,
+    this.punchStateDisplay,
+    this.verifyType,
     this.verifyTypeDisplay,
     this.workCode,
     this.gpsLocation,
@@ -35,11 +37,11 @@ class Transaction {
   String firstName;
   String? lastName;
   String department;
-  String position;
+  String? position;
   DateTime punchTime;
   String punchState;
-  String punchStateDisplay;
-  int verifyType;
+  String? punchStateDisplay;
+  int? verifyType;
   String? verifyTypeDisplay;
   String? workCode;
   String? gpsLocation;
@@ -49,7 +51,31 @@ class Transaction {
   dynamic terminalAlias;
   DateTime uploadTime;
 
-  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
+  CheckInStatus? get checkInStatus {
+    if (punchState == '0') {
+      var duration = punchTime.difference(DateTime(punchTime.year, punchTime.month, punchTime.day, 9, 0));
+      if (duration.inMinutes < 0) {
+        return CheckInStatus.onTime;
+      } else {
+        return CheckInStatus.late;
+      }
+    }
+    return null;
+  }
+
+  CheckOutStatus? get checkOutStatus {
+    if (punchState == '1') {
+      var duration = punchTime.difference(DateTime(punchTime.year, punchTime.month, punchTime.day, 4, 0));
+      if (duration.inMinutes > 0) {
+        return CheckOutStatus.onTime;
+      } else {
+        return CheckOutStatus.early;
+      }
+    }
+    return null;
+  }
+
+  factory TransactionLog.fromJson(Map<String, dynamic> json) => TransactionLog(
         id: json["id"],
         empCode: json["emp_code"],
         firstName: json["first_name"],
