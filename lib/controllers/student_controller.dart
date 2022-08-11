@@ -104,7 +104,6 @@ class StudentController extends GetxController implements CRUD {
       var employee = await EmployeeController.updateEmployee(student.employee);
       student.empId = employee.id;
     } catch (e) {
-      print(e.toString());
       return Result.error("Could not sync attendance. Contact Admin");
     }
 

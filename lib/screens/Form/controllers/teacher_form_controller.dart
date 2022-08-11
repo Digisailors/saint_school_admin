@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/controllers/classlist_controller.dart';
-import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/teacher.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
-import '../../../controllers/Attendance API/department_controller.dart';
 
 class TeacherFormController with BioFormController {
   String? className;

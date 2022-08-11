@@ -9,11 +9,6 @@ import 'package:school_app/models/Attendance/department.dart';
 class DepartmentController extends GetxController {
   static DepartmentController instance = Get.find();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   List<Department> departments = [];
 
   List<Department> getClasses() {

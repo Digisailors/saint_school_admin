@@ -30,53 +30,52 @@ class BioSource extends DataTableSource {
 
     final CRUD object = getEntity(entity, index);
     int sNo = index + 1;
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(Text(sNo.toString())),
-      DataCell((entity.imageUrl ?? '').isEmpty
-          ? const CircleAvatar(
-              child: Text("IMG"),
-            )
-          : CircleAvatar(
-              backgroundImage: NetworkImage(entity.imageUrl!),
-            )),
-      DataCell(Text(entity.name)),
-      DataCell(Text(entity.icNumber)),
-      DataCell(Text(entity.email ?? '')),
-      DataCell(Text(entity.gender.name.toString().toUpperCase())),
-      DataCell(Text((entity.addressLine1 ?? '') +
-          " ," +
-          (entity.addressLine2 ?? '') +
-          " ," +
-          (entity.city ?? ''))),
-      DataCell(IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () {
-          object.delete();
-        },
-      )),
-      DataCell(IconButton(
-          onPressed: () {
-            switch (entity.entityType) {
-              case EntityType.student:
-                Student student = entities[index];
-                Get.to(() => StudentForm(student: student));
-                break;
-              case EntityType.teacher:
-                Teacher teacher = entities[index];
-                Get.to(() => TeacherForm(teacher: teacher));
-                break;
-              case EntityType.parent:
-                Parent parent = entities[index];
-                Get.to(() => ParentForm(parent: parent));
-                break;
-              case EntityType.admin:
-                Admin admin = entities[index];
-                Get.to(() => AdminForm(admin: admin));
-                break;
-            }
-          },
-          icon: const Icon(Icons.edit))),
-    ]);
+    return DataRow.byIndex(
+        index: index,
+        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : Color.fromARGB(255, 233, 232, 232)),
+        cells: [
+          DataCell(Text(sNo.toString())),
+          DataCell((entity.imageUrl ?? '').isEmpty
+              ? const CircleAvatar(
+                  child: Text("IMG"),
+                )
+              : CircleAvatar(
+                  backgroundImage: NetworkImage(entity.imageUrl!),
+                )),
+          DataCell(Text(entity.name)),
+          DataCell(Text(entity.icNumber)),
+          DataCell(Text(entity.email ?? '')),
+          DataCell(Text(entity.gender.name.toString().toUpperCase())),
+          DataCell(Text((entity.addressLine1 ?? '') + " ," + (entity.addressLine2 ?? '') + " ," + (entity.city ?? ''))),
+          DataCell(IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              object.delete();
+            },
+          )),
+          DataCell(IconButton(
+              onPressed: () {
+                switch (entity.entityType) {
+                  case EntityType.student:
+                    Student student = entities[index];
+                    Get.to(() => StudentForm(student: student));
+                    break;
+                  case EntityType.teacher:
+                    Teacher teacher = entities[index];
+                    Get.to(() => TeacherForm(teacher: teacher));
+                    break;
+                  case EntityType.parent:
+                    Parent parent = entities[index];
+                    Get.to(() => ParentForm(parent: parent));
+                    break;
+                  case EntityType.admin:
+                    Admin admin = entities[index];
+                    Get.to(() => AdminForm(admin: admin));
+                    break;
+                }
+              },
+              icon: const Icon(Icons.edit))),
+        ]);
   }
 
   @override
@@ -91,17 +90,11 @@ class BioSource extends DataTableSource {
   getEntity(Bio entity, int index) {
     switch (entity.entityType) {
       case EntityType.parent:
-        return ParentController.parentsList
-            .firstWhere((p0) => p0.icNumber == entity.icNumber)
-            .controller;
+        return ParentController.parentsList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
       case EntityType.teacher:
-        return TeacherController.teacherList
-            .firstWhere((p0) => p0.icNumber == entity.icNumber)
-            .controller;
+        return TeacherController.teacherList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
       case EntityType.student:
-        return StudentController.studentList
-            .firstWhere((p0) => p0.icNumber == entity.icNumber)
-            .controller;
+        return StudentController.studentList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
       case EntityType.admin:
         return AdminController((entities[index] as Admin));
       default:

@@ -31,42 +31,51 @@ class PostSource extends DataTableSource {
     if (index >= postlist.length) ;
     int sNo = index + 1;
     Post post = postlist[index];
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(Text(sNo.toString())),
-      DataCell(SizedBox(width: 300, child: Text(post.title))),
-      DataCell(SizedBox(width: 600, child: Text(post.content))),
-      DataCell(Text(post.audience.toString().split('.').last.toUpperCase())),
-      DataCell(Text(post.date.toIso8601String())),
-      DataCell(IconButton(
-        icon: const Icon(Icons.visibility),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  child: PostForm(post: post),
-                );
-              });
-        },
-      )),
-      DataCell(IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () {
-          var future = firestore
-              .collection('posts')
-              .doc(post.docId)
-              .delete()
-              .then((value) => Result.success("Deleted Successfully"))
-              .onError((error, stackTrace) => Result.error(error.toString()));
-          showFutureCustomDialog(
-              context: context,
-              future: future,
-              onTapOk: () {
-                Navigator.of(context).pop();
-              });
-        },
-      ))
-    ]);
+    return DataRow.byIndex(
+        index: index,
+        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : Color.fromARGB(255, 233, 232, 232)),
+        cells: [
+          DataCell(Text(sNo.toString())),
+          DataCell(SizedBox(width: 300, child: Text(post.title))),
+          DataCell(SizedBox(
+              width: 600,
+              child: Text(
+                post.content,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ))),
+          DataCell(Text(post.audience.toString().split('.').last.toUpperCase())),
+          DataCell(Text(post.date.toIso8601String())),
+          DataCell(IconButton(
+            icon: const Icon(Icons.visibility),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: PostForm(post: post),
+                    );
+                  });
+            },
+          )),
+          DataCell(IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              var future = firestore
+                  .collection('posts')
+                  .doc(post.docId)
+                  .delete()
+                  .then((value) => Result.success("Deleted Successfully"))
+                  .onError((error, stackTrace) => Result.error(error.toString()));
+              showFutureCustomDialog(
+                  context: context,
+                  future: future,
+                  onTapOk: () {
+                    Navigator.of(context).pop();
+                  });
+            },
+          ))
+        ]);
   }
 
   @override

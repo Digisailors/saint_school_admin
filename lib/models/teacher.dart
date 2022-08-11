@@ -1,5 +1,4 @@
 import 'package:school_app/controllers/teacher_controller.dart';
-import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/Attendance/employee.dart';
 
 import 'biodata.dart';

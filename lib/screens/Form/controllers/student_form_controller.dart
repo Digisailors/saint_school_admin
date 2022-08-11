@@ -2,9 +2,7 @@ import 'package:get/get_utils/get_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
 import 'package:school_app/controllers/classlist_controller.dart';
-import 'package:school_app/controllers/Attendance%20API/department_controller.dart';
 import 'package:school_app/controllers/student_controller.dart';
-import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
 
 import '../../../models/parent.dart';

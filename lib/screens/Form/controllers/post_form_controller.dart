@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,7 +71,6 @@ class PostFormController {
   }
 
   Future<void> filePicker() async {
-    var _tempFiles;
     FilePickerResult? temp = await FilePicker.platform.pickFiles(allowMultiple: true);
     platformFiles.addAll((temp?.files) ?? []);
     return;

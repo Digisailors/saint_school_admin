@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/post_controller.dart';
-import 'package:school_app/controllers/session_controller.dart';
 import 'package:school_app/screens/Form/Widgets/desktop_post_form.dart';
 import 'package:school_app/screens/Form/controllers/post_form_controller.dart';
 
@@ -55,7 +53,6 @@ class _PostFormState extends State<PostForm> {
         ),
       ),
       body: LayoutBuilder(builder: (context, constraints) {
-        print(constraints.maxWidth);
         if (constraints.maxWidth > 1050) {
           // session.showSideBar = false;
           return DesktopPostForm(

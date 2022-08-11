@@ -31,7 +31,7 @@ class _PostListState extends State<PostList> {
                 TableRow(
                   children: [
                     PaginatedDataTable(
-                      dataRowHeight: kMinInteractiveDimension * 2,
+                      dataRowHeight: kMinInteractiveDimension * 1.5,
                       header: const Text("Announcements"),
                       actions: [
                         ElevatedButton(

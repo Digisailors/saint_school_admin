@@ -22,54 +22,57 @@ class AppointmentSource extends DataTableSource {
     // final CRUD object = getEntity(entity);
     int sNo = index + 1;
 
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(Text(sNo.toString())),
-      DataCell(Text(appointment.purpose)),
-      DataCell(Text(appointment.parent.name)),
-      DataCell(Text(appointment.date.toString())),
-      DataCell(Text(appointment.fromTime.format(context) + " : " + appointment.toTime.format(context))),
-      DataCell(Text(appointment.parentApproval ? "Accepted" : "Pending")),
-      DataCell(
-        appointment.adminApproval
-            ? const Text("Accepted")
-            : ElevatedButton(
-                onPressed: () {
-                  appointment.adminApproval = true;
-                  appointment.status =
-                      (appointment.parentApproval && appointment.adminApproval) ? AppointmentStatus.approved : AppointmentStatus.pending;
-                  appointment.approve();
-                },
-                child: const Text('Approve'),
-              ),
-      ),
-      DataCell(Text(appointment.status.toString().split('.').last.toUpperCase())),
-      DataCell(appointment.adminApproval
-          ? ElevatedButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                          content: SizedBox(
-                              width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.30,
-                              child: AppointmentPage(
-                                appointment: appointment,
-                              )));
-                    });
-              },
-              child: const Text('Reschedule'),
-            )
-          : Container()),
-      DataCell(IconButton(
-        icon: const Icon(
-          Icons.delete,
-          color: Colors.red,
-        ),
-        onPressed: () {
-          AppointmentController(appointment).delete();
-        },
-      )),
-    ]);
+    return DataRow.byIndex(
+        index: index,
+        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : Color.fromARGB(255, 233, 232, 232)),
+        cells: [
+          DataCell(Text(sNo.toString())),
+          DataCell(Text(appointment.purpose)),
+          DataCell(Text(appointment.parent.name)),
+          DataCell(Text(appointment.date.toString())),
+          DataCell(Text(appointment.fromTime.format(context) + " : " + appointment.toTime.format(context))),
+          DataCell(Text(appointment.parentApproval ? "Accepted" : "Pending")),
+          DataCell(
+            appointment.adminApproval
+                ? const Text("Accepted")
+                : ElevatedButton(
+                    onPressed: () {
+                      appointment.adminApproval = true;
+                      appointment.status =
+                          (appointment.parentApproval && appointment.adminApproval) ? AppointmentStatus.approved : AppointmentStatus.pending;
+                      appointment.approve();
+                    },
+                    child: const Text('Approve'),
+                  ),
+          ),
+          DataCell(Text(appointment.status.toString().split('.').last.toUpperCase())),
+          DataCell(appointment.adminApproval
+              ? ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              content: SizedBox(
+                                  width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.30,
+                                  child: AppointmentPage(
+                                    appointment: appointment,
+                                  )));
+                        });
+                  },
+                  child: const Text('Reschedule'),
+                )
+              : Container()),
+          DataCell(IconButton(
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              AppointmentController(appointment).delete();
+            },
+          )),
+        ]);
   }
 
   @override
