@@ -12,7 +12,6 @@ class DepartmentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadDepartments();
   }
 
   List<Department> departments = [];

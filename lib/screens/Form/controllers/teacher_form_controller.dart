@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/controllers/classlist_controller.dart';
 import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/teacher.dart';
 import 'package:school_app/screens/Form/controllers/bio_form_controller.dart';
 import '../../../controllers/Attendance API/department_controller.dart';
 
 class TeacherFormController with BioFormController {
-  Department? className;
-  Department? section;
+  String? className;
+  String? section;
   String? uid;
 
   @override
@@ -19,11 +20,10 @@ class TeacherFormController with BioFormController {
 
   TeacherFormController();
 
-  get classItems {
-    List<DropdownMenuItem<Department?>> items = departmentListController
-        .getClasses()
-        .map((e) => DropdownMenuItem<Department>(
-              child: Text(e.deptName),
+  List<DropdownMenuItem<String>> get classItems {
+    List<DropdownMenuItem<String>> items = classController.classes.keys
+        .map((e) => DropdownMenuItem<String>(
+              child: Text(e.toUpperCase()),
               value: e,
             ))
         .toList();
@@ -31,20 +31,24 @@ class TeacherFormController with BioFormController {
     return items;
   }
 
-  List<DropdownMenuItem<Department>> get sectionItems {
-    if (className == null) {
-      return <DropdownMenuItem<Department>>[];
+  List<DropdownMenuItem<String>> get sectionItems {
+    List<DropdownMenuItem<String>> items = [];
+    if (className != null) {
+      items = (classController.classes[className] ?? [])
+          .map((e) => DropdownMenuItem<String>(
+                child: Text(e),
+                value: e,
+              ))
+          .toList();
     }
-    return departmentListController
-        .getSections(className!.id!)
-        .map((e) => DropdownMenuItem<Department>(child: Text(e.toString()), value: e))
-        .toList();
+    items.add(const DropdownMenuItem(child: Text("None")));
+    return items;
   }
 
   factory TeacherFormController.fromTeacher(Teacher teacher) {
     var controller = TeacherFormController();
-    controller.className = departmentListController.findDepartment(className: teacher.className!);
-    controller.section = departmentListController.findDepartment(className: teacher.className!, sectionName: teacher.section);
+    controller.className = teacher.className;
+    controller.section = teacher.section;
     controller.uid = teacher.uid;
     controller.email.text = teacher.email ?? '';
     controller.gender = teacher.gender;
@@ -64,8 +68,8 @@ class TeacherFormController with BioFormController {
 
   Teacher get teacher => Teacher(
         empCode: empCode.text,
-        className: className?.id.toString(),
-        section: section?.id.toString(),
+        className: className,
+        section: section,
         uid: uid,
         email: email.text,
         gender: gender,

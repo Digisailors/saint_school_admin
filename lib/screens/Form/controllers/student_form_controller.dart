@@ -19,17 +19,16 @@ class StudentFormController with BioFormController {
   final studentClass = TextEditingController();
   final section = TextEditingController();
 
-  Department? classField;
-  Department? sectionField;
+  String? classField;
+  String? sectionField;
   final List<TextEditingController> siblings = [TextEditingController()];
 
   StudentFormController();
 
-  List<DropdownMenuItem<Department>> get classItems {
-    List<DropdownMenuItem<Department>> items = departmentListController
-        .getClasses()
-        .map((e) => DropdownMenuItem<Department>(
-              child: Text(e.deptName),
+  List<DropdownMenuItem<String>> get classItems {
+    List<DropdownMenuItem<String>> items = classController.classes.keys
+        .map((e) => DropdownMenuItem<String>(
+              child: Text(e.toUpperCase()),
               value: e,
             ))
         .toList();
@@ -37,13 +36,12 @@ class StudentFormController with BioFormController {
     return items;
   }
 
-  List<DropdownMenuItem<Department>> get sectionItems {
-    List<DropdownMenuItem<Department>> items = [];
+  List<DropdownMenuItem<String>> get sectionItems {
+    List<DropdownMenuItem<String>> items = [];
     if (classField != null) {
-      departmentListController
-          .getSections(classField!.id!)
-          .map((e) => DropdownMenuItem<Department>(
-                child: Text(e.deptName),
+      items = (classController.classes[classField] ?? [])
+          .map((e) => DropdownMenuItem<String>(
+                child: Text(e),
                 value: e,
               ))
           .toList();
@@ -100,14 +98,14 @@ class StudentFormController with BioFormController {
         name: name.text,
         icNumber: icNumber.text.toUpperCase().removeAllWhitespace,
         email: email.text,
-        classDepartment: classField!,
+        studentClass: classField!,
         imageUrl: image,
         addressLine1: addressLine1.text,
         addressLine2: addressLine2.text,
         city: city,
         primaryPhone: primaryPhone.text,
         secondaryPhone: secondaryPhone.text,
-        sectionDepartment: sectionField!,
+        section: sectionField!,
         address: addressLine1.text,
         gender: gender,
         father: father,
@@ -122,8 +120,8 @@ class StudentFormController with BioFormController {
     controller.icNumber.text = student.icNumber;
     controller.image = student.imageUrl;
     controller.state = student.state;
-    controller.classField = student.classDepartment;
-    controller.sectionField = student.sectionDepartment;
+    controller.classField = student.studentClass;
+    controller.sectionField = student.section;
     controller.email.text = student.email ?? '';
     controller.addressLine1.text = student.addressLine1 ?? '';
     controller.addressLine2.text = student.addressLine2 ?? '';

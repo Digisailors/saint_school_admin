@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
-import 'package:school_app/controllers/Attendance%20API/department_controller.dart';
-import 'package:school_app/models/Attendance/department.dart';
-import 'package:school_app/models/response.dart';
-
-import '../../controllers/classlist_controller.dart';
+import 'package:school_app/controllers/classlist_controller.dart';
 
 // ignore: must_be_immutable
 class ClassList extends StatelessWidget {
@@ -17,14 +13,13 @@ class ClassList extends StatelessWidget {
   final _sectionFormKey = GlobalKey<FormState>();
   final _classFormKey = GlobalKey<FormState>();
 
-  Department? classField;
+  String? classField;
 
-  List<DropdownMenuItem<Department>> getClassItems() {
-    return departmentListController
-        .getClasses()
+  List<DropdownMenuItem<String>> getClassItems() {
+    return classController.classes.keys
         .map((e) => DropdownMenuItem(
-              child: Text(e.deptName),
-              value: e,
+              child: Text(e),
+              value: e.toString(),
             ))
         .toList();
   }
@@ -39,7 +34,7 @@ class ClassList extends StatelessWidget {
           centerTitle: true,
         ),
         body: GetBuilder(
-            init: departmentListController,
+            init: classController,
             builder: (_) {
               return Column(
                 children: [
@@ -55,16 +50,12 @@ class ClassList extends StatelessWidget {
                             ListTile(
                                 title: const Text("Name"),
                                 subtitle: TextFormField(
-                                  controller: departmentListController.classNameController,
+                                  controller: classController.name,
                                   validator: (text) {
                                     if ((text ?? '').removeAllWhitespace.isEmpty) {
                                       return "Class Name should not be empty";
                                     }
-                                    var duplicate = departmentListController
-                                        .getClasses()
-                                        .map((e) => e.deptName.removeAllWhitespace)
-                                        .contains(departmentListController.classNameController.text.removeAllWhitespace.toUpperCase());
-                                    if (duplicate) {
+                                    if (classController.classes.keys.contains(text!.toUpperCase().removeAllWhitespace)) {
                                       return "Duplicate Class Name ";
                                     }
                                     return null;
@@ -75,17 +66,13 @@ class ClassList extends StatelessWidget {
                               child: ElevatedButton(
                                   onPressed: () {
                                     if (_classFormKey.currentState!.validate()) {
-                                      var future = departmentListController
-                                          .addDepartment(Department(
-                                              deptName: departmentListController.classNameController.text.trim().toUpperCase(), parentDept: 2))
-                                          .then((_) => Result.success("Class Added Successfully"))
-                                          .catchError((err) => Result.error(err));
+                                      var future = classController.addClass();
                                       showFutureCustomDialog(
                                           context: context,
                                           future: future,
                                           onTapOk: () {
-                                            departmentListController.classNameController.clear();
-                                            departmentListController.update();
+                                            classController.name.clear();
+                                            classController.update();
                                             Navigator.of(context).pop();
                                           });
                                     }
@@ -107,7 +94,7 @@ class ClassList extends StatelessWidget {
                           children: [
                             ListTile(
                                 title: const Text("Name"),
-                                subtitle: DropdownButtonFormField<Department?>(
+                                subtitle: DropdownButtonFormField<String?>(
                                   items: getClassItems(),
                                   value: classField,
                                   onChanged: (text) {
@@ -117,16 +104,12 @@ class ClassList extends StatelessWidget {
                             ListTile(
                                 title: const Text("Section"),
                                 subtitle: TextFormField(
-                                  controller: departmentListController.sectionNameController,
+                                  controller: classController.section,
                                   validator: (text) {
                                     if ((text ?? '').removeAllWhitespace.isEmpty) {
                                       return "Section is Required";
                                     }
-                                    var duplicate = departmentListController
-                                        .getSections(classField!.id!)
-                                        .map((e) => e.deptName.removeAllWhitespace)
-                                        .contains(departmentListController.sectionNameController.text.removeAllWhitespace.toUpperCase());
-                                    if (duplicate) {
+                                    if ((classController.classes[classField] ?? []).contains((text ?? '').toUpperCase().removeAllWhitespace)) {
                                       return "Section Already Exists";
                                     }
                                     return null;
@@ -137,18 +120,11 @@ class ClassList extends StatelessWidget {
                               child: ElevatedButton(
                                   onPressed: () {
                                     if (_sectionFormKey.currentState!.validate()) {
-                                      var future = departmentListController
-                                          .addDepartment(Department(
-                                              deptName: departmentListController.sectionNameController.text.trim().toUpperCase(),
-                                              parentDept: classField!.id!))
-                                          .then((_) => Result.success("Section Added Successfully"))
-                                          .catchError((err) => Result.error(err));
+                                      var future = classController.addSection(classField!, classController.section.text.removeAllWhitespace);
                                       showFutureCustomDialog(
                                           context: context,
                                           future: future,
                                           onTapOk: () {
-                                            departmentListController.classNameController.clear();
-                                            departmentListController.update();
                                             Navigator.of(context).pop();
                                           });
                                     }

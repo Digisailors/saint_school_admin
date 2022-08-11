@@ -24,4 +24,15 @@ class EmployeeController {
       return employee;
     });
   }
+
+  static Future<Employee> deleteEmployee(Employee employee) async {
+    var callable = functions.httpsCallable('deleteEmployee');
+    var data = employee.toJson();
+    data.addAll({'token': AttendanceController.token});
+    return callable.call(data).then((response) {
+      var value = response.data;
+      var employee = Employee.fromJson(value);
+      return employee;
+    });
+  }
 }

@@ -27,5 +27,6 @@ Future<void> main() async {
   if (auth.currentUser != null) {
     await auth.reloadClaims();
   }
+  print("\x1B[2J\x1B[0;0H");
   runApp(const AuthRouter());
 }

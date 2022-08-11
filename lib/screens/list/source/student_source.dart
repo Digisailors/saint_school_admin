@@ -52,7 +52,7 @@ class StudentSource extends DataTableSource {
                     child: DefaultTabController(
                   length: 2,
                   child: FutureBuilder<List<TransactionLog>>(
-                      future: TransactionController.loadTransactions(empCode: entity.icNumber),
+                      future: TransactionController.loadTransactions(empCode: entity.icNumber, entity: 0),
                       builder: (context, AsyncSnapshot<List<TransactionLog>> snapshot) {
                         if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
                           List<TransactionLog> cafeLogs = [];
@@ -123,7 +123,7 @@ class StudentSource extends DataTableSource {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            entity.classDepartment.deptName,
+                                            entity.studentClass,
                                             style: const TextStyle(fontSize: 18),
                                           ),
                                         ),
@@ -139,7 +139,7 @@ class StudentSource extends DataTableSource {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            entity.sectionDepartment.deptName,
+                                            entity.section,
                                             style: const TextStyle(fontSize: 18),
                                           ),
                                         ),

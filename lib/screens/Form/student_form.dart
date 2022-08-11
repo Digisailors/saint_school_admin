@@ -184,9 +184,9 @@ class _StudentFormState extends State<StudentForm> {
                         ),
                         SizedBox(
                           width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                          child: CustomDropDown<Department?>(
+                          child: CustomDropDown<String?>(
                             labelText: 'Class',
-                            items: departmentListController.getClassItems(),
+                            items: controller.classItems,
                             validator: (val) {
                               if (val == null) {
                                 return 'Please select a class';
@@ -204,9 +204,9 @@ class _StudentFormState extends State<StudentForm> {
                         ),
                         SizedBox(
                           width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                          child: CustomDropDown<Department?>(
+                          child: CustomDropDown<String?>(
                             labelText: 'Section',
-                            items: departmentListController.getSectionsItems(controller.classField?.id),
+                            items: controller.sectionItems,
                             validator: (val) {
                               if (val == null) {
                                 return 'Please select a Section';

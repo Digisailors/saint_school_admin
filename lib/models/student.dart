@@ -1,5 +1,4 @@
 import 'package:school_app/controllers/student_controller.dart';
-import 'package:school_app/models/Attendance/department.dart';
 import 'package:school_app/models/Attendance/employee.dart';
 import 'package:school_app/models/biodata.dart';
 import 'parent.dart';
@@ -7,8 +6,8 @@ import 'parent.dart';
 class Student extends Bio {
   Student({
     required String icNumber,
-    required this.classDepartment,
-    required this.sectionDepartment,
+    required this.studentClass,
+    required this.section,
     required String name,
     required String email,
     required Gender gender,
@@ -24,7 +23,7 @@ class Student extends Bio {
     String? primaryPhone,
     String? secondaryPhone,
     String? state,
-    this.empId,
+    String? empCode,
   }) : super(
           name: name,
           email: email,
@@ -42,17 +41,16 @@ class Student extends Bio {
           state: state,
         );
 
-  Department classDepartment;
-  Department sectionDepartment;
-
+  String studentClass;
+  String section;
+  int? empId;
   Parent? father;
   Parent? mother;
   Parent? guardian;
-  int? empId;
 
   static Map<Gender, String> genderCode = {Gender.male: 'M', Gender.female: 'F', Gender.unspecified: 'S'};
 
-  Employee get employee => Employee(empCode: icNumber, department: sectionDepartment.id!, gender: genderCode[gender]!, firstName: name);
+  Employee get employee => Employee(empCode: icNumber, department: 2, gender: genderCode[gender]!, firstName: name);
 
   List<String> get parents {
     List<String> result = [];
@@ -84,14 +82,13 @@ class Student extends Bio {
         primaryPhone: json["primaryPhone"],
         secondaryPhone: json["secondaryPhone"],
         state: json["state"],
-        empId: json['empId'],
         //-------------------------------------------
         father: json["father"] != null ? Parent.fromJson(json['father']) : null,
         guardian: json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
         mother: json["mother"] != null ? Parent.fromJson(json['mother']) : null,
         //-------------------------------------------
-        classDepartment: Department.fromJson(json["classDepartment"]),
-        sectionDepartment: Department.fromJson(json["sectionDepartment"]),
+        studentClass: json["class"],
+        section: json["section"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -110,16 +107,13 @@ class Student extends Bio {
         'secondaryPhone': secondaryPhone,
         "state": state,
         "search": search,
-        "empId": empId,
         //------------
         "father": father?.toJson(),
         "mother": mother?.toJson(),
         "guardian": guardian?.toJson(),
         //------------
-        "class": classDepartment.id,
-        "section": sectionDepartment.id,
-        "classDepartment": classDepartment.toJson(),
-        "sectionDepartment": sectionDepartment.toJson(),
+        "class": studentClass,
+        "section": section,
         //------------
         "parents": parents,
       };

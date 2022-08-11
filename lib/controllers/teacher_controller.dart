@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:school_app/controllers/Attendance%20API/employee_controller.dart';
 import 'package:school_app/controllers/crud_controller.dart';
 import '../constants/constant.dart';
 import '../models/response.dart';
@@ -24,22 +25,36 @@ class TeacherController extends GetxController implements CRUD {
 
   @override
   Future<Result> add() async {
-    return firestore
-        .collection('teachers')
-        .doc(teacher.icNumber)
-        .set(teacher.toJson())
-        .then((value) => Result.success("Teacher added successfully"))
-        .onError((error, stackTrace) => Result.error(error.toString()));
+    try {
+      teacher.employee.department = 3;
+      var employee = await EmployeeController.addEmployee(teacher.employee);
+      teacher.empId = employee.id;
+      return firestore
+          .collection('teachers')
+          .doc(teacher.icNumber)
+          .set(teacher.toJson())
+          .then((value) => Result.success("Teacher added successfully"))
+          .onError((error, stackTrace) => Result.error(error.toString()));
+    } catch (e) {
+      return Result.error(e.toString());
+    }
   }
 
   @override
   Future<Result> change() async {
-    return firestore
-        .collection('teachers')
-        .doc(teacher.icNumber)
-        .update(teacher.toJson())
-        .then((value) => Result.success("Teacher Updated successfully"))
-        .onError((error, stackTrace) => Result.error(error.toString()));
+    try {
+      teacher.employee.department = 3;
+      var employee = await EmployeeController.updateEmployee(teacher.employee);
+      teacher.empId = employee.id;
+      return firestore
+          .collection('teachers')
+          .doc(teacher.icNumber)
+          .update(teacher.toJson())
+          .then((value) => Result.success("Teacher Updated successfully"))
+          .onError((error, stackTrace) => Result.error(error.toString()));
+    } catch (e) {
+      return Result.error(e.toString());
+    }
   }
 
   @override

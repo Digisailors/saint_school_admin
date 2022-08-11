@@ -12,20 +12,23 @@ class TransactionController extends GetxController {
     super.onInit();
   }
 
-  static Future<List<TransactionLog>> loadTransactions({DateTime? startTime, DateTime? endTime, String? empCode}) {
+  static Future<List<TransactionLog>> loadTransactions({DateTime? startTime, DateTime? endTime, String? empCode, required int? entity}) {
     List<TransactionLog> transactionLogs = [];
     var callable = functions.httpsCallable('getTransaction');
     var data = {
       'token': AttendanceController.token,
       'start_time': startTime?.toString().substring(0, 19),
       'end_time': endTime?.toString().substring(0, 19),
-      'emp_code': empCode
+      'emp_code': empCode,
+      'entity': entity
     };
+    print("ENTITY : $entity");
     return callable.call(data).then((response) {
       var value = response.data;
       if (value is List) {
         transactionLogs = value.map((e) => TransactionLog.fromJson(e)).toList();
       }
+      print(transactionLogs.map((e) => e.department).toList());
       return transactionLogs;
     });
   }

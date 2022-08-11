@@ -9,8 +9,7 @@ class Idcard extends StatelessWidget {
   final Student student;
   final String string;
 
-  const Idcard({Key? key, required this.student, required this.string})
-      : super(key: key);
+  const Idcard({Key? key, required this.student, required this.string}) : super(key: key);
 
   // getCarTiles() {
   //   List<Widget> tiles = [];
@@ -67,8 +66,7 @@ class Idcard extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(16.0),
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage('https://picsum.photos/536/354'),
+                          backgroundImage: NetworkImage('https://picsum.photos/536/354'),
                           // backgroundColor: Colors.black,
                           maxRadius: double.maxFinite,
                         ),
@@ -77,46 +75,32 @@ class Idcard extends StatelessWidget {
                     Text(
                       student.name.toUpperCase(),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.bold, fontSize: 50),
+                      style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 50),
                     ),
                     Text(
                       student.icNumber.toUpperCase(),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          color: Colors.blueAccent),
+                      style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.blueAccent),
                     ),
                     const Divider(),
                     DataTable(
                       columns: [
                         DataColumn(
-                          label: Text.rich(TextSpan(
-                              text: 'CLASS',
-                              style: GoogleFonts.montserrat(
-                                  color: Colors.blueAccent),
-                              children: [
-                                TextSpan(
-                                  text: " : ${student.classDepartment}",
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 18, color: Colors.black),
-                                )
-                              ])),
+                          label: Text.rich(TextSpan(text: 'CLASS', style: GoogleFonts.montserrat(color: Colors.blueAccent), children: [
+                            TextSpan(
+                              text: " : ${student.studentClass}",
+                              style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
+                            )
+                          ])),
                         ),
                         const DataColumn(label: Text('')),
                         DataColumn(
-                          label: Text.rich(TextSpan(
-                              text: 'SECTION',
-                              style: GoogleFonts.montserrat(
-                                  color: Colors.blueAccent),
-                              children: [
-                                TextSpan(
-                                  text: " : ${student.sectionDepartment}",
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 18, color: Colors.black),
-                                )
-                              ])),
+                          label: Text.rich(TextSpan(text: 'SECTION', style: GoogleFonts.montserrat(color: Colors.blueAccent), children: [
+                            TextSpan(
+                              text: " : ${student.section}",
+                              style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
+                            )
+                          ])),
                         ),
                       ],
                       rows: const [],

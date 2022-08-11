@@ -16,7 +16,7 @@ class TransactionLog {
     required this.empCode,
     required this.firstName,
     this.lastName,
-    required this.department,
+    this.department,
     this.position,
     required this.punchTime,
     required this.punchState,
@@ -36,7 +36,7 @@ class TransactionLog {
   String empCode;
   String firstName;
   String? lastName;
-  String department;
+  String? department;
   String? position;
   DateTime punchTime;
   String punchState;
@@ -80,7 +80,7 @@ class TransactionLog {
         empCode: json["emp_code"],
         firstName: json["first_name"],
         lastName: json["last_name"],
-        department: json["department"],
+        department: json["department"] ?? json["dept_code"],
         position: json["position"],
         punchTime: DateTime.parse(json["punch_time"]),
         punchState: json["punch_state"],

@@ -29,17 +29,15 @@ class AuthRouter extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: auth.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.active &&
-            snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
           return FutureBuilder<bool>(
             future: auth.reloadClaims(),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.connectionState == ConnectionState.active ||
-                  snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   session.session.isAdmin = snapshot.data;
                 }
-                Get.put(ClassListController());
+                Get.put(ClassController());
                 ParentController.listenParents();
                 StudentController.listenStudents();
                 TeacherController.listenTeachers();
@@ -50,18 +48,15 @@ class AuthRouter extends StatelessWidget {
                   theme: ThemeData(
                     listTileTheme: const ListTileThemeData(),
                     pageTransitionsTheme: const PageTransitionsTheme(builders: {
-                      TargetPlatform.windows:
-                          FadeUpwardsPageTransitionsBuilder(),
-                      TargetPlatform.android:
-                          FadeUpwardsPageTransitionsBuilder(),
+                      TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+                      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
                       TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
                     }),
                     colorScheme: lightColorScheme,
                     textTheme: myTexTheme,
                     tabBarTheme: TabBarTheme(
                       indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(
-                            width: 4.0, color: getColor(context).tertiary),
+                        borderSide: BorderSide(width: 4.0, color: getColor(context).tertiary),
                       ),
                     ),
                     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -83,17 +78,14 @@ class AuthRouter extends StatelessWidget {
                   onGenerateRoute: (settings) {
                     if (settings.name == EntityList.routeName) {
                       final args = settings.arguments as EntityType;
-                      return MaterialPageRoute(
-                          builder: (context) => EntityList(entityType: args));
+                      return MaterialPageRoute(builder: (context) => EntityList(entityType: args));
                     }
                     if (settings.name == StudentForm.routeName) {
                       final args = settings.arguments as Student?;
-                      return MaterialPageRoute(
-                          builder: (context) => StudentForm(student: args));
+                      return MaterialPageRoute(builder: (context) => StudentForm(student: args));
                     }
                     if (settings.name == Dashboard.routeName) {
-                      return MaterialPageRoute(
-                          builder: (context) => const Dashboard());
+                      return MaterialPageRoute(builder: (context) => const Dashboard());
                     }
                     return null;
                   },
@@ -127,8 +119,7 @@ class AuthRouter extends StatelessWidget {
             textTheme: myTexTheme,
             tabBarTheme: TabBarTheme(
               indicator: UnderlineTabIndicator(
-                borderSide:
-                    BorderSide(width: 4.0, color: getColor(context).tertiary),
+                borderSide: BorderSide(width: 4.0, color: getColor(context).tertiary),
               ),
             ),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(

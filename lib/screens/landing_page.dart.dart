@@ -71,7 +71,10 @@ class LandingPage extends StatelessWidget {
                       //               )),
                       //         ],
                       //       ),
-                      appBar: AppBar(),
+                      appBar: AppBar(
+                        title: const Text("SAINT SCHOOL ADMIN"),
+                        centerTitle: true,
+                      ),
                       drawer: isDesktop(context) ? null : const SideMenu(),
                       body: child,
                     )),

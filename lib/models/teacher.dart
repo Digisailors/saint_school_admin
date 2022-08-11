@@ -1,4 +1,6 @@
 import 'package:school_app/controllers/teacher_controller.dart';
+import 'package:school_app/models/Attendance/department.dart';
+import 'package:school_app/models/Attendance/employee.dart';
 
 import 'biodata.dart';
 
@@ -44,6 +46,10 @@ class Teacher extends Bio {
   String? uid;
   int? empId;
 
+  static Map<Gender, String> genderCode = {Gender.male: 'M', Gender.female: 'F', Gender.unspecified: 'S'};
+
+  Employee get employee => Employee(empCode: icNumber, department: 3, gender: genderCode[gender]!, firstName: name);
+
   TeacherController get controller => TeacherController(this);
 
   factory Teacher.fromJson(json) => Teacher(
@@ -67,7 +73,11 @@ class Teacher extends Bio {
       );
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {"className": className, "section": section, "uid": uid};
+    Map<String, dynamic> map = {
+      "className": className,
+      "section": section,
+      "uid": uid,
+    };
     map.addAll(super.toBioJson());
     return map;
   }

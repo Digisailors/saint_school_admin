@@ -13,6 +13,7 @@ import 'package:school_app/screens/list/class_list.dart';
 import 'package:school_app/screens/list/parent_list.dart';
 import 'package:school_app/screens/list/post_list.dart';
 import 'package:school_app/screens/list/student_list.dart';
+import 'package:school_app/screens/list/teacher_list.dart';
 import 'package:school_app/screens/list/teachers_list.dart';
 import 'package:school_app/widgets/dashboard/class_list.dart';
 
@@ -94,7 +95,7 @@ class SideMenu extends StatelessWidget {
                   press: () {
                     session.pageIndex = 3;
                     // Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
-                    Get.offAll(() => const TeacherList());
+                    Get.offAll(() => const TeachersList());
                   },
                 ),
                 DrawerListTile(
