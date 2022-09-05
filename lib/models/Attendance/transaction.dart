@@ -50,6 +50,7 @@ class TransactionLog {
   int? temperature;
   dynamic terminalAlias;
   DateTime uploadTime;
+  DateTime get punchDate => DateTime(punchTime.year, punchTime.month, punchTime.day);
 
   CheckInStatus? get checkInStatus {
     if (punchState == '0') {
@@ -65,7 +66,7 @@ class TransactionLog {
 
   CheckOutStatus? get checkOutStatus {
     if (punchState == '1') {
-      var duration = punchTime.difference(DateTime(punchTime.year, punchTime.month, punchTime.day, 4, 0));
+      var duration = punchTime.difference(DateTime(punchTime.year, punchTime.month, punchTime.day, 16, 30));
       if (duration.inMinutes > 0) {
         return CheckOutStatus.onTime;
       } else {

@@ -65,6 +65,7 @@ class _CarouselState extends State<Carousel> {
                 } else {
                   selectedVoice = voices.first.value!;
                 }
+                var languages = await queueController.flutterTts.getLanguages;
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -73,7 +74,12 @@ class _CarouselState extends State<Carousel> {
                           title: const Text("Select Accent"),
                           content: DropdownButtonFormField(
                               value: selectedVoice,
-                              items: voices,
+                              items: (languages as List<Object?>)
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e.toString()),
+                                        value: e.toString(),
+                                      ))
+                                  .toList(),
                               onChanged: (v) {
                                 setstate(() {
                                   selectedVoice = v as String;
@@ -106,7 +112,6 @@ class _CarouselState extends State<Carousel> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
-
       body: GetBuilder(
         init: queueController,
         builder: (_) {
@@ -117,27 +122,8 @@ class _CarouselState extends State<Carousel> {
                 .map((e) => StudentTile(student: e.student, string: queueController.countDown[e.icNumber] ?? ''))
                 .toList(),
           );
-          // return Wrap(
-          //     children: queueController.queuedStudentsList
-          //         .map((e) => Expanded(child: StudentTile(student: e, string: queueController.countDown[e.ic] ?? '')))
-          //         .toList());
         },
       ),
-      // body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      //   stream: queue.orderBy("queuedTime").limit(3).snapshots(),
-      //   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.active || snapshot.hasData) {
-      //       List<Student> studentList = snapshot.data?.docs.map((e) => Student.fromJson(e.data())).toList() ?? [];
-      //       return Row(children: studentList.map((e) => Expanded(child: Idcard(student: e))).toList());
-      //     }
-      //     if (snapshot.hasError) {
-      //       return Center(child: Text(snapshot.error.toString()));
-      //     }
-      //     return const Center(
-      //       child: CircularProgressIndicator(),
-      //     );
-      //   },
-      // ),
     );
   }
 }

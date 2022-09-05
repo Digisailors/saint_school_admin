@@ -145,6 +145,7 @@ class _AdminFormState extends State<AdminForm> {
                         controller: controller.icNumber,
                         labelText: 'IC Number',
                         hintText: 'Enter IC Number',
+                        enabled: widget.admin == null,
                       ),
                     ),
                   ],

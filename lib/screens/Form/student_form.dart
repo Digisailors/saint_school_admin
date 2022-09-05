@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
@@ -92,7 +93,7 @@ class _StudentFormState extends State<StudentForm> {
             if (widget.student != null)
               IconButton(
                 onPressed: () async {
-                  var callable = functions.httpsCallable('getTransaction');
+                  var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
 
                   var data = {
                     'emp_code': 1,

@@ -13,7 +13,6 @@ enum AppointmentStatus { pending, approved, cancelled, finished }
 class Appointment {
   Appointment({
     required this.date,
-    required this.status,
     this.approvedBy,
     required this.location,
     this.raisedBy,
@@ -30,7 +29,22 @@ class Appointment {
   DateTime date;
   String? id;
   String purpose;
-  AppointmentStatus status;
+  AppointmentStatus get status {
+    if (date.isBefore(DateTime.now())) {
+      if (adminApproval && parentApproval) {
+        return AppointmentStatus.finished;
+      } else {
+        return AppointmentStatus.cancelled;
+      }
+    } else {
+      if (adminApproval && parentApproval) {
+        return AppointmentStatus.approved;
+      } else {
+        return AppointmentStatus.pending;
+      }
+    }
+  }
+
   Parent parent;
   TimeOfDay fromTime;
   TimeOfDay toTime;
@@ -44,7 +58,6 @@ class Appointment {
   factory Appointment.fromJson(Map<String, dynamic> json, id) => Appointment(
         id: id,
         date: json["date"].toDate(),
-        status: AppointmentStatus.values.elementAt(json["status"]),
         approvedBy: json["approvedBy"],
         location: json["location"],
         participants: json["participants"].map((e) => Bio.fromBioJson(e)).toList(),

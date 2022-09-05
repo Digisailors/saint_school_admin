@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
+import 'package:school_app/widgets/dashboard/class_list.dart';
 import '../widgets/sidebar.dart';
 
 class LandingPage extends StatelessWidget {

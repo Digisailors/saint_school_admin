@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
+import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/screens/Form/appointment_form.dart';
 import 'package:school_app/screens/list/source/appointmentsource.dart';
 import 'package:school_app/models/appointment.dart';
@@ -19,6 +20,29 @@ class AppoinmentList extends StatefulWidget {
 
 class _AppoinmentListState extends State<AppoinmentList> {
   StudentFormController get controller => session.formcontroller;
+
+  @override
+  void initState() {
+    fromDate = DateTime(DateTime.now().year, DateTime.now().month, 1);
+    toDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(const Duration(days: 1));
+    fromDateControler.text = fromDate.toString().substring(0, 10);
+    toDateControler.text = toDate.toString().substring(0, 10);
+    super.initState();
+  }
+
+  AppointmentStatus? status;
+  late DateTime fromDate;
+  late DateTime toDate;
+
+  final TextEditingController fromDateControler = TextEditingController();
+  final TextEditingController toDateControler = TextEditingController();
+
+  List<DropdownMenuItem<AppointmentStatus>> getAppointmentMenuItems() {
+    List<DropdownMenuItem<AppointmentStatus>> items = [];
+    items.add(const DropdownMenuItem(child: Text("ALL")));
+    items.addAll(AppointmentStatus.values.map((e) => DropdownMenuItem(child: Text(e.toString().split('.').last.toUpperCase()), value: e)));
+    return items;
+  }
 
   List<Appointment> source = [
     // Appointment(date: DateTime.now(), status: A, approvedBy: 'Admin', location: 'Thoothukudi', raisedBy: 'Rampwiz', participants: []),
@@ -56,14 +80,16 @@ class _AppoinmentListState extends State<AppoinmentList> {
                         mainAxisAlignment: isMobile(context) ? MainAxisAlignment.start : MainAxisAlignment.end,
                         children: [
                           const Text(''),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  Get.to(const AppointmentPage());
-                                },
-                                child: const Text("Add")),
-                          ),
+                          (auth.isAdmin ?? false)
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        Get.to(const AppointmentPage());
+                                      },
+                                      child: const Text("Add")),
+                                )
+                              : Container(),
                           ElevatedButton(
                               onPressed: () {
                                 setState(() {});
@@ -75,18 +101,85 @@ class _AppoinmentListState extends State<AppoinmentList> {
                   ),
                 ),
                 StreamBuilder<List<Appointment>>(
-                    stream: firestore
-                        .collection('appointments')
-                        .snapshots()
-                        .map((event) => event.docs.map((e) => Appointment.fromJson(e.data(), e.reference.id)).toList()),
+                    stream: getAppointmentsStream(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
-                        sourcelist = AppointmentSource(snapshot.data!, context);
+                        var appointments = snapshot.data ?? [];
+                        if (status != null) {
+                          appointments = appointments.where((element) => element.status == status).toList();
+                        }
+
+                        if (fromDate != null) {
+                          appointments = appointments.where((element) => element.date.isAfter(fromDate!)).toList();
+                        }
+
+                        if (toDate != null) {
+                          appointments = appointments.where((element) => element.date.isBefore(toDate!)).toList();
+                        }
+
+                        sourcelist = AppointmentSource(appointments, context);
+
                         return Table(
                           children: [
                             TableRow(
                               children: [
                                 PaginatedDataTable(
+                                  header: const Text("APPOINTMENTS"),
+                                  actions: [
+                                    SizedBox(
+                                        width: 150,
+                                        child: ListTile(
+                                          title: DropdownButtonFormField<AppointmentStatus>(
+                                              value: status,
+                                              items: getAppointmentMenuItems(),
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  status = val;
+                                                });
+                                              }),
+                                        )),
+                                    SizedBox(
+                                        width: 200,
+                                        child: ListTile(
+                                          title: TextFormField(
+                                            controller: fromDateControler,
+                                            readOnly: true,
+                                            decoration: InputDecoration(
+                                                suffixIcon: IconButton(
+                                                    onPressed: () async {
+                                                      var date = await showDatePicker(
+                                                          context: context,
+                                                          initialDate: fromDate,
+                                                          firstDate: DateTime(2000),
+                                                          lastDate: DateTime(2100));
+                                                      setState(() {
+                                                        fromDate = date ?? fromDate;
+                                                        fromDateControler.text = fromDate.toString().substring(0, 10);
+                                                      });
+                                                    },
+                                                    icon: const Icon(Icons.calendar_month))),
+                                          ),
+                                        )),
+                                    SizedBox(
+                                        width: 200,
+                                        child: ListTile(
+                                          title: TextFormField(
+                                            controller: toDateControler,
+                                            readOnly: true,
+                                            decoration: InputDecoration(
+                                                suffixIcon: IconButton(
+                                                    onPressed: () async {
+                                                      var date = await showDatePicker(
+                                                          context: context, initialDate: toDate, firstDate: DateTime(2000), lastDate: DateTime(2100));
+                                                      setState(() {
+                                                        toDate = date ?? toDate;
+                                                        toDateControler.text = toDate.toString().substring(0, 10);
+                                                      });
+                                                    },
+                                                    icon: const Icon(Icons.calendar_month))),
+                                          ),
+                                        ))
+                                  ],
                                   dragStartBehavior: DragStartBehavior.start,
                                   columns: AppointmentSource.getCoumns(),
                                   source: sourcelist,
@@ -98,7 +191,7 @@ class _AppoinmentListState extends State<AppoinmentList> {
                         );
                       }
                       if (snapshot.hasError) {
-                        return Center(child: Text(snapshot.error.toString()));
+                        return Center(child: SelectableText(snapshot.error.toString()));
                       }
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -109,31 +202,21 @@ class _AppoinmentListState extends State<AppoinmentList> {
           )),
     );
   }
+
+  Stream<List<Appointment>> getAppointmentsStream() {
+    if (auth.isAdmin ?? false) {
+      return firestore
+          .collection('appointments')
+          .orderBy('date', descending: true)
+          .snapshots()
+          .map((event) => event.docs.map((e) => Appointment.fromJson(e.data(), e.reference.id)).toList());
+    } else {
+      return firestore
+          .collection('appointments')
+          .where('particpantsIcs', arrayContains: auth.currentUser?.uid ?? '')
+          .orderBy('date', descending: true)
+          .snapshots()
+          .map((event) => event.docs.map((e) => Appointment.fromJson(e.data(), e.reference.id)).toList());
+    }
+  }
 }
-
-  // List<Bio> getList() {
-  //   switch (widget.entityType) {
-  //     case EntityType.student:
-  //       return StudentController.studentList.toList();
-  //     case EntityType.teacher:
-  //       return TeacherController.teacherList.toList();
-  //     case EntityType.parent:
-  //       return ParentController.parentsList.toList();
-  //     case EntityType.admin:
-  //       return AdminController.adminList.toList();
-  //   }
-  // }
-
-//   getStream() {
-//     switch (widget.entityType) {
-//       case EntityType.student:
-//         return StudentController.listenStudents();
-//       case EntityType.teacher:
-//         return TeacherController.listenTeachers();
-//       case EntityType.parent:
-//         return ParentController.listenParents();
-//       case EntityType.admin:
-//         return AdminController.adminList.stream;
-//     }
-//   }
-// }

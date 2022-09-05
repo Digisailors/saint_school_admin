@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:school_app/controllers/Attendance%20API/trnasaction_controller.dart';
+import 'package:school_app/constants/constant.dart';
+import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/attendance_controller.dart';
 import 'package:school_app/models/Attendance/transaction.dart';
 import 'package:school_app/screens/Form/student_form.dart';
+import 'package:school_app/screens/list/attendance_list.dart';
 import 'package:school_app/screens/list/student_list.dart';
 import '../../../models/biodata.dart';
-import '../../../models/student.dart';
 
 class StudentSource extends DataTableSource {
   final List<StudentTransaction> students;
   final BuildContext context;
+  final void Function(void Function()) setstate;
   StudentSource(
     this.students,
     this.context,
+    this.setstate,
   );
 
   final timeFormat = DateFormat.jm();
@@ -29,7 +32,7 @@ class StudentSource extends DataTableSource {
 
     return DataRow.byIndex(
         index: index,
-        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : Color.fromARGB(255, 233, 232, 232)),
+        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : const Color.fromARGB(255, 233, 232, 232)),
         cells: [
           DataCell(Text(sNo.toString())),
           DataCell((entity.imageUrl ?? '').isEmpty
@@ -55,131 +58,8 @@ class StudentSource extends DataTableSource {
                       builder: (context) {
                         int index = 0;
                         return Dialog(
-                            child: DefaultTabController(
-                          length: 2,
-                          child: FutureBuilder<List<TransactionLog>>(
-                              future: TransactionController.loadTransactions(empCode: entity.icNumber, entity: 0),
-                              builder: (context, AsyncSnapshot<List<TransactionLog>> snapshot) {
-                                if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
-                                  List<TransactionLog> cafeLogs = [];
-                                  List<TransactionLog> gateLogs = [];
-                                  if (snapshot.hasData) {
-                                    var allLogs = snapshot.data!;
-                                    for (var log in allLogs) {
-                                      if (log.areaAlias == 'CAFETERIA') {
-                                        cafeLogs.add(log);
-                                      } else {
-                                        gateLogs.add(log);
-                                      }
-                                    }
-                                  }
-                                  // Text(entity.icNumber),
-                                  //     Text(entity.name),
-                                  //     Text(entity.classDepartment.deptName),
-                                  //     Text(entity.sectionDepartment.deptName),
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: SizedBox(
-                                          width: 400,
-                                          child: Table(
-                                            children: [
-                                              TableRow(children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "IC Number",
-                                                    style: TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    entity.icNumber,
-                                                    style: const TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                              ]),
-                                              TableRow(children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Name",
-                                                    style: TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    entity.name,
-                                                    style: const TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                              ]),
-                                              TableRow(children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Class",
-                                                    style: TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    entity.studentClass,
-                                                    style: const TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                              ]),
-                                              TableRow(children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Section",
-                                                    style: TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    entity.section,
-                                                    style: const TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                              ]),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 400,
-                                        child: TabBar(labelColor: Colors.blue, automaticIndicatorColorAdjustment: true, tabs: [
-                                          Tab(child: Text('GATE')),
-                                          Tab(child: Text('CAFETERIA')),
-                                        ]),
-                                      ),
-                                      Expanded(
-                                        child: TabBarView(children: [
-                                          AttendanceTable(logs: gateLogs, area: 'GATE'),
-                                          AttendanceTable(logs: cafeLogs, area: 'CAFETERIA'),
-                                        ]),
-                                      ),
-                                    ],
-                                  );
-                                }
-                                if (snapshot.hasError) {
-                                  return const Center(
-                                    child: Text("Attendance Data Could not be retreived. PLease try again"),
-                                  );
-                                }
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }),
-                        ));
+                          child: BioAttendnace(entity: entity),
+                        );
                       });
                 },
               ),
@@ -188,7 +68,50 @@ class StudentSource extends DataTableSource {
           DataCell(IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              entity.controller.delete();
+              var future = entity.controller.delete().then((value) {
+                functions.httpsCallable('deleteEmployee').call({'token': AttendanceController.token, 'emp_code': entity.icNumber});
+                setstate(() {
+                  students.removeWhere((element) => element.student == entity);
+                });
+              });
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return FutureBuilder(
+                      future: future,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
+                          return AlertDialog(
+                            title: const Text("Student Deleted"),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Okay"))
+                            ],
+                          );
+                        }
+
+                        if (snapshot.hasError) {
+                          return AlertDialog(
+                            title: const Text("Error occured"),
+                            content: Text(snapshot.error.toString()),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Okay"))
+                            ],
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+                  });
             },
           )),
           DataCell(IconButton(
@@ -241,19 +164,26 @@ class AttendanceLogSource extends DataTableSource {
     return statrTime.isAfter(date);
   }
 
+  final _format = DateFormat.yMMMMd('en_US');
+
   @override
   DataRow? getRow(int index) {
     assert(index >= 0);
     if (index >= logs.length) return null;
     final log = logs[index];
 
-    return DataRow(cells: [
+    var cells = [
       DataCell(Text((index + 1).toString())),
-      DataCell(Text(log.punchTime.toString().substring(0, 10))),
-      DataCell(Text(log.punchTime.toString().substring(10, 16))),
+      DataCell(Text(_format.format(log.punchTime))),
+      DataCell(Text(TimeOfDay.fromDateTime(log.punchTime).format(context))),
       DataCell(Text(log.punchStateDisplay.toString())),
       DataCell(Text(status(log.punchTime) ? "ON-TIME" : "LATE")),
-    ]);
+    ];
+    if (area == 'CAFETERIA') {
+      cells.removeLast();
+    }
+
+    return DataRow(cells: cells);
   }
 
   @override
@@ -265,7 +195,7 @@ class AttendanceLogSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  static List<DataColumn> getCoumns() {
+  static List<DataColumn> getCoumns(String? area) {
     List<DataColumn> columns = [
       const DataColumn(label: Text('SINO')),
       const DataColumn(label: Text('DATE')),
@@ -273,18 +203,87 @@ class AttendanceLogSource extends DataTableSource {
       const DataColumn(label: Text('PUNCH STATE')),
       const DataColumn(label: Text('STATUS')),
     ];
+    if (area == 'CAFETERIA') {
+      columns.removeLast();
+    }
     return columns;
   }
 }
 
-class AttendanceTable extends StatelessWidget {
+class AttendanceTable extends StatefulWidget {
   const AttendanceTable({Key? key, required this.logs, required this.area}) : super(key: key);
 
   final List<TransactionLog> logs;
   final String area;
+
+  @override
+  State<AttendanceTable> createState() => _AttendanceTableState();
+}
+
+class _AttendanceTableState extends State<AttendanceTable> {
+  final fromDateController = TextEditingController();
+  final toDateController = TextEditingController();
+
+  @override
+  void initState() {
+    var today = DateTime.now();
+    fromDate = DateTime(today.year, today.month, today.day);
+    toDate = fromDate.add(const Duration(days: 1));
+    fromDateController.text = _format.format(fromDate);
+    toDateController.text = _format.format(toDate);
+    super.initState();
+  }
+
+  final _format = DateFormat.yMMMMd('en_US');
+
+  late DateTime toDate;
+  late DateTime fromDate;
+  Widget getTextFormField(bool isFromDate) {
+    return SizedBox(
+      width: isMobile(context) ? 100 : 300,
+      child: TextFormField(
+        controller: isFromDate ? fromDateController : toDateController,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            onPressed: () async {
+              DateTime date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime.now(),
+                  ) ??
+                  (isFromDate ? fromDate : toDate);
+
+              if (isFromDate) {
+                setState(() {
+                  fromDateController.text = _format.format(date);
+                  fromDate = date;
+                });
+              } else {
+                setState(() {
+                  toDateController.text = _format.format(date);
+                  toDate = date;
+                });
+              }
+            },
+            icon: const Icon(Icons.calendar_month),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var source = AttendanceLogSource(context, logs, area);
-    return PaginatedDataTable(columns: AttendanceLogSource.getCoumns(), source: source);
+    var source = AttendanceLogSource(context, widget.logs, widget.area);
+    return PaginatedDataTable(
+      header: const Text(''),
+      actions: [
+        getTextFormField(true),
+        getTextFormField(false),
+      ],
+      columns: AttendanceLogSource.getCoumns(widget.area),
+      source: source,
+    );
   }
 }

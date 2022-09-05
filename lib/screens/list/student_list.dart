@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:school_app/models/student.dart';
 import 'package:school_app/screens/Form/student_form.dart';
 import 'package:school_app/screens/list/source/student_source.dart';
 import 'package:school_app/service/excel_service.dart';
+import 'package:school_app/widgets/dashboard/class_list.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
@@ -42,11 +44,18 @@ class StudentTransaction {
 
   factory StudentTransaction.create(Student student, List<TransactionLog> logs) {
     var studentTransaction = StudentTransaction(student, logs);
-    studentTransaction.checkInStatus = logs.firstWhereOrNull((element) => element.punchState == "0")?.checkInStatus;
-    studentTransaction.checkInTime = logs.firstWhereOrNull((element) => element.punchState == "0")?.punchTime;
+
+    var checkIntransaction = logs.firstWhereOrNull((element) => element.punchState == "0");
+    studentTransaction.checkInTime = checkIntransaction?.punchTime;
+    studentTransaction.checkInStatus = checkIntransaction?.checkInStatus;
+
     var list = logs.where((element) => element.punchState == "1");
-    studentTransaction.checkOutTime = list.isEmpty ? null : list.last.punchTime;
-    studentTransaction.checkOutStatus = list.isEmpty ? null : list.last.checkOutStatus;
+    var checkOutTransaction = list.isEmpty ? null : list.last;
+    studentTransaction.checkOutTime = checkOutTransaction?.punchTime;
+    studentTransaction.checkOutStatus = checkOutTransaction?.checkOutStatus;
+    if (student.name == 'BRUCE BANNER') {
+      print(studentTransaction.checkOutStatus);
+    }
     return studentTransaction;
   }
 
@@ -59,7 +68,7 @@ class StudentTransaction {
 class StudentList extends StatefulWidget {
   const StudentList({Key? key}) : super(key: key);
 
-  static const routeName = '/passArguments';
+  static const routeName = '/StudentList';
   @override
   State<StudentList> createState() => _StudentListState();
 }
@@ -118,7 +127,7 @@ class _StudentListState extends State<StudentList> {
 
   int statusFilter = 0;
 
-  static Future<List<StudentTransaction>> getStudentTransactions(Map<String, dynamic> map) async {
+  Future<List<StudentTransaction>> getStudentTransactions(Map<String, dynamic> map) async {
     String? search = map['search'];
     String? classFilter = map['classFilter'];
     String? sectionFilter = map['sectionFilter'];
@@ -142,13 +151,33 @@ class _StudentListState extends State<StudentList> {
     Future<List<Student>> future1 =
         query.get().then((value) => value.docs.map((e) => Student.fromJson(e.data())).toList()).then((value) => _studentslist = value);
     Future<List<TransactionLog>> future2 = getTransactionLogs(date).then((value) => _logslist = value);
-    await Future.wait([future1, future2]);
+    try {
+      await Future.wait([future1, future2]);
+    } catch (e) {
+      if (e is FirebaseFunctionsException) {
+        hasError = true;
+      }
+    }
+
+    printInfo(info: " STUDENT LIST LENGTH : ${_studentslist.length}");
 
     for (var student in _studentslist) {
+      print(student.toBioJson());
       studentTransactions.add(StudentTransaction.create(student, _logslist.where((element) => element.empCode == student.icNumber).toList()));
+    }
+
+    var tempTransactions = [];
+
+    if (checkInStatus != null) {
+      studentTransactions = studentTransactions.where((element) => (element.checkInStatus == checkInStatus)).toList();
+    }
+    if (checkOutstatus != null) {
+      studentTransactions = studentTransactions.where((element) => element.checkOutStatus == checkOutstatus).toList();
     }
     return studentTransactions;
   }
+
+  bool hasError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +194,22 @@ class _StudentListState extends State<StudentList> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      IconButton(
+                        tooltip: "Class Master",
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  child: ClassList(),
+                                );
+                              });
+                        },
+                        icon: Image.network(
+                          'https://cdn-icons-png.flaticon.com/512/942/942968.png',
+                          height: getHeight(context) * 0.03,
+                        ),
+                      ),
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -188,7 +233,7 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.053,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.10,
                             child: DropdownButtonFormField<String?>(
                               value: classFilter,
                               decoration: const InputDecoration(
@@ -213,7 +258,7 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.053,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.10,
                             child: DropdownButtonFormField<String>(
                               value: sectionFilter,
                               decoration: const InputDecoration(
@@ -254,7 +299,7 @@ class _StudentListState extends State<StudentList> {
                           onPressed: () {
                             setState(() {});
                           },
-                          icon: const Icon(Icons.refresh))
+                          icon: const Icon(Icons.refresh)),
                     ],
                   ),
                 ),
@@ -264,104 +309,106 @@ class _StudentListState extends State<StudentList> {
                       compute(getStudentTransactions, {'search': search, 'classFilter': classFilter, 'sectionFilter': sectionFilter, 'date': date}),
                   builder: (context, AsyncSnapshot<List<StudentTransaction>> snapshot) {
                     List<StudentTransaction> sourceList = [];
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(snapshot.error.toString()),
-                      );
-                    }
-                    if ((snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) &&
-                        snapshot.hasData) {
+
+                    if ((snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done)) {
                       sourceList = snapshot.data ?? [];
-                      if (checkInStatus != null) {
-                        sourceList = sourceList.where((element) => element.checkInStatus == checkInStatus).toList();
-                      }
 
-                      if (checkOutstatus != null) {
-                        sourceList = sourceList.where((element) => element.checkOutStatus == checkOutstatus).toList();
-                      }
-
-                      var source = StudentSource(sourceList, context);
-                      return ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: getWidth(context) * 0.90,
-                          maxWidth: 1980,
-                        ),
-                        child: PaginatedDataTable(
-                          header: const Text("STUDENT LIST"),
-                          actions: [
-                            isMobile(context)
-                                ? ElevatedButton(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text("Filters"),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: getFilterChildren(),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: const Text("OKAY"))
-                                              ],
-                                            );
-                                          });
-                                    },
-                                    child: const Text("Show Filters"))
-                                : Row(children: getFilterChildren()),
-                            ElevatedButton(
-                                onPressed: () async {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return FutureBuilder<List<int>>(
-                                            future: compute(ExcelService.createStudentReport, sourceList),
-                                            builder: (context, AsyncSnapshot<List<int>> snapshot) {
-                                              if ((snapshot.connectionState == ConnectionState.active ||
-                                                      snapshot.connectionState == ConnectionState.done) &&
-                                                  snapshot.hasData) {
-                                                return AlertDialog(
-                                                  title: const Text("Your download is ready"),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          if (kIsWeb) {
-                                                            AnchorElement(
-                                                                href:
-                                                                    'data:application/octet-stream;charset=utf-16le;base64, ${base64.encode(snapshot.data!)}')
-                                                              ..setAttribute('download', 'export.xlsx')
-                                                              ..click();
-                                                          }
-                                                        },
-                                                        child: const Text('DOWNLOAD'))
-                                                  ],
-                                                );
-                                              }
-                                              if (snapshot.hasError) {
-                                                return AlertDialog(
-                                                  title: const Text("Error Occured. Contact Admin"),
-                                                  content: Text(snapshot.error.toString()),
-                                                );
-                                              }
-                                              return const AlertDialog(
-                                                content: Center(
-                                                  child: CircularProgressIndicator(),
-                                                ),
-                                              );
+                      return Column(
+                        children: [
+                          hasError
+                              ? const SizedBox(
+                                  height: 50,
+                                  child: Center(
+                                    child: Text("ATTENDANCE API IS OFFLINE, COULD NOT RETRIEVE DATA", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                )
+                              : Container(),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: getWidth(context) * 0.90,
+                              maxWidth: 1980,
+                            ),
+                            child: StatefulBuilder(builder: (context, setstate) {
+                              var source = StudentSource(sourceList, context, setstate);
+                              return PaginatedDataTable(
+                                header: const Text("STUDENT LIST"),
+                                actions: [
+                                  isMobile(context)
+                                      ? ElevatedButton(
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: const Text("Filters"),
+                                                    content: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: getFilterChildren(),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: const Text("OKAY"))
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: const Text("Show Filters"))
+                                      : Row(children: getFilterChildren()),
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return FutureBuilder<List<int>>(
+                                                  future: compute(ExcelService.createStudentsReport, sourceList),
+                                                  builder: (context, AsyncSnapshot<List<int>> snapshot) {
+                                                    if ((snapshot.connectionState == ConnectionState.active ||
+                                                            snapshot.connectionState == ConnectionState.done) &&
+                                                        snapshot.hasData) {
+                                                      return AlertDialog(
+                                                        title: const Text("Your download is ready"),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                if (kIsWeb) {
+                                                                  AnchorElement(
+                                                                      href:
+                                                                          'data:application/octet-stream;charset=utf-16le;base64, ${base64.encode(snapshot.data!)}')
+                                                                    ..setAttribute('download', 'export.xlsx')
+                                                                    ..click();
+                                                                }
+                                                              },
+                                                              child: const Text('DOWNLOAD'))
+                                                        ],
+                                                      );
+                                                    }
+                                                    if (snapshot.hasError) {
+                                                      return AlertDialog(
+                                                        title: const Text("Error Occured. Contact Admin"),
+                                                        content: Text(snapshot.error.toString()),
+                                                      );
+                                                    }
+                                                    return const AlertDialog(
+                                                      content: Center(
+                                                        child: CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  });
                                             });
-                                      });
-                                },
-                                child: const Text("EXPORT"))
-                          ],
-                          dragStartBehavior: DragStartBehavior.start,
-                          columns: StudentSource.getCoumns(EntityType.student),
-                          source: source,
-                          rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
-                        ),
+                                      },
+                                      child: const Text("EXPORT"))
+                                ],
+                                dragStartBehavior: DragStartBehavior.start,
+                                columns: StudentSource.getCoumns(EntityType.student),
+                                source: source,
+                                rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 7,
+                              );
+                            }),
+                          ),
+                        ],
                       );
                     }
 

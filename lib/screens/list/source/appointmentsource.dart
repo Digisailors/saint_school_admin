@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/appointment_controller.dart';
 import 'package:school_app/models/appointment.dart';
@@ -29,7 +30,7 @@ class AppointmentSource extends DataTableSource {
           DataCell(Text(sNo.toString())),
           DataCell(Text(appointment.purpose)),
           DataCell(Text(appointment.parent.name)),
-          DataCell(Text(appointment.date.toString())),
+          DataCell(Text(appointment.date.toString().substring(0, 10))),
           DataCell(Text(appointment.fromTime.format(context) + " : " + appointment.toTime.format(context))),
           DataCell(Text(appointment.parentApproval ? "Accepted" : "Pending")),
           DataCell(
@@ -38,8 +39,8 @@ class AppointmentSource extends DataTableSource {
                 : ElevatedButton(
                     onPressed: () {
                       appointment.adminApproval = true;
-                      appointment.status =
-                          (appointment.parentApproval && appointment.adminApproval) ? AppointmentStatus.approved : AppointmentStatus.pending;
+                      // appointment.status =
+                      //     (appointment.parentApproval && appointment.adminApproval) ? AppointmentStatus.approved : AppointmentStatus.pending;
                       appointment.approve();
                     },
                     child: const Text('Approve'),

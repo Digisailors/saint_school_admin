@@ -117,6 +117,7 @@ class StudentController extends GetxController implements CRUD {
 
   @override
   Future<Result> delete() async {
+    print("Deleting");
     await firestore.collection('parents').where('parents', arrayContains: student.icNumber).get().then((value) {
       value.docs.map((e) => Parent.fromJson(e.data())).forEach((element) {
         element.children.remove(student.icNumber);

@@ -4,18 +4,15 @@ import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/controllers/queue_controller.dart';
 import 'package:school_app/controllers/session_controller.dart';
-import 'package:school_app/screens/Form/post_form.dart';
+import 'package:school_app/models/biodata.dart';
 import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
 import 'package:school_app/screens/list/admin_list.dart';
 import 'package:school_app/screens/list/appointmentlist.dart';
-import 'package:school_app/screens/list/class_list.dart';
 import 'package:school_app/screens/list/parent_list.dart';
 import 'package:school_app/screens/list/post_list.dart';
 import 'package:school_app/screens/list/student_list.dart';
 import 'package:school_app/screens/list/teacher_list.dart';
-import 'package:school_app/screens/list/teachers_list.dart';
-import 'package:school_app/widgets/dashboard/class_list.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -84,20 +81,23 @@ class SideMenu extends StatelessWidget {
                     Get.offAll(() => const ParentList());
                   },
                 ),
-                DrawerListTile(
-                  leading: Image.network(
-                    'https://cdn-icons-png.flaticon.com/512/4696/4696727.png',
-                    height: getHeight(context) * 0.03,
-                  ),
-                  title: "Teacher List",
-                  svgSrc: "assets/icons/menu_tran.svg",
-                  selected: currentPage == 3,
-                  press: () {
-                    session.pageIndex = 3;
-                    // Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
-                    Get.offAll(() => const TeachersList());
-                  },
-                ),
+                (auth.isAdmin!)
+                    ? DrawerListTile(
+                        leading: Image.network(
+                          'https://cdn-icons-png.flaticon.com/512/4696/4696727.png',
+                          height: getHeight(context) * 0.03,
+                        ),
+                        title: "Teacher List",
+                        svgSrc: "assets/icons/menu_tran.svg",
+                        selected: currentPage == 3,
+                        press: () {
+                          session.pageIndex = 3;
+                          // Get.offAllNamed(EntityList.routeName, arguments: EntityType.teacher);
+                          Get.offAll(() => const TeachersList());
+                        },
+                      )
+                    : Container(),
+
                 DrawerListTile(
                   leading: Image.network(
                     'https://cdn-icons-png.flaticon.com/512/942/942759.png',
@@ -137,20 +137,6 @@ class SideMenu extends StatelessWidget {
                 ),
                 DrawerListTile(
                   leading: Image.network(
-                    'https://cdn-icons-png.flaticon.com/512/942/942968.png',
-                    height: getHeight(context) * 0.03,
-                  ),
-                  title: "Class",
-                  svgSrc: "assets/icons/menu_tran.svg",
-                  selected: currentPage == 5,
-                  press: () {
-                    session.pageIndex = 5;
-                    Get.offAll(const ClassMaster());
-                    // Get.offAll(() => const Carousel());
-                  },
-                ),
-                DrawerListTile(
-                  leading: Image.network(
                     'https://cdn-icons-png.flaticon.com/512/1378/1378644.png',
                     height: getHeight(context) * 0.03,
                   ),
@@ -163,20 +149,40 @@ class SideMenu extends StatelessWidget {
                     // Get.offAll(() => const Carousel());
                   },
                 ),
-                DrawerListTile(
-                  leading: Image.network(
-                    'https://cdn-icons-png.flaticon.com/512/1378/1378644.png',
-                    height: getHeight(context) * 0.03,
-                  ),
-                  title: "Admins",
-                  svgSrc: "assets/icons/menu_tran.svg",
-                  selected: currentPage == 7,
-                  press: () {
-                    session.pageIndex = 7;
-                    Get.offAll(const AdminList());
-                    // Get.offAll(() => const Carousel());
-                  },
-                ),
+                (auth.isAdmin!)
+                    ? DrawerListTile(
+                        leading: Image.network(
+                          'https://cdn-icons-png.flaticon.com/512/6024/6024190.png',
+                          height: getHeight(context) * 0.03,
+                        ),
+                        title: "Admins",
+                        svgSrc: "assets/icons/menu_tran.svg",
+                        selected: currentPage == 7,
+                        press: () {
+                          session.pageIndex = 7;
+                          Get.offAll(const AdminList());
+                          // Get.offAll(() => const Carousel());
+                        },
+                      )
+                    : Container(),
+                // DrawerListTile(
+                // leading: Image.network(
+                //   'https://cdn-icons-png.flaticon.com/512/942/942968.png',
+                //   height: getHeight(context) * 0.03,
+                // ),
+                //   title: "Class",
+                //   svgSrc: "assets/icons/menu_tran.svg",
+                //   // selected: currentPage == 5,
+                //   press: () {
+                //     // session.pageIndex = 5;
+                //     showDialog(
+                //         context: context,
+                //         builder: (context) {
+                //           return Dialog(child: ClassList());
+                //         });
+                //     // Get.offAll(() => const Carousel());
+                //   },
+                // ),
                 DrawerListTile(
                   leading: Image.network(
                     'https://cdn-icons-png.flaticon.com/512/1574/1574351.png',

@@ -109,7 +109,7 @@ class _TeacherFormState extends State<TeacherForm> {
                     SizedBox(
                       width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                       child: CustomTextField(
-                        hintText: 'Student Name',
+                        hintText: 'Teacher Name',
                         validator: requiredValidator,
                         controller: controller.name,
                         labelText: 'Name   ',
@@ -138,6 +138,7 @@ class _TeacherFormState extends State<TeacherForm> {
                         controller: controller.icNumber,
                         labelText: 'IC Number',
                         hintText: 'Enter IC Number',
+                        enabled: widget.teacher == null,
                       ),
                     ),
                   ],

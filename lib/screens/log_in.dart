@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:school_app/constants/constant.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/auth_controller.dart';
 import 'package:school_app/widgets/responsivewidget.dart';
@@ -75,7 +76,8 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                             });
                           } else {
-                            auth.signInWithEmailAndPassword(emailController.text.removeAllWhitespace, passwordController.text);
+                            var future = auth.signInWithEmailAndPassword(emailController.text.removeAllWhitespace, passwordController.text);
+                            showFutureCustomDialog(context: context, future: future, onTapOk: () => Navigator.of(context).pop());
                           }
                         },
                         child: Text(forgotPassword ? "RESET PASSWORD" : "LOG IN"),
@@ -169,7 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                                                 });
                                           });
                                         } else {
-                                          auth.signInWithEmailAndPassword(emailController.text.removeAllWhitespace, passwordController.text);
+                                          var future =
+                                              auth.signInWithEmailAndPassword(emailController.text.removeAllWhitespace, passwordController.text);
+                                          showFutureCustomDialog(context: context, future: future, onTapOk: () => Navigator.of(context).pop());
                                         }
                                       },
                                       child: Text(forgotPassword ? "RESET PASSWORD" : "LOG IN"),
@@ -270,7 +274,9 @@ class _LoginPageState extends State<LoginPage> {
                                                 });
                                           });
                                         } else {
-                                          auth.signInWithEmailAndPassword(emailController.text.removeAllWhitespace, passwordController.text);
+                                          var future =
+                                              auth.signInWithEmailAndPassword(emailController.text.removeAllWhitespace, passwordController.text);
+                                          showFutureCustomDialog(context: context, future: future, onTapOk: () => Navigator.of(context).pop());
                                         }
                                       },
                                       child: Text(forgotPassword ? "RESET PASSWORD" : "LOG IN"),

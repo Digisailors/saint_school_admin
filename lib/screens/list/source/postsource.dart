@@ -33,19 +33,23 @@ class PostSource extends DataTableSource {
     Post post = postlist[index];
     return DataRow.byIndex(
         index: index,
-        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : Color.fromARGB(255, 233, 232, 232)),
+        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : const Color.fromARGB(255, 233, 232, 232)),
         cells: [
           DataCell(Text(sNo.toString())),
           DataCell(SizedBox(width: 300, child: Text(post.title))),
-          DataCell(SizedBox(
-              width: 600,
-              child: Text(
-                post.content,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ))),
+          DataCell(Tooltip(
+            message: post.content,
+            preferBelow: true,
+            child: SizedBox(
+                width: 600,
+                child: Text(
+                  post.content,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                )),
+          )),
           DataCell(Text(post.audience.toString().split('.').last.toUpperCase())),
-          DataCell(Text(post.date.toIso8601String())),
+          DataCell(Text(post.date.toString().substring(0, 10))),
           DataCell(IconButton(
             icon: const Icon(Icons.visibility),
             onPressed: () {

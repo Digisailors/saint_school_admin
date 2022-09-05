@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 // import 'package:universal_html/html.dart' show AnchorElement;
 
 class ExcelService {
-  static Future<List<int>> createStudentReport(List<StudentTransaction> studentTransactions) async {
+  static Future<List<int>> createStudentsReport(List<StudentTransaction> studentTransactions) async {
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
     sheet.getRangeByName('A1').setText('NAME');
@@ -49,7 +49,7 @@ class ExcelService {
     return bytes;
   }
 
-  static Future<List<int>> createTeacherReport(List<TeacherTransaction> teacherTransactions) async {
+  static Future<List<int>> createTeachersReport(List<TeacherTransaction> teacherTransactions) async {
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
     sheet.getRangeByName('A1').setText('NAME');

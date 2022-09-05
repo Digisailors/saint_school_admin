@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:universal_html/html.dart' show AnchorElement;
 import '../../constants/constant.dart';
 import '../../constants/get_constants.dart';
 import '../../models/teacher.dart';
+import '../../widgets/dashboard/class_list.dart';
 import 'student_list.dart';
 
 class TeacherTransaction {
@@ -111,7 +113,7 @@ class _TeachersListState extends State<TeachersList> {
 
   int statusFilter = 0;
 
-  static Future<List<TeacherTransaction>> getTeacherTransactions(Map<String, dynamic> map) async {
+  Future<List<TeacherTransaction>> getTeacherTransactions(Map<String, dynamic> map) async {
     String? search = map['search'];
     String? classFilter = map['classFilter'];
     String? sectionFilter = map['sectionFilter'];
@@ -126,7 +128,7 @@ class _TeachersListState extends State<TeachersList> {
       query = query.where('search', arrayContains: search);
     }
     if (classFilter != null) {
-      query = query.where('class', isEqualTo: classFilter);
+      query = query.where('className', isEqualTo: classFilter);
     }
     if (sectionFilter != null) {
       query = query.where('section', isEqualTo: sectionFilter);
@@ -135,13 +137,29 @@ class _TeachersListState extends State<TeachersList> {
     Future<List<Teacher>> future1 =
         query.get().then((value) => value.docs.map((e) => Teacher.fromJson(e.data())).toList()).then((value) => _teacherslist = value);
     Future<List<TransactionLog>> future2 = getTransactionLogs(date).then((value) => _logslist = value);
-    await Future.wait([future1, future2]);
+    try {
+      await Future.wait([future1, future2]);
+    } catch (e) {
+      if (e is FirebaseFunctionsException) {
+        hasError = true;
+      }
+    }
 
     for (var teacher in _teacherslist) {
       teacherTransactions.add(TeacherTransaction.create(teacher, _logslist.where((element) => element.empCode == teacher.icNumber).toList()));
     }
+
+    if (checkInStatus != null) {
+      teacherTransactions = teacherTransactions.where((element) => (element.checkInStatus == checkInStatus)).toList();
+    }
+    if (checkOutstatus != null) {
+      teacherTransactions = teacherTransactions.where((element) => element.checkOutStatus == checkOutstatus).toList();
+    }
+
     return teacherTransactions;
   }
+
+  bool hasError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -158,12 +176,28 @@ class _TeachersListState extends State<TeachersList> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      IconButton(
+                        tooltip: "Class Master",
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  child: ClassList(),
+                                );
+                              });
+                        },
+                        icon: Image.network(
+                          'https://cdn-icons-png.flaticon.com/512/942/942968.png',
+                          height: getHeight(context) * 0.03,
+                        ),
+                      ),
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.08,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.1,
                             child: Center(
                               child: TextFormField(
                                 onChanged: ((value) => search = value),
@@ -181,7 +215,7 @@ class _TeachersListState extends State<TeachersList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.053,
-                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.1,
                             child: DropdownButtonFormField<String?>(
                               value: classFilter,
                               decoration: const InputDecoration(
@@ -265,98 +299,110 @@ class _TeachersListState extends State<TeachersList> {
                     if ((snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) &&
                         snapshot.hasData) {
                       sourceList = snapshot.data ?? [];
-                      if (checkInStatus != null) {
-                        sourceList = sourceList.where((element) => element.checkInStatus == checkInStatus).toList();
-                      }
+                      // if (checkInStatus != null) {
+                      //   sourceList = sourceList.where((element) => element.checkInStatus == checkInStatus).toList();
+                      // }
 
-                      if (checkOutstatus != null) {
-                        sourceList = sourceList.where((element) => element.checkOutStatus == checkOutstatus).toList();
-                      }
+                      // if (checkOutstatus != null) {
+                      //   sourceList = sourceList.where((element) => element.checkOutStatus == checkOutstatus).toList();
+                      // }
 
-                      return ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: getWidth(context) * 0.90,
-                          maxWidth: 1980,
-                        ),
-                        child: StatefulBuilder(builder: (context, setstate) {
-                          var source = TeacherSource(sourceList, context, setstate);
-                          return PaginatedDataTable(
-                            header: const Text("TEACHER LIST"),
-                            actions: [
-                              isMobile(context)
-                                  ? ElevatedButton(
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: const Text("Filters"),
-                                                content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: getFilterChildren(),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: const Text("OKAY"))
-                                                ],
-                                              );
-                                            });
-                                      },
-                                      child: const Text("Show Filters"))
-                                  : Row(children: getFilterChildren()),
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return FutureBuilder<List<int>>(
-                                              future: compute(ExcelService.createTeacherReport, sourceList),
-                                              builder: (context, AsyncSnapshot<List<int>> snapshot) {
-                                                if ((snapshot.connectionState == ConnectionState.active ||
-                                                        snapshot.connectionState == ConnectionState.done) &&
-                                                    snapshot.hasData) {
+                      return Column(
+                        children: [
+                          hasError
+                              ? const SizedBox(
+                                  height: 50,
+                                  child: Center(
+                                    child: Text("ATTENDANCE API IS OFFLINE, COULD NOT RETRIEVE DATA", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                )
+                              : Container(),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: getWidth(context) * 0.90,
+                              maxWidth: 1980,
+                            ),
+                            child: StatefulBuilder(builder: (context, setstate) {
+                              var source = TeacherSource(sourceList, context, setstate);
+                              return PaginatedDataTable(
+                                header: const Text("TEACHER LIST"),
+                                actions: [
+                                  isMobile(context)
+                                      ? ElevatedButton(
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
                                                   return AlertDialog(
-                                                    title: const Text("Your download is ready"),
+                                                    title: const Text("Filters"),
+                                                    content: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: getFilterChildren(),
+                                                    ),
                                                     actions: [
                                                       TextButton(
                                                           onPressed: () {
-                                                            if (kIsWeb) {
-                                                              AnchorElement(
-                                                                  href:
-                                                                      'data:application/octet-stream;charset=utf-16le;base64, ${base64.encode(snapshot.data!)}')
-                                                                ..setAttribute('download', 'export.xlsx')
-                                                                ..click();
-                                                            }
+                                                            Navigator.of(context).pop();
                                                           },
-                                                          child: const Text('DOWNLOAD'))
+                                                          child: const Text("OKAY"))
                                                     ],
                                                   );
-                                                }
-                                                if (snapshot.hasError) {
-                                                  return AlertDialog(
-                                                    title: const Text("Error Occured. Contact Admin"),
-                                                    content: SelectableText(snapshot.error.toString()),
-                                                  );
-                                                }
-                                                return const AlertDialog(
-                                                  content: Center(
-                                                    child: CircularProgressIndicator(),
-                                                  ),
-                                                );
-                                              });
-                                        });
-                                  },
-                                  child: const Text("EXPORT"))
-                            ],
-                            dragStartBehavior: DragStartBehavior.start,
-                            columns: TeacherSource.getCoumns(),
-                            source: source,
-                            rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
-                          );
-                        }),
+                                                });
+                                          },
+                                          child: const Text("Show Filters"))
+                                      : Row(children: getFilterChildren()),
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return FutureBuilder<List<int>>(
+                                                  future: compute(ExcelService.createTeachersReport, sourceList),
+                                                  builder: (context, AsyncSnapshot<List<int>> snapshot) {
+                                                    if ((snapshot.connectionState == ConnectionState.active ||
+                                                            snapshot.connectionState == ConnectionState.done) &&
+                                                        snapshot.hasData) {
+                                                      return AlertDialog(
+                                                        title: const Text("Your download is ready"),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                if (kIsWeb) {
+                                                                  AnchorElement(
+                                                                      href:
+                                                                          'data:application/octet-stream;charset=utf-16le;base64, ${base64.encode(snapshot.data!)}')
+                                                                    ..setAttribute('download', 'export.xlsx')
+                                                                    ..click();
+                                                                }
+                                                              },
+                                                              child: const Text('DOWNLOAD'))
+                                                        ],
+                                                      );
+                                                    }
+                                                    if (snapshot.hasError) {
+                                                      return AlertDialog(
+                                                        title: const Text("Error Occured. Contact Admin"),
+                                                        content: SelectableText(snapshot.error.toString()),
+                                                      );
+                                                    }
+                                                    return const AlertDialog(
+                                                      content: Center(
+                                                        child: CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  });
+                                            });
+                                      },
+                                      child: const Text("EXPORT"))
+                                ],
+                                dragStartBehavior: DragStartBehavior.start,
+                                columns: TeacherSource.getCoumns(),
+                                source: source,
+                                rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 7,
+                              );
+                            }),
+                          ),
+                        ],
                       );
                     }
 

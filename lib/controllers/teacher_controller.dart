@@ -36,6 +36,7 @@ class TeacherController extends GetxController implements CRUD {
           .then((value) => Result.success("Teacher added successfully"))
           .onError((error, stackTrace) => Result.error(error.toString()));
     } catch (e) {
+      print(e);
       return Result.error(e.toString());
     }
   }

@@ -22,6 +22,8 @@ class _ParentListState extends State<ParentList> {
   String? search;
   String? section;
 
+  final searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +35,9 @@ class _ParentListState extends State<ParentList> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
                 var list = snapshot.data;
-                if ((search ?? '').isNotEmpty) {
-                  list = list!.where((element) => element.name.startsWith(search!)).toList();
-                }
+                // if ((search ?? '').isNotEmpty) {
+                //   list = list!.where((element) => element.name.toLowerCase().contains(search!.toLowerCase())).toList();
+                // }
 
                 var source = BioSource(list!, context);
                 return SingleChildScrollView(
@@ -55,7 +57,12 @@ class _ParentListState extends State<ParentList> {
                                   width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                                   child: Center(
                                     child: TextFormField(
-                                      onChanged: ((value) => search = value),
+                                      controller: searchController,
+                                      onChanged: ((value) {
+                                        if (value.isEmpty) {
+                                          setState(() {});
+                                        }
+                                      }),
                                       decoration: InputDecoration(
                                         prefixIcon: Icon(
                                           Icons.search,
@@ -111,8 +118,8 @@ class _ParentListState extends State<ParentList> {
 
   getStream() {
     Query<Map<String, dynamic>> query = firestore.collection('parents');
-    if (search != null) {
-      query = query.where('search', arrayContains: search);
+    if (searchController.text.isNotEmpty) {
+      query = query.where('search', arrayContains: searchController.text.toLowerCase());
     }
     return query.snapshots().map((event) => event.docs.map((e) => Parent.fromJson(e.data())).toList());
   }

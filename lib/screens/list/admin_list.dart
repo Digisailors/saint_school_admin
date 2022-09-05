@@ -24,14 +24,13 @@ class AdminList extends StatefulWidget {
 class _AdminListState extends State<AdminList> {
   StudentFormController get controller => session.formcontroller;
 
-  String? search;
+  TextEditingController search = TextEditingController();
 
   Stream<List<Admin>> getStream() {
     Query<Map<String, dynamic>> query = firestore.collection('admins');
-    if (search != null) {
-      query = query.where('search', arrayContains: search);
+    if (search.text.isNotEmpty) {
+      query = query.where('search', arrayContains: search.text.toLowerCase());
     }
-
     return query.snapshots().map((event) => event.docs.map((e) {
           return Admin.fromJson(e.data());
         }).toList());
@@ -50,9 +49,7 @@ class _AdminListState extends State<AdminList> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  width: isMobile(context)
-                      ? getWidth(context) * 2
-                      : getWidth(context) * 0.80,
+                  width: isMobile(context) ? getWidth(context) * 2 : getWidth(context) * 0.80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -62,12 +59,13 @@ class _AdminListState extends State<AdminList> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
                             height: getHeight(context) * 0.08,
-                            width: isMobile(context)
-                                ? getWidth(context) * 0.40
-                                : getWidth(context) * 0.20,
+                            width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
-                                onChanged: ((value) => search = value),
+                                controller: search,
+                                onChanged: ((value) => {
+                                      if (value.isEmpty) {setState(() {})}
+                                    }),
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.search,
@@ -93,7 +91,7 @@ class _AdminListState extends State<AdminList> {
                         padding: const EdgeInsets.all(4.0),
                         child: ElevatedButton(
                             onPressed: () {
-                              setStreamBuilderState!(() {});
+                              setState(() {});
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -109,8 +107,7 @@ class _AdminListState extends State<AdminList> {
                 return StreamBuilder<List<Admin>>(
                     stream: getStream(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.active &&
-                          snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
                         var list = snapshot.data;
                         print(list!.first.toJson());
                         var source = BioSource(list, context);
@@ -123,9 +120,7 @@ class _AdminListState extends State<AdminList> {
                             dragStartBehavior: DragStartBehavior.start,
                             columns: BioSource.getCoumns(EntityType.admin),
                             source: source,
-                            rowsPerPage: (getHeight(context) ~/
-                                    kMinInteractiveDimension) -
-                                5,
+                            rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 5,
                           ),
                         );
                       }

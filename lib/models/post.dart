@@ -44,6 +44,16 @@ class Post {
     return returns;
   }
 
+  getSearchArray() {
+    var array = [];
+    if (audience == Audience.individual) {
+      array.add(sentTo?.icNumber);
+    } else {
+      array.add(audience.index);
+    }
+    return array;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "docId": docId,
@@ -55,6 +65,7 @@ class Post {
       "title": title,
       "contentImage": contentImage,
       "date": date,
+      "search": getSearchArray()
     };
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:school_app/constants/constant.dart';
@@ -37,7 +38,7 @@ class DepartmentController extends GetxController {
   }
 
   Future<Department> addDepartment(Department department) {
-    var callable = functions.httpsCallable('addDepartment');
+    var callable = functions.httpsCallable('addDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
     var data = department.toJson();
     data.addAll({'token': AttendanceController.token});
     return callable.call(data).then((value) {
@@ -48,7 +49,7 @@ class DepartmentController extends GetxController {
   }
 
   Future<void> loadDepartments() async {
-    var callable = functions.httpsCallable('loadDepartment');
+    var callable = functions.httpsCallable('loadDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
     return callable.call({'token': AttendanceController.token}).then((value) {
       var data = value.data;
       if (data is List) {
@@ -73,7 +74,7 @@ class DepartmentController extends GetxController {
   }
 
   Future<Department> updateDepartment(int id, String deptName, String deptCode) async {
-    var callable = functions.httpsCallable('updateDepartment');
+    var callable = functions.httpsCallable('updateDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
     var data = {
       "dept_code": deptCode,
       "dept_name": deptName,

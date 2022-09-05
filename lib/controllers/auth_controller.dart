@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:school_app/controllers/session_controller.dart';
+import 'package:school_app/models/response.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -30,6 +30,7 @@ class AuthController extends GetxController {
   }
 
   bool? isAdmin;
+  bool? isTeacher;
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -40,7 +41,10 @@ class AuthController extends GetxController {
     try {
       IdTokenResult? result = await currentUser?.getIdTokenResult();
       if (result != null) {
-        returns = result.claims?['admin'] ?? false;
+        isAdmin = result.claims?['admin'] ?? false;
+        isTeacher = result.claims?['teacher'] ?? false;
+        returns = isAdmin! || isTeacher!;
+        update();
       }
     } catch (e) {
       returns = false;
@@ -48,19 +52,45 @@ class AuthController extends GetxController {
     return returns;
   }
 
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
-    final userCredential = await _firebaseAuth.signInWithCredential(
-      EmailAuthProvider.credential(email: email, password: password),
-    );
-    try {
-      IdTokenResult? result = await userCredential.user?.getIdTokenResult();
-      if (result != null) {
-        session.session.isAdmin = result.claims?['admin'] ?? false;
-      }
-    } catch (e) {
-      isAdmin = false;
+  String handleFirebaseAuthError(String e) {
+    if (e.contains("ERROR_WEAK_PASSWORD")) {
+      return "Password is too weak";
+    } else if (e.contains("invalid-email")) {
+      return "Invalid Email";
+    } else if (e.contains("ERROR_EMAIL_ALREADY_IN_USE") || e.contains('email-already-in-use')) {
+      return "The email address is already in use by another account.";
+    } else if (e.contains("ERROR_NETWORK_REQUEST_FAILED")) {
+      return "Network error occured!";
+    } else if (e.contains("ERROR_USER_NOT_FOUND") || e.contains('firebase_auth/user-not-found')) {
+      return "Invalid credentials.";
+    } else if (e.contains("ERROR_WRONG_PASSWORD") || e.contains('wrong-password')) {
+      return "Invalid credentials.";
+    } else if (e.contains('firebase_auth/requires-recent-login')) {
+      return 'This operation is sensitive and requires recent authentication.'
+          ' Log in again before retrying this request.';
+    } else {
+      return e;
     }
-    return userCredential.user;
+  }
+
+  Future<Result> signInWithEmailAndPassword(String email, String password) async {
+    return _firebaseAuth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((userCredential) {
+          userCredential.user?.getIdTokenResult().then((result) {
+            isAdmin = result.claims?['admin'] ?? false;
+            isTeacher = result.claims?['teacher'] ?? false;
+            update();
+          });
+        })
+        .then((value) => Result.success("User Successfully logged in"))
+        .onError((error, stackTrace) {
+          if (error is FirebaseAuthException) {
+            return Result(code: error.code, message: handleFirebaseAuthError(error.code));
+          } else {
+            return Result.error(error.toString());
+          }
+        });
   }
 
   Future<User?> createUserWithEmailAndPassword(String email, String password) async {
@@ -77,20 +107,9 @@ class AuthController extends GetxController {
     });
   }
 
-  signInwithPhoneNumber(String phoneNumber) async {
-    await _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: '+44 7123 123 456',
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _firebaseAuth.signInWithCredential(credential);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-      codeSent: (String verificationId, int? forceResendingToken) {},
-      verificationFailed: (FirebaseAuthException error) {},
-    );
-  }
-
   Future<void> signOut() async {
-    session.session.isAdmin = false;
+    isAdmin = null;
+    isTeacher = null;
     await _firebaseAuth.signOut();
   }
 }

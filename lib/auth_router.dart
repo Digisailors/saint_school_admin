@@ -13,6 +13,7 @@ import 'package:school_app/screens/carousel.dart';
 import 'package:school_app/screens/dashboard.dart';
 import 'package:school_app/screens/landing_page.dart.dart';
 import 'package:school_app/screens/list/list.dart';
+import 'package:school_app/screens/list/student_list.dart';
 import 'package:school_app/screens/log_in.dart';
 import 'package:school_app/widgets/theme.dart';
 
@@ -92,6 +93,7 @@ class AuthRouter extends StatelessWidget {
                   routes: {
                     '/Carousel': (context) => const Carousel(),
                     Dashboard.routeName: (context) => const Dashboard(),
+                    StudentList.routeName: (context) => const StudentList(),
                     '/': (context) => const Dashboard(),
                   },
                 );

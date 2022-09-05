@@ -12,21 +12,36 @@ import 'controllers/auth_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
-  Get.put(SessionController(MySession()));
-  Get.put(AuthController());
+  runApp(const SplashScreen());
+}
 
-  await AttendanceController.loadToken();
-  Get.put(TransactionController());
-  Get.put(DepartmentController());
-  if (auth.currentUser != null) {
-    await auth.reloadClaims();
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  Future<void> getFutures() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    ).then((value) => Future.wait([AttendanceController.loadToken(), auth.reloadClaims()]));
   }
-  // ignore: avoid_print
-  print("\x1B[2J\x1B[0;0H");
-  runApp(const AuthRouter());
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: getFutures(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
+          try {
+            Get.put(AuthController());
+            Get.put(SessionController(MySession()));
+            Get.put(TransactionController());
+            Get.put(DepartmentController());
+          } catch (e) {}
+          return const AuthRouter();
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
 }

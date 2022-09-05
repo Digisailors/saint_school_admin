@@ -29,7 +29,6 @@ class AppointmentFormController {
 
   Appointment get appointment => Appointment(
         date: DateTime(date.year, date.month, date.day, fromTime.hour, fromTime.minute),
-        status: status,
         location: location,
         participants: participants,
         purpose: purpose.text,
@@ -47,7 +46,7 @@ class AppointmentFormController {
     var controller = AppointmentFormController();
     controller.date = appointment.date;
     controller.id = appointment.id;
-    controller.purpose.text = appointment.purpose; 
+    controller.purpose.text = appointment.purpose;
     controller.fromTime = appointment.fromTime;
     controller.toTime = appointment.toTime;
     controller.approvedBy = appointment.approvedBy;

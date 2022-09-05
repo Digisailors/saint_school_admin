@@ -60,7 +60,7 @@ class QueueController extends GetxController {
       update();
     });
     timer = startSpeaking();
-
+    getVoices();
     super.onInit();
   }
 
@@ -75,6 +75,15 @@ class QueueController extends GetxController {
 
   // TextToSpeech tts = TextToSpeech();
   FlutterTts flutterTts = FlutterTts();
+
+  getVoices() async {
+    var voices = await flutterTts.getVoices;
+    print(voices);
+  }
+
+  selectVoice(Map<String, String> voice) async {
+    flutterTts.setVoice(voice);
+  }
 
   Timer startSpeaking() {
     return Timer.periodic(const Duration(seconds: 3), (timer) {

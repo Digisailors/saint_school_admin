@@ -2,15 +2,16 @@
 
 import 'dart:convert';
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:school_app/constants/constant.dart';
 
 import '../models/biodata.dart';
 
-const USERNAME = 'govin';
-const PASSWORD = 'Govin1040@';
-const HOST = 'http://waxton.dvrdns.org:80';
+const USERNAME = 'admin';
+const PASSWORD = 'Admin1040@';
+const HOST = 'http://f0270f046de7.sn.mynetname.net:81';
 
 class AttendanceController extends GetxController {
   static AttendanceController instance = Get.find();
@@ -26,7 +27,7 @@ class AttendanceController extends GetxController {
   static sendRequest() {}
 
   static Future<void> loadToken() {
-    var calable = functions.httpsCallable('loadToken');
+    var calable = functions.httpsCallable('loadToken', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
     return calable.call().then((value) {
       token = value.data;
       print(token);
