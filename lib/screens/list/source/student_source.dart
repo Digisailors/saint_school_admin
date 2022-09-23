@@ -69,7 +69,7 @@ class StudentSource extends DataTableSource {
             icon: const Icon(Icons.delete),
             onPressed: () {
               var future = entity.controller.delete().then((value) {
-                functions.httpsCallable('deleteEmployee').call({'token': AttendanceController.token, 'emp_code': entity.icNumber});
+                functions.httpsCallable('deleteEmployee').call({'token': AttendanceController.token, 'emp_code': entity.docId});
                 setstate(() {
                   students.removeWhere((element) => element.student == entity);
                 });

@@ -43,20 +43,32 @@ class _StudentFormState extends State<StudentForm> {
 
   bool duplicateIcNumber = false;
 
-  validateIcNumber() {
-    return students.where('ic', isEqualTo: controller.icNumber.text).get().then((value) {
-      if (value.docs.length > 2) {
+  validateIcNumber() async {
+    duplicateIcNumber = false;
+    var tempStudents = await students.where('icNumber', isEqualTo: controller.icNumber.text).get();
+    if (formMode == FormMode.update) {
+      if (tempStudents.docs.length > 1) {
         duplicateIcNumber = true;
-      } else if (value.docs.length == 1) {
-        if (value.docs.first.id != widget.student?.icNumber) {
-          duplicateIcNumber = true;
-        } else {
-          duplicateIcNumber = false;
-        }
-      } else {
-        duplicateIcNumber = false;
       }
-    });
+    } else {
+      if (tempStudents.docs.isNotEmpty) {
+        duplicateIcNumber = true;
+      }
+    }
+
+    // return students.where('ic', isEqualTo: controller.icNumber.text).get().then((value) {
+    //   if (value.docs.length > 2) {
+    //     duplicateIcNumber = true;
+    //   } else if (value.docs.length == 1) {
+    //     if (value.docs.first.id != widget.student?.icNumber) {
+    //       duplicateIcNumber = true;
+    //     } else {
+    //       duplicateIcNumber = false;
+    //     }
+    //   } else {
+    //     duplicateIcNumber = false;
+    //   }
+    // });
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -68,6 +80,7 @@ class _StudentFormState extends State<StudentForm> {
     motherFormController.gender = Gender.female;
     guardianFormController.gender = Gender.unspecified;
     controller = widget.student == null ? StudentFormController() : StudentFormController.fromStudent(widget.student!);
+    duplicateIcNumber = false;
 
     if (widget.student != null) {
       if (widget.student?.father != null) {
@@ -93,7 +106,7 @@ class _StudentFormState extends State<StudentForm> {
             if (widget.student != null)
               IconButton(
                 onPressed: () async {
-                  var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
+                  var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
 
                   var data = {
                     'emp_code': 1,
@@ -230,7 +243,7 @@ class _StudentFormState extends State<StudentForm> {
                         SizedBox(
                           width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                           child: CustomTextField(
-                            enabled: widget.student == null,
+                            // enabled: widget.student == null,
                             validator: (val) {
                               if ((val ?? '').isEmpty) {
                                 return 'THis is a required field';
@@ -311,6 +324,7 @@ class _StudentFormState extends State<StudentForm> {
                                   }
                                 }
                               } catch (e) {
+                                print(e.toString());
                                 future = Result.error("Unknown error") as Future<Result>;
                               }
 

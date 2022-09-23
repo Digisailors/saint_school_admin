@@ -10,7 +10,7 @@ class TransactionController {
   static Future<List<TransactionLog>> loadTransactions({DateTime? startTime, DateTime? endTime, String? empCode, required int? entity}) {
     List<TransactionLog> transactionLogs = [];
 
-    var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
+    var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 15)));
     var data = {
       'token': AttendanceController.token,
       'start_time': startTime?.toString().substring(0, 19),
@@ -23,6 +23,7 @@ class TransactionController {
       if (value is List) {
         transactionLogs = value.map((e) => TransactionLog.fromJson(e)).toList();
       }
+      print("Transaction Length  : ${transactionLogs.length}");
       return transactionLogs;
     });
   }
@@ -33,7 +34,7 @@ class TransactionController {
     String empCode = paramsMap['empCode'];
     int? entity = paramsMap['entity'];
     List<StudentAttendanceByDate> transactionLogs = [];
-    var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
+    var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
     var data = {
       'token': AttendanceController.token,
       'start_time': startTime.toString().substring(0, 19),
@@ -48,7 +49,7 @@ class TransactionController {
         var diffInDays = endTime.difference(startTime).inDays + 1;
         for (int i = 0; i < diffInDays; i++) {
           var date = startTime.add(Duration(days: i));
-          print(date.toString());
+          // print(date.toString());
           DateTime? checkInTime;
           DateTime? checkOutTime;
           bool cafeteria = false;
@@ -56,7 +57,7 @@ class TransactionController {
           try {
             tempLogs = logs.where((element) => element.punchDate == date).toList();
           } catch (e) {
-            print(e.toString());
+            // print(e.toString());
           }
           for (var tempLog in tempLogs) {
             if (tempLog.areaAlias != 'CAFETERIA') {
@@ -80,7 +81,7 @@ class TransactionController {
           transactionLogs.add(StudentAttendanceByDate(date: date, checkInTime: checkInTime, checkOutTime: checkOutTime, cafeteria: cafeteria));
         }
       } else {
-        print('ERROR');
+        // print('ERROR');
       }
       return transactionLogs;
     });

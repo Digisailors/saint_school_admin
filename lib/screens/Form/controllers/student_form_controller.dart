@@ -21,6 +21,8 @@ class StudentFormController with BioFormController {
   String? sectionField;
   final List<TextEditingController> siblings = [TextEditingController()];
 
+  String? docId;
+
   StudentFormController();
 
   List<DropdownMenuItem<String>> get classItems {
@@ -93,6 +95,7 @@ class StudentFormController with BioFormController {
   }
 
   Student get student => Student(
+        docId: docId,
         name: name.text,
         icNumber: icNumber.text.toUpperCase().removeAllWhitespace,
         email: email.text,
@@ -114,6 +117,7 @@ class StudentFormController with BioFormController {
 
   factory StudentFormController.fromStudent(Student student) {
     StudentFormController controller = StudentFormController();
+    controller.docId = student.docId;
     controller.name.text = student.name;
     controller.icNumber.text = student.icNumber;
     controller.image = student.imageUrl;

@@ -51,7 +51,7 @@ class _ParentFormState extends State<ParentForm> {
     if (widget.parent != null) {
       var _controller = ParentController(parent: widget.parent!);
       await firestore.collection('students').where('parents', arrayContains: widget.parent!.icNumber).get().then((value) {
-        children = value.docs.map((e) => Student.fromJson(e.data())).toList();
+        children = value.docs.map((e) => Student.fromJson(e.data(), e.id)).toList();
       });
       print(children.length);
     }

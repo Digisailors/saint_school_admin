@@ -26,17 +26,17 @@ class TeacherController extends GetxController implements CRUD {
   @override
   Future<Result> add() async {
     try {
-      teacher.employee.department = 3;
+      teacher.docId = firestore.collection('teachers').doc().id;
       var employee = await EmployeeController.addEmployee(teacher.employee);
       teacher.empId = employee.id;
       return firestore
           .collection('teachers')
-          .doc(teacher.icNumber)
+          .doc(teacher.docId)
           .set(teacher.toJson())
           .then((value) => Result.success("Teacher added successfully"))
           .onError((error, stackTrace) => Result.error(error.toString()));
     } catch (e) {
-      print(e);
+      // print(e);
       return Result.error(e.toString());
     }
   }
@@ -44,12 +44,9 @@ class TeacherController extends GetxController implements CRUD {
   @override
   Future<Result> change() async {
     try {
-      teacher.employee.department = 3;
-      var employee = await EmployeeController.updateEmployee(teacher.employee);
-      teacher.empId = employee.id;
       return firestore
           .collection('teachers')
-          .doc(teacher.icNumber)
+          .doc(teacher.docId)
           .update(teacher.toJson())
           .then((value) => Result.success("Teacher Updated successfully"))
           .onError((error, stackTrace) => Result.error(error.toString()));
@@ -62,11 +59,11 @@ class TeacherController extends GetxController implements CRUD {
   Future<Result> delete() async {
     return firestore
         .collection('teachers')
-        .doc(teacher.icNumber)
+        .doc(teacher.docId)
         .delete()
         .then((value) => Result.success("Teacher Updated successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
   }
 
-  Stream<Teacher> get stream => firestore.collection('teachers').doc(teacher.icNumber).snapshots().map((event) => Teacher.fromJson(event.data()!));
+  Stream<Teacher> get stream => firestore.collection('teachers').doc(teacher.docId).snapshots().map((event) => Teacher.fromJson(event.data()!));
 }

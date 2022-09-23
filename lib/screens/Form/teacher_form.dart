@@ -138,7 +138,7 @@ class _TeacherFormState extends State<TeacherForm> {
                         controller: controller.icNumber,
                         labelText: 'IC Number',
                         hintText: 'Enter IC Number',
-                        enabled: widget.teacher == null,
+                        // enabled: widget.teacher == null,
                       ),
                     ),
                   ],

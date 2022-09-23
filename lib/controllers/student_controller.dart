@@ -25,7 +25,7 @@ class StudentController extends GetxController implements CRUD {
 
   static listenStudents() {
     Stream<List<Student>> stream =
-        firestore.collection('students').snapshots().map((event) => event.docs.map((e) => Student.fromJson(e.data())).toList());
+        firestore.collection('students').snapshots().map((event) => event.docs.map((e) => Student.fromJson(e.data(), e.id)).toList());
     studentList.bindStream(stream);
     return stream;
   }
@@ -40,22 +40,55 @@ class StudentController extends GetxController implements CRUD {
         father.children.add(student.icNumber);
       }
       student.father = father;
-      firestore.collection('parents').doc(father.icNumber).set(father.toJson());
+      firestore.collection('parents').where('icNumber', isEqualTo: father.icNumber).get().then((value) {
+        if (value.docs.isNotEmpty) {
+          for (var element in value.docs) {
+            element.reference.update(father.toJson());
+          }
+        } else {
+          var docId = firestore.collection('parents').doc().id;
+          father.docId = docId;
+          firestore.collection('parents').doc(docId).set(father.toJson());
+        }
+      });
     }
     if (mother != null && mother.icNumber.isNotEmpty) {
       if (!mother.children.contains(student.icNumber)) {
         mother.children.add(student.icNumber);
       }
       student.mother = mother;
-      firestore.collection('parents').doc(mother.icNumber).set(mother.toJson());
+      firestore.collection('parents').where('icNumber', isEqualTo: mother.icNumber).get().then((value) {
+        if (value.docs.isNotEmpty) {
+          for (var element in value.docs) {
+            element.reference.update(mother.toJson());
+          }
+        } else {
+          var docId = firestore.collection('parents').doc().id;
+          mother.docId = docId;
+          firestore.collection('parents').doc(docId).set(mother.toJson());
+        }
+      });
     }
     if (guardian != null && guardian.icNumber.isNotEmpty) {
       if (!guardian.children.contains(student.icNumber)) {
         guardian.children.add(student.icNumber);
       }
       student.guardian = guardian;
-      firestore.collection('parents').doc(guardian.icNumber).set(guardian.toJson());
+      firestore.collection('parents').where('icNumber', isEqualTo: guardian.icNumber).get().then((value) {
+        if (value.docs.isNotEmpty) {
+          for (var element in value.docs) {
+            element.reference.update(guardian.toJson());
+          }
+        } else {
+          var docId = firestore.collection('parents').doc().id;
+          guardian.docId = docId;
+          firestore.collection('parents').doc(docId).set(guardian.toJson());
+        }
+      });
     }
+
+    student.docId = firestore.collection('students').doc().id;
+
     try {
       var employee = await EmployeeController.addEmployee(student.employee);
       student.empId = employee.id;
@@ -65,9 +98,10 @@ class StudentController extends GetxController implements CRUD {
       }
       return Result.error("Could not sync attendance. Contact Admin");
     }
+
     return firestore
         .collection('students')
-        .doc(student.icNumber)
+        .doc(student.docId)
         .set(student.toJson())
         .then((value) => Result.success("Student added successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
@@ -104,12 +138,13 @@ class StudentController extends GetxController implements CRUD {
       var employee = await EmployeeController.updateEmployee(student.employee);
       student.empId = employee.id;
     } catch (e) {
-      return Result.error("Could not sync attendance. Contact Admin");
+      // return Result.error("Could not sync attendance. Contact Admin");
     }
 
+    print("DOCUMENT ID : ${student.docId}");
     return firestore
         .collection('students')
-        .doc(student.icNumber)
+        .doc(student.docId)
         .update(student.toJson())
         .then((value) => Result.success("Student Updated successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
@@ -117,20 +152,21 @@ class StudentController extends GetxController implements CRUD {
 
   @override
   Future<Result> delete() async {
-    print("Deleting");
+    // print("Deleting");
     await firestore.collection('parents').where('parents', arrayContains: student.icNumber).get().then((value) {
       value.docs.map((e) => Parent.fromJson(e.data())).forEach((element) {
         element.children.remove(student.icNumber);
-        firestore.collection('parents').doc(element.icNumber).update({'children': element.children});
+        firestore.collection('parents').doc(element.docId).update({'children': element.children});
       });
     });
     return firestore
         .collection('students')
-        .doc(student.icNumber)
+        .doc(student.docId)
         .delete()
         .then((value) => Result.success("Student Updated successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
   }
 
-  Stream<Student> get stream => firestore.collection('students').doc(student.icNumber).snapshots().map((event) => Student.fromJson(event.data()!));
+  Stream<Student> get stream =>
+      firestore.collection('students').doc(student.icNumber).snapshots().map((event) => Student.fromJson(event.data()!, event.id));
 }

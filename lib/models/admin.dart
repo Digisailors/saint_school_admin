@@ -1,22 +1,9 @@
 import 'package:school_app/models/biodata.dart';
 
 class Admin extends Bio {
-  Admin({
-    email,
-    gender,
-    icNumber,
-    name,
-    address,
-    imageUrl,
-    addressLine1,
-    addressLine2,
-    city,
-    lastName,
-    primaryPhone,
-    secondaryPhone,
-    state,
-    required this.docId,
-  }) : super(
+  Admin({email, gender, icNumber, name, address, imageUrl, addressLine1, addressLine2, city, lastName, primaryPhone, secondaryPhone, state, docId})
+      : super(
+          docId: docId,
           email: email,
           entityType: EntityType.admin,
           gender: gender,
@@ -32,7 +19,6 @@ class Admin extends Bio {
           secondaryPhone: secondaryPhone,
           state: state,
         );
-  String docId;
   factory Admin.fromJson(Map<String, dynamic> json) => Admin(
         docId: json['docId'],
         gender: Gender.values.elementAt(json["gender"]),
@@ -52,7 +38,6 @@ class Admin extends Bio {
 
   toJson() {
     var map = toBioJson();
-    map.addAll({'docId': docId});
     return map;
   }
 }

@@ -7,6 +7,7 @@ class TeacherFormController with BioFormController {
   String? className;
   String? section;
   String? uid;
+  String? docId;
 
   @override
   clear() {
@@ -61,6 +62,7 @@ class TeacherFormController with BioFormController {
     controller.primaryPhone.text = teacher.primaryPhone ?? '';
     controller.secondaryPhone.text = teacher.secondaryPhone ?? '';
     controller.state = teacher.state;
+    controller.docId = teacher.docId!;
     return controller;
   }
 
@@ -82,5 +84,6 @@ class TeacherFormController with BioFormController {
         primaryPhone: primaryPhone.text,
         secondaryPhone: secondaryPhone.text,
         state: state,
+        docId: docId,
       );
 }

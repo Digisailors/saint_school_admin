@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:school_app/constants/constant.dart';
-import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/models/student.dart';
 import 'package:school_app/screens/Form/student_form.dart';
-import 'package:school_app/screens/list/post_list.dart';
 
 class ChildList extends StatefulWidget {
   const ChildList({Key? key, required this.students}) : super(key: key);

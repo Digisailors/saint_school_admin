@@ -6,23 +6,24 @@ import '../constants/constant.dart';
 import 'parent.dart';
 
 class Bio {
-  Bio({
-    required this.name,
-    required this.entityType,
-    required this.icNumber,
-    required this.email,
-    required this.gender,
-    this.address,
-    this.lastName,
-    this.imageUrl,
-    this.addressLine1,
-    this.addressLine2,
-    this.city,
-    this.primaryPhone,
-    this.secondaryPhone,
-    this.state,
-  });
+  Bio(
+      {required this.name,
+      required this.entityType,
+      required this.icNumber,
+      required this.email,
+      required this.gender,
+      this.address,
+      this.lastName,
+      this.imageUrl,
+      this.addressLine1,
+      this.addressLine2,
+      this.city,
+      this.primaryPhone,
+      this.secondaryPhone,
+      this.state,
+      required this.docId});
 
+  String? docId;
   String name;
   String? lastName;
   EntityType entityType;
@@ -45,6 +46,7 @@ class Bio {
   }
 
   factory Bio.fromBioJson(json) => Bio(
+        docId: json["docId"],
         name: json["name"] ?? '',
         entityType: EntityType.values.elementAt(json["entityType"]),
         icNumber: json["icNumber"] ?? '',
@@ -79,6 +81,7 @@ class Bio {
   }
 
   Map<String, dynamic> toBioJson() => {
+        "docId": docId,
         "name": name,
         "lastName": lastName,
         "entityType": entityType.index,
@@ -116,7 +119,7 @@ class Bio {
     List<Bio> bios = [];
     try {
       var studentList = students.where("search", arrayContains: string.toLowerCase()).get().then((value) {
-        bios.addAll(value.docs.map((e) => Student.fromJson(e.data())));
+        bios.addAll(value.docs.map((e) => Student.fromJson(e.data(), e.id)));
       });
       var parentsList = firestore.collection('parents').where("search", arrayContains: string.toLowerCase()).get().then((value) {
         bios.addAll(value.docs.map((e) => Parent.fromJson(e.data())));

@@ -16,6 +16,21 @@ class ExcelService {
     sheet.getRangeByName('E1').setText('CHECK IN STATUS');
     sheet.getRangeByName('F1').setText('CHECK OUT');
     sheet.getRangeByName('G1').setText('CHECK OUT STATUS');
+    sheet.getRangeByName('H1').setText('FATHER NAME');
+    sheet.getRangeByName('I1').setText('FATHER IC');
+    sheet.getRangeByName('J1').setText('FATHER EMAIL');
+    sheet.getRangeByName('K1').setText('FATHER GENDER');
+    sheet.getRangeByName('L1').setText('FATHER ADDRESS');
+    sheet.getRangeByName('M1').setText('MOTHER NAME');
+    sheet.getRangeByName('N1').setText('MOTHER IC');
+    sheet.getRangeByName('O1').setText('MOTHER EMAIL');
+    sheet.getRangeByName('P1').setText('MOTHER GENDER');
+    sheet.getRangeByName('Q1').setText('MOTHER ADDRESS');
+    sheet.getRangeByName('R1').setText('GUARDIAN NAME');
+    sheet.getRangeByName('S1').setText('GUARDIAN IC');
+    sheet.getRangeByName('T1').setText('GUARDIAN EMAIL');
+    sheet.getRangeByName('U1').setText('GUARDIAN GENDER');
+    sheet.getRangeByName('V1').setText('GUARDIAN ADDRESS');
 
     for (int i = 0; i < studentTransactions.length; i++) {
       var studentTransaction = studentTransactions[i];
@@ -34,6 +49,22 @@ class ExcelService {
       sheet
           .getRangeByName('G${i + 2}')
           .setText(studentTransaction.checkOutStatus == null ? "NO DATA" : studentTransaction.checkOutStatus.toString().toUpperCase());
+      var letter = 72;
+      sheet.getRangeByName('H${i + 2}').setText(studentTransaction.student.father?.name.toString().toUpperCase());
+      sheet.getRangeByName('I${i + 2}').setText(studentTransaction.student.father?.icNumber.toString().toUpperCase());
+      sheet.getRangeByName('J${i + 2}').setText(studentTransaction.student.father?.email.toString().toUpperCase());
+      sheet.getRangeByName('K${i + 2}').setText(studentTransaction.student.father?.gender.toString().toUpperCase());
+      sheet.getRangeByName('L${i + 2}').setText(studentTransaction.student.father?.address.toString().toUpperCase());
+      sheet.getRangeByName('M${i + 2}').setText(studentTransaction.student.mother?.name.toString().toUpperCase());
+      sheet.getRangeByName('N${i + 2}').setText(studentTransaction.student.mother?.icNumber.toString().toUpperCase());
+      sheet.getRangeByName('O${i + 2}').setText(studentTransaction.student.mother?.email.toString().toUpperCase());
+      sheet.getRangeByName('P${i + 2}').setText(studentTransaction.student.mother?.gender.toString().toUpperCase());
+      sheet.getRangeByName('Q${i + 2}').setText(studentTransaction.student.mother?.address.toString().toUpperCase());
+      sheet.getRangeByName('R${i + 2}').setText(studentTransaction.student.guardian?.name.toString().toUpperCase());
+      sheet.getRangeByName('S${i + 2}').setText(studentTransaction.student.guardian?.icNumber.toString().toUpperCase());
+      sheet.getRangeByName('T${i + 2}').setText(studentTransaction.student.guardian?.email.toString().toUpperCase());
+      sheet.getRangeByName('U${i + 2}').setText(studentTransaction.student.guardian?.gender.toString().toUpperCase());
+      sheet.getRangeByName('V${i + 2}').setText(studentTransaction.student.guardian?.address.toString().toUpperCase());
     }
 
     for (int i = 1; i <= 30; i++) {

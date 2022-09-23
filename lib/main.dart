@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,10 @@ class SplashScreen extends StatelessWidget {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    ).then((value) => Future.wait([AttendanceController.loadToken(), auth.reloadClaims()]));
+    ).then((value) {
+      // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+      return Future.wait([AttendanceController.loadToken(), auth.reloadClaims()]);
+    });
   }
 
   @override

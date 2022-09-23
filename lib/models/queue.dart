@@ -20,7 +20,7 @@ class StudentQueue {
   int? get remaingTime => queuedTime == null ? 0 : 10 - DateTime.now().difference(queuedTime!).inSeconds;
 
   factory StudentQueue.fromJson(json) => StudentQueue(
-        student: Student.fromJson(json["student"]),
+        student: Student.fromJson(json["student"], json["student"]["docId"]),
         queuedTime: json["queuedTime"]?.toDate(),
         queueStatus: QueueStatus.values.elementAt(json["queueStatus"]),
       );

@@ -74,7 +74,7 @@ class _BioAttendnaceState extends State<BioAttendnace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.entity.name), actions: []),
+      appBar: AppBar(title: Text(widget.entity.name), actions: const []),
       body: Column(children: [
         SizedBox(
           height: 120,
@@ -109,7 +109,7 @@ class _BioAttendnaceState extends State<BioAttendnace> {
         Expanded(child: SingleChildScrollView(
           child: Builder(builder: (context) {
             Map<String, dynamic> mapParams = {
-              'empCode': widget.entity.icNumber,
+              'empCode': widget.entity.docId,
               'startTime': fromDate,
               'endTime': toDate,
             };
@@ -173,7 +173,7 @@ class _BioAttendnaceState extends State<BioAttendnace> {
                                 )
                               ],
                               columns: AttendanceSource.getCoumns(),
-                              source: AttendanceSource(context: context, logs: attendanceLogs ?? [])),
+                              source: AttendanceSource(context: context, logs: attendanceLogs)),
                         ],
                       ),
                     ],
@@ -221,15 +221,12 @@ class AttendanceSource extends DataTableSource {
   }
 
   @override
-  // TODO: implement isRowCountApproximate
   bool get isRowCountApproximate => false;
 
   @override
-  // TODO: implement rowCount
   int get rowCount => logs.length;
 
   @override
-  // TODO: implement selectedRowCount
   int get selectedRowCount => 0;
 
   static List<DataColumn> getCoumns() {

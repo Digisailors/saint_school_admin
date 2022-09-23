@@ -22,9 +22,11 @@ class ParentController extends GetxController implements CRUD {
 
   @override
   Future<Result> add() async {
+    var docId = firestore.collection('parents').doc(parent.icNumber).id;
+    parent.docId = docId;
     return firestore
         .collection('parents')
-        .doc(parent.icNumber)
+        .doc(parent.docId)
         .set(parent.toJson())
         .then((value) => Result.success("Parent added successfully"))
         .onError((error, stackTrace) => Result.error(error.toString()));
@@ -34,8 +36,8 @@ class ParentController extends GetxController implements CRUD {
   Future<Result> change() async {
     List<Future> futures = [];
     for (var element in parent.children) {
-      futures.add(firestore.collection('students').doc(element).get().then((value) {
-        var student = Student.fromJson(value.data()!);
+      futures.add(firestore.collection('students').where('icNumber', isEqualTo: element).get().then((value) {
+        var student = Student.fromJson(value.docs.first.data(), value.docs.first.id);
         if (student.father?.icNumber == parent.icNumber) {
           student.father = parent;
         }
@@ -45,7 +47,7 @@ class ParentController extends GetxController implements CRUD {
         if (student.guardian?.icNumber == parent.icNumber) {
           student.guardian = parent;
         }
-        return firestore.collection('students').doc(student.icNumber).set(student.toJson());
+        return firestore.collection('students').doc(student.docId).set(student.toJson());
       }));
     }
 
@@ -53,7 +55,7 @@ class ParentController extends GetxController implements CRUD {
         .then((value) => firestore
             .collection('parents')
             .doc(parent.icNumber)
-            .update(parent.toJson())
+            .set(parent.toJson())
             .then((value) => Result.success("Parent Updated successfully"))
             .onError((error, stackTrace) => Result.error(error.toString())))
         .onError((error, stackTrace) => Result.error(error.toString()));

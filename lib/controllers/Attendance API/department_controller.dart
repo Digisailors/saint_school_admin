@@ -38,7 +38,7 @@ class DepartmentController extends GetxController {
   }
 
   Future<Department> addDepartment(Department department) {
-    var callable = functions.httpsCallable('addDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
+    var callable = functions.httpsCallable('addDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
     var data = department.toJson();
     data.addAll({'token': AttendanceController.token});
     return callable.call(data).then((value) {
@@ -49,7 +49,7 @@ class DepartmentController extends GetxController {
   }
 
   Future<void> loadDepartments() async {
-    var callable = functions.httpsCallable('loadDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
+    var callable = functions.httpsCallable('loadDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
     return callable.call({'token': AttendanceController.token}).then((value) {
       var data = value.data;
       if (data is List) {
@@ -74,7 +74,7 @@ class DepartmentController extends GetxController {
   }
 
   Future<Department> updateDepartment(int id, String deptName, String deptCode) async {
-    var callable = functions.httpsCallable('updateDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 10)));
+    var callable = functions.httpsCallable('updateDepartment', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
     var data = {
       "dept_code": deptCode,
       "dept_name": deptName,

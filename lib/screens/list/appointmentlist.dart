@@ -109,13 +109,9 @@ class _AppoinmentListState extends State<AppoinmentList> {
                           appointments = appointments.where((element) => element.status == status).toList();
                         }
 
-                        if (fromDate != null) {
-                          appointments = appointments.where((element) => element.date.isAfter(fromDate!)).toList();
-                        }
+                        appointments = appointments.where((element) => element.date.isAfter(fromDate)).toList();
 
-                        if (toDate != null) {
-                          appointments = appointments.where((element) => element.date.isBefore(toDate!)).toList();
-                        }
+                        appointments = appointments.where((element) => element.date.isBefore(toDate)).toList();
 
                         sourcelist = AppointmentSource(appointments, context);
 

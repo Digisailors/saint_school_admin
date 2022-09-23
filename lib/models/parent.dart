@@ -18,7 +18,9 @@ class Parent extends Bio {
     String? primaryPhone,
     String? secondaryPhone,
     String? imageUrl,
+    String? docId,
   }) : super(
+          docId: docId,
           name: name,
           lastName: lastName,
           entityType: EntityType.parent,
@@ -43,6 +45,7 @@ class Parent extends Bio {
   ParentController get controller => ParentController(parent: this);
 
   copyWith(Parent parent) {
+    docId = parent.docId;
     gender = parent.gender;
     address = parent.address;
     uid = parent.uid;
@@ -60,6 +63,7 @@ class Parent extends Bio {
   }
 
   factory Parent.fromJson(Map<String, dynamic> json) => Parent(
+        docId: json["docId"],
         gender: Gender.values.elementAt(json["gender"]),
         address: json["address"] ?? '',
         uid: json["uid"] ?? '',
@@ -81,6 +85,7 @@ class Parent extends Bio {
     Map<String, dynamic> map = {
       "children": children,
       "uid": uid,
+      "docId" : docId,
     };
     map.addAll(super.toBioJson());
     return map;

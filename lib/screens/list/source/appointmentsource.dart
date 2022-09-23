@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:school_app/constants/get_constants.dart';
 import 'package:school_app/controllers/appointment_controller.dart';
 import 'package:school_app/models/appointment.dart';

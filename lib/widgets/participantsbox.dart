@@ -29,7 +29,7 @@ class _CCTextBoxState extends State<CCTextBox> {
     List<Bio> bios = [];
     try {
       var studentList = students.where("search", arrayContains: _emailController.text.toLowerCase()).get().then((value) {
-        bios.addAll(value.docs.map((e) => Student.fromJson(e.data())));
+        bios.addAll(value.docs.map((e) => Student.fromJson(e.data(), e.id)));
       });
       var parentsList = firestore.collection('parents').where("search", arrayContains: _emailController.text.toLowerCase()).get().then((value) {
         bios.addAll(value.docs.map((e) => Parent.fromJson(e.data())));

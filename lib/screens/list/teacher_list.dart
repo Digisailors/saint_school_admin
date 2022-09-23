@@ -146,7 +146,7 @@ class _TeachersListState extends State<TeachersList> {
     }
 
     for (var teacher in _teacherslist) {
-      teacherTransactions.add(TeacherTransaction.create(teacher, _logslist.where((element) => element.empCode == teacher.icNumber).toList()));
+      teacherTransactions.add(TeacherTransaction.create(teacher, _logslist.where((element) => element.empCode == teacher.docId).toList()));
     }
 
     if (checkInStatus != null) {

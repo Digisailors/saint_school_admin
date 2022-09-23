@@ -127,6 +127,19 @@ class _StudentListState extends State<StudentList> {
 
   int statusFilter = 0;
 
+  Future<void> batchDelete() {
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    return firestore.collection('students').get().then((querySnapshot) {
+      for (var document in querySnapshot.docs) {
+        var student = Student.fromJson(document.data(), document.id);
+        batch.update(document.reference, student.toJson());
+      }
+
+      return batch.commit();
+    });
+  }
+
   Future<List<StudentTransaction>> getStudentTransactions(Map<String, dynamic> map) async {
     String? search = map['search'];
     String? classFilter = map['classFilter'];
@@ -149,7 +162,7 @@ class _StudentListState extends State<StudentList> {
     }
 
     Future<List<Student>> future1 =
-        query.get().then((value) => value.docs.map((e) => Student.fromJson(e.data())).toList()).then((value) => _studentslist = value);
+        query.get().then((value) => value.docs.map((e) => Student.fromJson(e.data(), e.id)).toList()).then((value) => _studentslist = value);
     Future<List<TransactionLog>> future2 = getTransactionLogs(date).then((value) => _logslist = value);
     try {
       await Future.wait([future1, future2]);
@@ -160,10 +173,11 @@ class _StudentListState extends State<StudentList> {
     }
 
     printInfo(info: " STUDENT LIST LENGTH : ${_studentslist.length}");
+    printInfo(info: " LOG LIST LENGTH : ${_logslist.length}");
 
     for (var student in _studentslist) {
       print(student.toBioJson());
-      studentTransactions.add(StudentTransaction.create(student, _logslist.where((element) => element.empCode == student.icNumber).toList()));
+      studentTransactions.add(StudentTransaction.create(student, _logslist.where((element) => element.empCode == student.docId).toList()));
     }
 
     var tempTransactions = [];
@@ -182,6 +196,7 @@ class _StudentListState extends State<StudentList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: ElevatedButton(onPressed: batchDelete, child: const Text('refresh')),
       body: Padding(
         padding: EdgeInsets.all(isMobile(context) ? 2 : 8),
         child: SingleChildScrollView(
