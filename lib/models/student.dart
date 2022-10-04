@@ -11,9 +11,9 @@ class Student extends Bio {
       required String name,
       required String email,
       required Gender gender,
-      required this.father,
-      required this.guardian,
-      required this.mother,
+      this.father,
+      this.guardian,
+      this.mother,
       this.empId,
       String? address,
       String? addressLine1,
@@ -70,29 +70,33 @@ class Student extends Bio {
 
   Bio get bio => this;
   StudentController get controller => StudentController(this);
-  factory Student.fromJson(Map<String, dynamic> json, String docId) => Student(
-      docId: json["docId"],
-      icNumber: json["ic"],
-      name: json["name"],
-      email: json["email"] ?? '',
-      gender: json["gender"] == null ? Gender.male : Gender.values.elementAt(json["gender"]),
-      address: json["address"],
-      addressLine1: json["addressLine1"],
-      addressLine2: json["addressLine2"],
-      city: json["city"],
-      imageUrl: json["imageUrl"],
-      lastName: json["lastName"],
-      primaryPhone: json["primaryPhone"],
-      secondaryPhone: json["secondaryPhone"],
-      state: json["state"],
-      //-------------------------------------------
-      father: json["father"] != null ? Parent.fromJson(json['father']) : null,
-      guardian: json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
-      mother: json["mother"] != null ? Parent.fromJson(json['mother']) : null,
-      //-------------------------------------------
-      studentClass: json["class"],
-      section: json["section"],
-      empId: json["empId"]);
+  factory Student.fromJson(Map<String, dynamic> json, String docId) {
+    print(docId);
+
+    return Student(
+        docId: json["docId"],
+        icNumber: json["icNumber"],
+        name: json["name"],
+        email: json["email"] ?? '',
+        gender: json["gender"] == null ? Gender.male : Gender.values.elementAt(json["gender"]),
+        address: json["address"],
+        addressLine1: json["addressLine1"],
+        addressLine2: json["addressLine2"],
+        city: json["city"],
+        imageUrl: json["imageUrl"],
+        lastName: json["lastName"],
+        primaryPhone: json["primaryPhone"],
+        secondaryPhone: json["secondaryPhone"],
+        state: json["state"],
+        //-------------------------------------------
+        father: json["father"] != null ? Parent.fromJson(json['father']) : null,
+        guardian: json["guardian"] != null ? Parent.fromJson(json['guardian']) : null,
+        mother: json["mother"] != null ? Parent.fromJson(json['mother']) : null,
+        //-------------------------------------------
+        studentClass: json["class"],
+        section: json["section"],
+        empId: json["empId"]);
+  }
 
   Map<String, dynamic> toJson() => {
         "empId": empId,

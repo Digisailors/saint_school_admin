@@ -161,8 +161,10 @@ class _StudentListState extends State<StudentList> {
       query = query.where('section', isEqualTo: sectionFilter);
     }
 
-    Future<List<Student>> future1 =
-        query.get().then((value) => value.docs.map((e) => Student.fromJson(e.data(), e.id)).toList()).then((value) => _studentslist = value);
+    Future<List<Student>> future1 = query.get().then((value) {
+      printInfo(info: "DOCUMENTS LENGTH : ${value.docs.length}");
+      return value.docs.map((e) => Student.fromJson(e.data(), e.id)).toList();
+    }).then((value) => _studentslist = value);
     Future<List<TransactionLog>> future2 = getTransactionLogs(date).then((value) => _logslist = value);
     try {
       await Future.wait([future1, future2]);
@@ -199,10 +201,12 @@ class _StudentListState extends State<StudentList> {
       floatingActionButton: ElevatedButton(onPressed: batchDelete, child: const Text('refresh')),
       body: Padding(
         padding: EdgeInsets.all(isMobile(context) ? 2 : 8),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 60,
+              child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width: isMobile(context) ? getWidth(context) * 2 : getWidth(context) * 0.80,
@@ -319,120 +323,125 @@ class _StudentListState extends State<StudentList> {
                   ),
                 ),
               ),
-              FutureBuilder<List<StudentTransaction>>(
-                  future:
-                      compute(getStudentTransactions, {'search': search, 'classFilter': classFilter, 'sectionFilter': sectionFilter, 'date': date}),
-                  builder: (context, AsyncSnapshot<List<StudentTransaction>> snapshot) {
-                    List<StudentTransaction> sourceList = [];
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: FutureBuilder<List<StudentTransaction>>(
+                    future:
+                        compute(getStudentTransactions, {'search': search, 'classFilter': classFilter, 'sectionFilter': sectionFilter, 'date': date}),
+                    builder: (context, AsyncSnapshot<List<StudentTransaction>> snapshot) {
+                      List<StudentTransaction> sourceList = [];
 
-                    if ((snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done)) {
-                      sourceList = snapshot.data ?? [];
+                      if ((snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done)) {
+                        sourceList = snapshot.data ?? [];
 
-                      return Column(
-                        children: [
-                          hasError
-                              ? const SizedBox(
-                                  height: 50,
-                                  child: Center(
-                                    child: Text("ATTENDANCE API IS OFFLINE, COULD NOT RETRIEVE DATA", style: TextStyle(fontWeight: FontWeight.bold)),
-                                  ),
-                                )
-                              : Container(),
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minWidth: getWidth(context) * 0.90,
-                              maxWidth: 1980,
-                            ),
-                            child: StatefulBuilder(builder: (context, setstate) {
-                              var source = StudentSource(sourceList, context, setstate);
-                              return PaginatedDataTable(
-                                header: const Text("STUDENT LIST"),
-                                actions: [
-                                  isMobile(context)
-                                      ? ElevatedButton(
-                                          onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: const Text("Filters"),
-                                                    content: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: getFilterChildren(),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                          child: const Text("OKAY"))
-                                                    ],
-                                                  );
-                                                });
-                                          },
-                                          child: const Text("Show Filters"))
-                                      : Row(children: getFilterChildren()),
-                                  ElevatedButton(
-                                      onPressed: () async {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return FutureBuilder<List<int>>(
-                                                  future: compute(ExcelService.createStudentsReport, sourceList),
-                                                  builder: (context, AsyncSnapshot<List<int>> snapshot) {
-                                                    if ((snapshot.connectionState == ConnectionState.active ||
-                                                            snapshot.connectionState == ConnectionState.done) &&
-                                                        snapshot.hasData) {
-                                                      return AlertDialog(
-                                                        title: const Text("Your download is ready"),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                if (kIsWeb) {
-                                                                  AnchorElement(
-                                                                      href:
-                                                                          'data:application/octet-stream;charset=utf-16le;base64, ${base64.encode(snapshot.data!)}')
-                                                                    ..setAttribute('download', 'export.xlsx')
-                                                                    ..click();
-                                                                }
-                                                              },
-                                                              child: const Text('DOWNLOAD'))
-                                                        ],
-                                                      );
-                                                    }
-                                                    if (snapshot.hasError) {
-                                                      return AlertDialog(
-                                                        title: const Text("Error Occured. Contact Admin"),
-                                                        content: Text(snapshot.error.toString()),
-                                                      );
-                                                    }
-                                                    return const AlertDialog(
-                                                      content: Center(
-                                                        child: CircularProgressIndicator(),
+                        return Column(
+                          children: [
+                            hasError
+                                ? const SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child:
+                                          Text("ATTENDANCE API IS OFFLINE, COULD NOT RETRIEVE DATA", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
+                                  )
+                                : Container(),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: getWidth(context) * 0.90,
+                                maxWidth: double.maxFinite,
+                              ),
+                              child: StatefulBuilder(builder: (context, setstate) {
+                                var source = StudentSource(sourceList, context, setstate);
+                                return PaginatedDataTable(
+                                  header: const Text("STUDENT LIST"),
+                                  actions: [
+                                    isMobile(context)
+                                        ? ElevatedButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: const Text("Filters"),
+                                                      content: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: getFilterChildren(),
                                                       ),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            child: const Text("OKAY"))
+                                                      ],
                                                     );
                                                   });
-                                            });
-                                      },
-                                      child: const Text("EXPORT"))
-                                ],
-                                dragStartBehavior: DragStartBehavior.start,
-                                columns: StudentSource.getCoumns(EntityType.student),
-                                source: source,
-                                rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 7,
-                              );
-                            }),
-                          ),
-                        ],
-                      );
-                    }
+                                            },
+                                            child: const Text("Show Filters"))
+                                        : Row(children: getFilterChildren()),
+                                    ElevatedButton(
+                                        onPressed: () async {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return FutureBuilder<List<int>>(
+                                                    future: compute(ExcelService.createStudentsReport, sourceList),
+                                                    builder: (context, AsyncSnapshot<List<int>> snapshot) {
+                                                      if ((snapshot.connectionState == ConnectionState.active ||
+                                                              snapshot.connectionState == ConnectionState.done) &&
+                                                          snapshot.hasData) {
+                                                        return AlertDialog(
+                                                          title: const Text("Your download is ready"),
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  if (kIsWeb) {
+                                                                    AnchorElement(
+                                                                        href:
+                                                                            'data:application/octet-stream;charset=utf-16le;base64, ${base64.encode(snapshot.data!)}')
+                                                                      ..setAttribute('download', 'export.xlsx')
+                                                                      ..click();
+                                                                  }
+                                                                },
+                                                                child: const Text('DOWNLOAD'))
+                                                          ],
+                                                        );
+                                                      }
+                                                      if (snapshot.hasError) {
+                                                        return AlertDialog(
+                                                          title: const Text("Error Occured. Contact Admin"),
+                                                          content: Text(snapshot.error.toString()),
+                                                        );
+                                                      }
+                                                      return const AlertDialog(
+                                                        content: Center(
+                                                          child: CircularProgressIndicator(),
+                                                        ),
+                                                      );
+                                                    });
+                                              });
+                                        },
+                                        child: const Text("EXPORT"))
+                                  ],
+                                  dragStartBehavior: DragStartBehavior.start,
+                                  columns: StudentSource.getCoumns(EntityType.student),
+                                  source: source,
+                                  rowsPerPage: (getHeight(context) ~/ kMinInteractiveDimension) - 7,
+                                );
+                              }),
+                            ),
+                          ],
+                        );
+                      }
 
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-            ],
-          ),
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
+              ),
+            ),
+          ],
         ),
       ),
     );

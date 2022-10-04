@@ -29,6 +29,9 @@ String? requiredAlphabetsonly(String? val) {
 
 String? requiredEmail(String? val) {
   var text = val ?? '';
+  if (text.isEmpty) {
+    return "This is a required field";
+  }
   if (text.removeAllWhitespace.isEmail) {
     return "Please enter a valid email";
   }

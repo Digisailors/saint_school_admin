@@ -246,7 +246,7 @@ class _StudentFormState extends State<StudentForm> {
                             // enabled: widget.student == null,
                             validator: (val) {
                               if ((val ?? '').isEmpty) {
-                                return 'THis is a required field';
+                                return 'This is a required field';
                               }
                               if (duplicateIcNumber) {
                                 return 'IC Number already taken';
