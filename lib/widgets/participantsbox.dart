@@ -42,7 +42,7 @@ class _CCTextBoxState extends State<CCTextBox> {
       return bios;
     } catch (e) {
       if (kDebugMode) {
-        print(e.toString());
+        // print(e.toString());
       }
       return bios;
     }

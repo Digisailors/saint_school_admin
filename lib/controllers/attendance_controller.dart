@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names, avoid_print
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -18,7 +19,9 @@ class AttendanceController extends GetxController {
   @override
   void onInit() {
     // getAuth();
-    loadToken();
+    Timer.periodic(const Duration(minutes: 15), (timer) {
+      loadToken();
+    });
     super.onInit();
   }
 
@@ -30,7 +33,6 @@ class AttendanceController extends GetxController {
     var calable = functions.httpsCallable('loadToken', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
     return calable.call().then((value) {
       token = value.data;
-      print(token);
     });
   }
 
@@ -92,7 +94,6 @@ class AttendanceController extends GetxController {
   //   };
   //   http.get(uri, headers: headers).then((value) => print(jsonDecode(value.body)));
   // }
-
 }
 
 // extension Raptor on Uri {

@@ -57,7 +57,7 @@ class PostFormController {
         : (contentImage != null)
             ? Provide.network
             : Provide.logo;
-    print(result);
+    // print(result);
     return result;
   }
 
@@ -102,7 +102,7 @@ class PostFormController {
     controller.contentImage = post.contentImage;
     controller.date = post.date;
     if (kDebugMode) {
-      print(controller.attachments.map((e) => e.attachmentLocation).toList());
+      // print(controller.attachments.map((e) => e.attachmentLocation).toList());
     }
     return controller;
   }

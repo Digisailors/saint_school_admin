@@ -327,9 +327,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   initialRange: controller.timeRange,
                   timeStep: 10,
                   timeBlock: 30,
+                  onFirstTimeSelected: ((hour) {
+                    setState(() {
+                      controller.fromTime = hour;
+                    });
+                  }),
                   onRangeCompleted: (range) => setState(() {
                     if (range != null) {
-                      controller.fromTime = range.start;
                       controller.toTime = range.end;
                       controller.parentApproval = false;
                     }

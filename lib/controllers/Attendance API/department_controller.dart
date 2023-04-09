@@ -26,10 +26,10 @@ class DepartmentController extends GetxController {
     List<DropdownMenuItem<Department>> items = [];
     if (id != null) {
       items = getSections(id).map((e) => DropdownMenuItem(child: Text(e.deptName), value: e)).toList();
-      print(items.map((e) => e.value?.id));
+      // print(items.map((e) => e.value?.id));
     }
     items.add(const DropdownMenuItem(child: Text("None")));
-    print(items.length);
+    // print(items.length);
     return items;
   }
 
@@ -59,15 +59,15 @@ class DepartmentController extends GetxController {
             var department = Department.fromJson(element);
             deptList.add(department);
           } catch (e) {
-            print(element);
-            print(e.toString());
+            // print(element);
+            // print(e.toString());
           }
         }
         departments = deptList;
-        print(departments.map((e) => e.toJson()));
+        // print(departments.map((e) => e.toJson()));
       } else {
         departments = departments;
-        print("Could not load departments.. Error occured.");
+        // print("Could not load departments.. Error occured.");
       }
       return;
     });

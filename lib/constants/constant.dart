@@ -41,6 +41,7 @@ Future<String> uploadImage(Uint8List file, String name) async {
 showFutureCustomDialog({required BuildContext context, required Future<Result> future, required void Function()? onTapOk}) {
   showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return FutureBuilder(
             future: future,
@@ -48,6 +49,7 @@ showFutureCustomDialog({required BuildContext context, required Future<Result> f
               if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
                 var response = snapshot.data as Result;
                 if (response.code == "success") {
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 }
                 return AlertDialog(
@@ -57,6 +59,7 @@ showFutureCustomDialog({required BuildContext context, required Future<Result> f
                     ElevatedButton(
                         onPressed: response.code == "Error"
                             ? () {
+                                Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                               }
                             : onTapOk,

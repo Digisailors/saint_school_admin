@@ -78,7 +78,7 @@ class QueueController extends GetxController {
 
   getVoices() async {
     var voices = await flutterTts.getVoices;
-    print(voices);
+    // print(voices);
   }
 
   selectVoice(Map<String, String> voice) async {

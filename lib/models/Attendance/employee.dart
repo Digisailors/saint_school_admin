@@ -20,5 +20,6 @@ class Employee {
         firstName: json["first_name"],
       );
 
-  Map<String, dynamic> toJson() => {"id": id, "emp_code": empCode, "department": department, "gender": gender, "first_name": firstName};
+  Map<String, dynamic> toJson() =>
+      {"id": id, "emp_code": empCode, "department": department, "gender": gender, "first_name": firstName!.substring(1, 15)};
 }

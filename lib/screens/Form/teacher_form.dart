@@ -125,9 +125,9 @@ class _TeacherFormState extends State<TeacherForm> {
                           },
                           labelText: 'Gender',
                           items: const [
-                            DropdownMenuItem(child: Text('Male'), value: Gender.male),
-                            DropdownMenuItem(child: Text('Female'), value: Gender.female),
-                            DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
+                            DropdownMenuItem(value: Gender.male, child: Text('Male')),
+                            DropdownMenuItem(value: Gender.female, child: Text('Female')),
+                            DropdownMenuItem(value: Gender.unspecified, child: Text('Unspecified')),
                           ],
                           selectedValue: controller.gender),
                     ),
@@ -213,33 +213,27 @@ class _TeacherFormState extends State<TeacherForm> {
                       },
                     ),
                   ),
-                  SizedBox(
-                    width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                    child: CustomDropDown<String?>(
-                      selectedValue: controller.city,
-                      items: getCities(controller.state),
-                      labelText: "City",
-                      onChanged: (city) {
-                        controller.city = city;
-                      },
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                  //   child: CustomDropDown<String?>(
+                  //     selectedValue: controller.city,
+                  //     items: getCities(controller.state),
+                  //     labelText: "City",
+                  //     onChanged: (city) {
+                  //       controller.city = city;
+                  //     },
+                  //   ),
+                  // ),
                 ]),
               ),
               const Divider(),
               Center(
-                child: CustomLayout(children: [
+                child: CustomLayout(mainAxisAlignment: MainAxisAlignment.start, children: [
                   SizedBox(
                     width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
                     child: CustomDropDown<String?>(
                       labelText: 'Class',
                       items: controller.classItems,
-                      validator: (val) {
-                        if (val == null) {
-                          return 'Please select a class';
-                        }
-                        return null;
-                      },
                       selectedValue: controller.className,
                       onChanged: (dept) {
                         setState(() {
@@ -254,12 +248,6 @@ class _TeacherFormState extends State<TeacherForm> {
                     child: CustomDropDown<String?>(
                       labelText: 'Section',
                       items: controller.sectionItems,
-                      validator: (val) {
-                        if (val == null) {
-                          return 'Please select a Section';
-                        }
-                        return null;
-                      },
                       selectedValue: controller.section,
                       onChanged: (dept) {
                         setState(() {
@@ -268,7 +256,7 @@ class _TeacherFormState extends State<TeacherForm> {
                       },
                     ),
                   ),
-                ], mainAxisAlignment: MainAxisAlignment.start),
+                ]),
               ),
               const Divider(),
               Center(

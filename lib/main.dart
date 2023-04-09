@@ -1,4 +1,3 @@
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +24,7 @@ class SplashScreen extends StatelessWidget {
       options: DefaultFirebaseOptions.currentPlatform,
     ).then((value) {
       // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+      // FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
       return Future.wait([AttendanceController.loadToken(), auth.reloadClaims()]);
     });
   }

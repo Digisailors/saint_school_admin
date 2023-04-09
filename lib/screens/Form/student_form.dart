@@ -116,9 +116,9 @@ class _StudentFormState extends State<StudentForm> {
                   };
                   try {
                     var response = await callable.call(data);
-                    print(response.data);
+                    // print(response.data);
                   } catch (e) {
-                    print(e.toString());
+                    // print(e.toString());
                   }
                 },
                 icon: const Icon(Icons.calendar_month),
@@ -324,7 +324,7 @@ class _StudentFormState extends State<StudentForm> {
                                   }
                                 }
                               } catch (e) {
-                                print(e.toString());
+                                // print(e.toString());
                                 future = Result.error("Unknown error") as Future<Result>;
                               }
 

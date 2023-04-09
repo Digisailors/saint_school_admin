@@ -45,6 +45,7 @@ class TransactionController {
     return callable.call(data).then((response) {
       var value = response.data;
       if (value is List) {
+        print(value);
         var logs = value.map((e) => TransactionLog.fromJson(e)).toList();
         var diffInDays = endTime.difference(startTime).inDays + 1;
         for (int i = 0; i < diffInDays; i++) {
@@ -57,7 +58,7 @@ class TransactionController {
           try {
             tempLogs = logs.where((element) => element.punchDate == date).toList();
           } catch (e) {
-            // print(e.toString());
+            print(e.toString());
           }
           for (var tempLog in tempLogs) {
             if (tempLog.areaAlias != 'CAFETERIA') {

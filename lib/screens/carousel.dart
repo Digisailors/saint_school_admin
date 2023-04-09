@@ -98,7 +98,7 @@ class _CarouselState extends State<Carousel> {
                                       queueController.flutterTts.setLanguage(selectedVoice).then((value) {
                                         Navigator.of(context).pop();
                                       });
-                                      print("Langage available");
+                                      // print("Langage available");
                                     }
                                   });
                                 },

@@ -25,20 +25,15 @@ class TeacherController extends GetxController implements CRUD {
 
   @override
   Future<Result> add() async {
-    try {
-      teacher.docId = firestore.collection('teachers').doc().id;
-      var employee = await EmployeeController.addEmployee(teacher.employee);
-      teacher.empId = employee.id;
-      return firestore
-          .collection('teachers')
-          .doc(teacher.docId)
-          .set(teacher.toJson())
-          .then((value) => Result.success("Teacher added successfully"))
-          .onError((error, stackTrace) => Result.error(error.toString()));
-    } catch (e) {
-      // print(e);
-      return Result.error(e.toString());
-    }
+    teacher.docId = firestore.collection('teachers').doc().id;
+    var employee = await EmployeeController.addEmployee(teacher.employee);
+    teacher.empId = employee.id;
+    return firestore
+        .collection('teachers')
+        .doc(teacher.docId)
+        .set(teacher.toJson())
+        .then((value) => Result.success("Teacher added successfully"))
+        .onError((error, stackTrace) => Result.error(error.toString()));
   }
 
   @override

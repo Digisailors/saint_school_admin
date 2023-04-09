@@ -53,7 +53,7 @@ class _ParentFormState extends State<ParentForm> {
       await firestore.collection('students').where('parents', arrayContains: widget.parent!.icNumber).get().then((value) {
         children = value.docs.map((e) => Student.fromJson(e.data(), e.id)).toList();
       });
-      print(children.length);
+      // print(children.length);
     }
   }
 
@@ -254,17 +254,17 @@ class _ParentFormState extends State<ParentForm> {
                                 },
                               ),
                             ),
-                            SizedBox(
-                              width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-                              child: CustomDropDown<String?>(
-                                selectedValue: controller.city,
-                                items: getCities(controller.state),
-                                labelText: "City",
-                                onChanged: (city) {
-                                  controller.city = city;
-                                },
-                              ),
-                            ),
+                            // SizedBox(
+                            //   width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                            //   child: CustomDropDown<String?>(
+                            //     selectedValue: controller.city,
+                            //     items: getCities(controller.state),
+                            //     labelText: "City",
+                            //     onChanged: (city) {
+                            //       controller.city = city;
+                            //     },
+                            //   ),
+                            // ),
                           ]),
                         ),
                         Center(

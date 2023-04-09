@@ -36,7 +36,7 @@ class StudentTransaction {
   static List<TransactionLog> getMyTransactionLog({required Student student, required List<TransactionLog> logs}) {
     List<TransactionLog> mylogs = logs.where((element) => element.empCode == student.icNumber && element.areaAlias != 'CAFETERIA').toList();
     mylogs.sort(((a, b) => b.punchTime.compareTo(a.punchTime)));
-    print(' count  :  ${mylogs.where((element) => element.checkOutStatus != null).length}');
+    // print(' count  :  ${mylogs.where((element) => element.checkOutStatus != null).length}');
     return mylogs;
   }
 
@@ -54,7 +54,7 @@ class StudentTransaction {
     studentTransaction.checkOutTime = checkOutTransaction?.punchTime;
     studentTransaction.checkOutStatus = checkOutTransaction?.checkOutStatus;
     if (student.name == 'BRUCE BANNER') {
-      print(studentTransaction.checkOutStatus);
+      // print(studentTransaction.checkOutStatus);
     }
     return studentTransaction;
   }
@@ -178,7 +178,7 @@ class _StudentListState extends State<StudentList> {
     printInfo(info: " LOG LIST LENGTH : ${_logslist.length}");
 
     for (var student in _studentslist) {
-      print(student.toBioJson());
+      // print(student.toBioJson());
       studentTransactions.add(StudentTransaction.create(student, _logslist.where((element) => element.empCode == student.docId).toList()));
     }
 
@@ -204,6 +204,7 @@ class _StudentListState extends State<StudentList> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height: 16),
             SizedBox(
               height: 60,
               child: SingleChildScrollView(
@@ -233,7 +234,7 @@ class _StudentListState extends State<StudentList> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
-                            height: getHeight(context) * 0.08,
+                            height: 60,
                             width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
@@ -251,9 +252,10 @@ class _StudentListState extends State<StudentList> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
-                            height: getHeight(context) * 0.053,
+                            height: 60,
                             width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.10,
                             child: DropdownButtonFormField<String?>(
+                              isDense: true,
                               value: classFilter,
                               decoration: const InputDecoration(
                                 labelText: 'Class',
@@ -276,7 +278,7 @@ class _StudentListState extends State<StudentList> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: SizedBox(
-                            height: getHeight(context) * 0.053,
+                            height: 60,
                             width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.10,
                             child: DropdownButtonFormField<String>(
                               value: sectionFilter,

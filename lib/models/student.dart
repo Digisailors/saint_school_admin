@@ -71,7 +71,7 @@ class Student extends Bio {
   Bio get bio => this;
   StudentController get controller => StudentController(this);
   factory Student.fromJson(Map<String, dynamic> json, String docId) {
-    print(docId);
+    // print(docId);
 
     return Student(
         docId: json["docId"],

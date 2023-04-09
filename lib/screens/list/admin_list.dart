@@ -109,8 +109,8 @@ class _AdminListState extends State<AdminList> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
                         var list = snapshot.data;
-                        print(list!.first.toJson());
-                        var source = BioSource(list, context);
+                        // print(list!.first.toJson());
+                        var source = BioSource(list!, context);
                         return ConstrainedBox(
                           constraints: BoxConstraints(
                             minWidth: getWidth(context) * 0.90,
@@ -126,7 +126,7 @@ class _AdminListState extends State<AdminList> {
                       }
                       if (snapshot.hasError) {
                         if (kDebugMode) {
-                          print(snapshot.error);
+                          // print(snapshot.error);
                         }
                         return const Text("Error occured");
                       }

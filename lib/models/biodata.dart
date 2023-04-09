@@ -74,7 +74,7 @@ class Bio {
       results.addAll(makeSearchstring(email!.split('@').first));
     } catch (e) {
       if (kDebugMode) {
-        print(e.toString());
+        // print(e.toString());
       }
     }
     return results;

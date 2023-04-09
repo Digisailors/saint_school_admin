@@ -129,7 +129,7 @@ class SideMenu extends StatelessWidget {
                     int columns = screenWidth ~/ 464;
                     int rows = screenHeight ~/ 152;
                     QueueController.tileCount = columns * rows;
-                    print(QueueController.tileCount);
+                    // print(QueueController.tileCount);
                     Get.to(
                       () => const Carousel(),
                     );

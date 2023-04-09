@@ -29,7 +29,7 @@ class TeacherTransaction {
   static List<TransactionLog> getMyTransactionLog({required Teacher student, required List<TransactionLog> logs}) {
     List<TransactionLog> mylogs = logs.where((element) => element.empCode == student.icNumber && element.areaAlias != 'CAFETERIA').toList();
     mylogs.sort(((a, b) => b.punchTime.compareTo(a.punchTime)));
-    print(' count  :  ${mylogs.where((element) => element.checkOutStatus != null).length}');
+    // print(' count  :  ${mylogs.where((element) => element.checkOutStatus != null).length}');
     return mylogs;
   }
 
@@ -144,7 +144,7 @@ class _TeachersListState extends State<TeachersList> {
         })
         .then((value) => _teacherslist = value)
         .onError((error, stacktrace) {
-          print(error.toString());
+          // print(error.toString());
           return [];
         });
     Future<List<TransactionLog>> future2 = getTransactionLogs(date).then((value) => _logslist = value);
@@ -181,6 +181,7 @@ class _TeachersListState extends State<TeachersList> {
         padding: EdgeInsets.all(isMobile(context) ? 2 : 8),
         child: Column(
           children: [
+            const SizedBox(height: 16),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
@@ -226,7 +227,7 @@ class _TeachersListState extends State<TeachersList> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: SizedBox(
-                          height: getHeight(context) * 0.053,
+                          height: 60,
                           width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.1,
                           child: DropdownButtonFormField<String?>(
                             value: classFilter,
@@ -251,7 +252,7 @@ class _TeachersListState extends State<TeachersList> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: SizedBox(
-                          height: getHeight(context) * 0.053,
+                          height: 60,
                           width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                           child: DropdownButtonFormField<String>(
                             value: sectionFilter,

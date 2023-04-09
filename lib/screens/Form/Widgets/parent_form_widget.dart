@@ -210,19 +210,19 @@ class _ParentFormState extends State<ParentForm> {
                 },
               ),
             ),
-            SizedBox(
-              width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
-              child: CustomDropDown<String?>(
-                selectedValue: widget.controller.city,
-                items: getCities(widget.controller.state),
-                labelText: "City",
-                onChanged: (city) {
-                  setState(() {
-                    widget.controller.city = city;
-                  });
-                },
-              ),
-            ),
+            // SizedBox(
+            //   width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+            //   child: CustomDropDown<String?>(
+            //     selectedValue: widget.controller.city,
+            //     items: getCities(widget.controller.state),
+            //     labelText: "City",
+            //     onChanged: (city) {
+            //       setState(() {
+            //         widget.controller.city = city;
+            //       });
+            //     },
+            //   ),
+            // ),
           ]),
         ),
       ],
