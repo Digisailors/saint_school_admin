@@ -47,6 +47,7 @@ class AuthRouter extends StatelessWidget {
                   defaultTransition: Transition.leftToRight,
                   title: 'SAINT SCHOOL ADMIN',
                   theme: ThemeData(
+                    useMaterial3: false,
                     listTileTheme: const ListTileThemeData(),
                     pageTransitionsTheme: const PageTransitionsTheme(builders: {
                       TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
@@ -116,7 +117,9 @@ class AuthRouter extends StatelessWidget {
           );
         }
         return MaterialApp(
+          
           theme: ThemeData(
+            useMaterial3: false,
             colorScheme: lightColorScheme,
             textTheme: myTexTheme,
             tabBarTheme: TabBarTheme(

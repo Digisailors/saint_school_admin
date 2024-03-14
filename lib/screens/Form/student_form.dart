@@ -13,11 +13,12 @@ import 'package:school_app/models/student.dart';
 import 'package:school_app/screens/Form/Widgets/parent_form_widget.dart';
 import 'package:school_app/screens/Form/controllers/parent_form_controller.dart';
 import 'package:school_app/widgets/custom_drop_down.dart';
+
 import '../../constants/get_constants.dart';
 import '../../constants/validators.dart';
-import 'controllers/student_form_controller.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/theme.dart';
+import 'controllers/student_form_controller.dart';
 
 class StudentForm extends StatefulWidget {
   const StudentForm({
@@ -332,6 +333,7 @@ class _StudentFormState extends State<StudentForm> {
                                   context: context,
                                   future: future,
                                   onTapOk: () {
+                                    Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     if (formMode == FormMode.add) {
                                       formMode = FormMode.update;

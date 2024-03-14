@@ -89,15 +89,15 @@ class StudentController extends GetxController implements CRUD {
 
     student.docId = firestore.collection('students').doc().id;
 
-    try {
-      var employee = await EmployeeController.addEmployee(student.employee);
-      student.empId = employee.id;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      return Result.error("Could not sync attendance. Contact Admin");
-    }
+    // try {
+    //   var employee = await EmployeeController.addEmployee(student.employee);
+    //   student.empId = employee.id;
+    // } catch (e) {
+    //   if (kDebugMode) {
+    //     print(e.toString());
+    //   }
+    //   return Result.error("Could not sync attendance. Contact Admin");
+    // }
 
     return firestore
         .collection('students')
@@ -134,12 +134,12 @@ class StudentController extends GetxController implements CRUD {
       firestore.collection('parents').doc(guardian.icNumber).set(guardian.toJson());
     }
 
-    try {
-      var employee = await EmployeeController.updateEmployee(student.employee);
-      student.empId = employee.id;
-    } catch (e) {
-      // return Result.error("Could not sync attendance. Contact Admin");
-    }
+    // try {
+    //   var employee = await EmployeeController.updateEmployee(student.employee);
+    //   student.empId = employee.id;
+    // } catch (e) {
+    //   // return Result.error("Could not sync attendance. Contact Admin");
+    // }
 
     print("DOCUMENT ID : ${student.docId}");
     return firestore
