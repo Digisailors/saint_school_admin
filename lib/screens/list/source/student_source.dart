@@ -28,6 +28,7 @@ class StudentSource extends DataTableSource {
     if (index >= students.length) return null;
     final studentTransaction = students[index];
     final entity = studentTransaction.student;
+    print("While Clicking edit ${entity.toJson()}");
     int sNo = index + 1;
 
     return DataRow.byIndex(

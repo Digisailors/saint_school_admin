@@ -10,6 +10,7 @@ class Parent extends Bio {
     required String name,
     required Gender gender,
     String? lastName,
+    String? nonHyphenIcNumber,
     String? address,
     String? addressLine1,
     String? addressLine2,
@@ -25,6 +26,7 @@ class Parent extends Bio {
           lastName: lastName,
           entityType: EntityType.parent,
           icNumber: icNumber,
+          nonHyphenIcNumber: icNumber.replaceAll(" ", "").replaceAll("-", ""),
           email: email,
           address: address,
           addressLine1: addressLine1,
@@ -50,6 +52,7 @@ class Parent extends Bio {
     address = parent.address;
     uid = parent.uid;
     icNumber = parent.icNumber;
+    nonHyphenIcNumber = parent.icNumber.replaceAll(" ", "").replaceAll("-", "");
     email = parent.email;
     name = parent.name;
     children = parent.children;
@@ -68,6 +71,7 @@ class Parent extends Bio {
         address: json["address"] ?? '',
         uid: json["uid"] ?? '',
         icNumber: json["icNumber"] ?? '',
+        nonHyphenIcNumber: json["nonHyphenIcNumber"] ?? '',
         email: json["email"] ?? '',
         name: json["name"],
         imageUrl: json["imageUrl"],

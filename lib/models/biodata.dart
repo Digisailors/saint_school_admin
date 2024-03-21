@@ -21,13 +21,14 @@ class Bio {
       this.primaryPhone,
       this.secondaryPhone,
       this.state,
-      required this.docId});
+      required this.docId, this.nonHyphenIcNumber});
 
   String? docId;
   String name;
   String? lastName;
   EntityType entityType;
   String icNumber;
+  String? nonHyphenIcNumber;
   String? email;
   String? address;
   String? addressLine1;
@@ -60,7 +61,7 @@ class Bio {
         lastName: json["lastName"],
         primaryPhone: json["primaryPhone"],
         secondaryPhone: json["secondaryPhone"],
-        state: json["state"],
+        state: json["state"], nonHyphenIcNumber: json["nonHyphenIcNumber"],
       );
 
   List<String> get search {
@@ -86,6 +87,7 @@ class Bio {
         "lastName": lastName,
         "entityType": entityType.index,
         "icNumber": icNumber,
+        "nonHyphenIcNumber": nonHyphenIcNumber,
         "email": email,
         "address": address,
         "addressLine1": addressLine1,

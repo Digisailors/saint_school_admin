@@ -18,6 +18,7 @@ class BioFormController {
   final empCode = TextEditingController();
   String? state;
   String? city;
+  String? docId;
   final primaryPhone = TextEditingController();
   final secondaryPhone = TextEditingController();
   // final imageUrl = TextEditingController();
@@ -56,6 +57,7 @@ class BioFormController {
     addressLine2.clear();
     city = null;
     state = null;
+    docId = null;
     primaryPhone.clear();
     secondaryPhone.clear();
     gender = Gender.unspecified;
