@@ -238,7 +238,7 @@ class _StudentListState extends State<StudentList> {
                             width: isMobile(context) ? getWidth(context) * 0.40 : getWidth(context) * 0.20,
                             child: Center(
                               child: TextFormField(
-                                onChanged: ((value) => search = value),
+                                onChanged: ((value) => search = value.toLowerCase()),
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.search,
